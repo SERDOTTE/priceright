@@ -1,3 +1,15 @@
+
+Team Members: 
+1. Nick Daniel Alejandro Granados Lares
+2. Rodrigo Serdotte Freitas
+3. Osamagumwende Flourish Idahosa-Sunny
+
+Is a full-stack web application designed to help micro-entrepreneurs, artisans, and informal professionals manage their businesses efficiently. The platform enables users to calculate the ideal selling price for products and services based on actual costs and organizes the order workflow from the initial quote to final delivery. The goal is to transform financial management for self-employed workers into a simple, visual process—free from complex spreadsheets.
+
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
