@@ -21,8 +21,10 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
       onClose();
     }
   };
+
+  
   return (
-    <dialog onClick={handleClose} className="fixed top-0 left-0 h-full w-full bg-black/80 flex flex-col justify-center items-center py-4 px-20 outline-none m-auto backdrop-blur-md">
+    <dialog onClick={handleClose} className="fixed top-0 left-0 h-full w-full bg-black/80 flex flex-col justify-center items-center py-4 px-20 outline-none m-auto backdrop-blur-md z-1">
       <div onAnimationEnd={handleAnimationEnd} className={`${isExiting ? 'animate-hide' : 'animate-show'} bg-white p-5 rounded-lg shadow-md`}>
         <h2>Create Order</h2>
         {/*a form or an import to be added here*/}

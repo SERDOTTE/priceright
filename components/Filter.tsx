@@ -1,4 +1,5 @@
-import React from 'react';
+import { FilterList } from "@/app/dashboard/page";
+import { useState } from "react";
 
 interface OptionsItem {
     value: string;
@@ -11,7 +12,7 @@ interface FilterProps {
     name: string;
     id: string;
     options: OptionsItem[];
-    onClear?: () => void; // Optional function to clear active filters
+    value?: string;
 }
 
 interface FilterList {
@@ -19,25 +20,53 @@ interface FilterList {
 }
 
 export default function Filter(props: FilterList) {
+    const [filterValues, setFilterValues] = useState(
+        props.filters.reduce((acc, filter) => ({ ...acc, [filter.name]: '' }), {})
+    );
+
+    const handleReset = () => {
+        setFilterValues(
+            props.filters.reduce((acc, filter) => ({ ...acc, [filter.name]: '' }), {})
+        );
+    }
+
     return (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] justify-center items-center  text-white gap-2 mx-2">
-            {props.filters && props.filters.length > 0 && props.filters.map((filter, index) => (
-                <div key={index} className="flex flex-col bg-white my-2 rounded-md">
-                    <label htmlFor={filter.htmlFor} className="text-sm font-medium text-gray-300">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3 mx-auto p-4  rounded-xl">
+            {props.filters && props.filters.length > 0 && props.filters.map((filter) => (
+                <div key={filter.id || filter.name} className="relative flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
+                    {/* Screen reader only label for accessibility */}
+                    <label htmlFor={filter.id} className="sr-only">
                         {filter.label}
-                        <select name={filter.name} id={filter.id} defaultValue="" className="text-black px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="" disabled hidden >
-                                
-                            </option>
-                            {filter.options && filter.options.length > 0 && filter.options.map((option, optIndex) => (
-                                <option key={optIndex} value={option.value}>
-                                    {option.value.charAt(0).toUpperCase() + option.value.slice(1)}
-                                </option>
-                            ))}
-                        </select>
                     </label>
+                    <select name={filter.name} id={filter.id} defaultValue="" className="appearance-none w-full text-gray-800 text-sm font-medium px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-transparent cursor-pointer">
+                        {/* Use the label as the default placeholder text to match the image */}
+                        <option value="" disabled hidden>{filter.label}</option>
+
+                        {filter.options && filter.options.length > 0 && filter.options.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.value.charAt(0).toUpperCase() + option.value.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+                    {/* Custom Chevron to replace the default select arrow */}
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-600">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
                 </div>
             ))}
+            <div className="relative flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
+                <button type="button" onClick={handleReset}
+                    className="flex items-center justify-between w-full sm:w-auto px-4 py-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-800 text-sm font-medium transition-colors outline-none hover:cursor-pointer">
+                    <span>Reset filters</span>
+
+                    {/* Counter-clockwise Undo Arrow SVG */}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.75" stroke="currentColor" className="w-4 h-4 ml-2 text-gray-600" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                    </svg>
+                </button>
+            </div>
         </div>
     );
 }

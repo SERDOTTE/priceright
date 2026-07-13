@@ -41,7 +41,7 @@ export default function OrdersDashboard() {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
       <main className="p-8 max-w-7xl mx-auto">
-        <div className="flex max-sm:flex-col max-sm:gap-2 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/70 shadow-black/50 p-5">
+        <div className="flex max-sm:flex-col max-sm:gap-2 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-5">
           <div id="searchBoxContainer">
             <div className="searchContainer flex items-center justify-between gap-2 h-8 ">
               <input
@@ -68,10 +68,10 @@ export default function OrdersDashboard() {
           >+ Create Order
           </button>
         </div>
-        <div className='bg-gray-200 shadow-md/20 rounded-lg'>
+        <div className='bg-gray-200 shadow-md/20 rounded-l sm:max-w-250 my-0 mx-auto'>
           <Filter filters={FilterList} />
         </div>
-
+ 
         {/* Table rendering goes here (same as before, mapping over 'orders') */}
         <div className="bg-[#FFFFFF] rounded-lg shadow overflow-hidden">
           {/* ... table content ... */}
