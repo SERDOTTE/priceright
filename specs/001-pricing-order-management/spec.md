@@ -77,9 +77,58 @@ As a professional, I want to move orders visually between workflow stages so tha
 - Framework: Next.js App Router
 - Language: TypeScript in strict mode
 - Styling: Tailwind CSS with utility-first styling and minimal custom CSS
+- Database: Supabase (PostgreSQL) as the primary data store for users, pricing sheets, orders, and quotes
 - Architecture: server components by default, with client components only where interactivity is required
-- Authentication: secure sign-up and sign-in for private business data
+- Authentication: secure sign-up and sign-in for private business data, backed by Supabase Auth
 - Testing: unit and integration coverage for pricing logic, order status updates, and quote approval flows
+
+## Data Model
+
+**Database solution:** Supabase (PostgreSQL). A relational database fits this model well: the entities connect through clear foreign keys, and the finance dashboard metrics (revenue, receivables, overdue) are simple SQL aggregations over orders.
+
+### Core Entities
+
+**User** (managed by Supabase Auth)
+- `id` (uuid), `email`, `name`, `created_at`
+- Passwords are handled by Supabase Auth and never stored by the app.
+
+**Customer**
+- `id`, `user_id` (FK → User), `name`, `email`, `phone`, `created_at`
+- Each user manages their own customer list.
+- MVP scope: no dedicated customer management screen. Customers are selected from a dropdown or created inline in the order form. A full customer management screen (edit, history per customer) is a stretch feature.
+
+**PricingSheet**
+- `id`, `user_id` (FK → User), `name`
+- `target_salary`, `working_hours_per_month`, `margin_percent`
+- `cost_per_minute`, `suggested_price` (calculated on save)
+- `created_at`
+
+**Material** (detail table for PricingSheet line items)
+- `id`, `pricing_sheet_id` (FK → PricingSheet), `name`, `unit_cost`, `quantity`
+
+**Order**
+- `id`, `user_id` (FK → User), `customer_id` (FK → Customer)
+- `description`, `status` (`quote_sent` | `approved` | `in_progress` | `delivered`)
+- `price`, `due_date`
+- `payment_status` (`pending` | `paid` | `overdue`), `paid_at`
+- `created_at`
+- The finance dashboard needs no entity of its own: revenue, receivables, and overdue indicators are aggregations over orders.
+
+**Quote**
+- `id`, `order_id` (FK → Order), `share_token` (unique, used in the public URL)
+- `status` (`pending` | `approved`), `approved_at`, `created_at`
+- The customer is reached through the order: Quote → Order → Customer, so the public quote page shows the customer without duplicating the reference.
+
+### Relationships
+
+```
+User        1:N  Customer
+User        1:N  PricingSheet
+User        1:N  Order
+PricingSheet 1:N Material
+Customer    1:N  Order
+Order       1:1  Quote
+```
 
 ## Core API Endpoints
 - POST /api/auth/signup
@@ -98,6 +147,107 @@ As a professional, I want to move orders visually between workflow stages so tha
 - GET /api/quotes/:token
 - POST /api/quotes/:token/approve
 - GET /api/dashboard/finance
+
+## Reusable Components (MVP)
+
+**Layout**
+- `Header`: logo, navigation, user menu / logout
+- `Footer`: basic links and copyright
+- `EmptyState`: reusable empty state (no orders, no pending payments)
+
+**Shared UI primitives** (used across all pages and forms)
+- `Button`, `Input`, `Card`
+- `StatusBadge`: colored pill for order status, reused in lists, order details, and the public quote
+
+**Pricing**
+- `PricingSheetForm`: target salary, working hours, margin
+- `MaterialsList` / `MaterialRow`: dynamic material line items
+- `PriceSummary`: cost-per-minute rate and suggested selling price
+
+**Orders**
+- `OrderList`: order list container
+- `OrderCard`: single order summary
+- `OrderForm`: create/edit an order
+- `StatusSelector`: change order stage with validation
+- `FilterBar`: filter orders by status
+
+**Public Quote**
+- `QuoteView`: customer-facing quote summary (no account required)
+- `ApproveQuoteButton`: quote approval action
+
+**Finance Dashboard**
+- `StatCard`: metric card (revenue, receivables, overdue)
+- `OverdueIndicator`: overdue/pending payment alert
+
+## Component Hierarchy Diagram
+
+```
+RootLayout
+├── Header
+├── Footer
+└── Pages
+    ├── AuthPage
+    │   └── AuthForm
+    ├── PricingPage
+    │   ├── PricingSheetForm
+    │   │   └── MaterialsList
+    │   │       └── MaterialRow
+    │   └── PriceSummary
+    ├── OrdersPage
+    │   ├── FilterBar
+    │   ├── OrderList
+    │   │   └── OrderCard
+    │   │       └── StatusBadge
+    │   └── OrderForm
+    │       └── StatusSelector
+    ├── QuotePage (public)
+    │   └── QuoteView
+    │       ├── StatusBadge
+    │       └── ApproveQuoteButton
+    └── FinancePage
+        ├── StatCard
+        ├── OverdueIndicator
+        └── EmptyState
+```
+
+## Design Theme & Branding
+
+Visual language: energetic and friendly, but trustworthy — a financial tool for freelancers, not a corporate bank. Based on the PriceRight brand guide.
+
+### Color Palette
+
+| Token | Hex | Usage |
+|---|---|---|
+| `brand` (Vibrant Yellow) | `#FFC200` | Primary actions, titles, icons, highlights |
+| `action` (Orange-Red) | `#FF4A3C` | Call-to-action buttons, quote approval, key focus points |
+| `ink` (Deep Black) | `#1A1A1A` | Text, dark backgrounds/cards |
+| Neutrals | Tailwind `slate` scale | `slate-50` page background, white cards, `slate-200` borders, `slate-500` secondary text |
+| Status: paid / approved | `green-600` | StatusBadge, payment indicators |
+| Status: pending | `#FFC200` (brand) | StatusBadge, receivables |
+| Status: overdue / error | `red-600` | StatusBadge, validation errors |
+
+Rules:
+- Brand colors are defined once as Tailwind theme tokens (`bg-brand`, `text-ink`, `bg-action`), no hardcoded hex values in components.
+- Text on brand yellow is always `#1A1A1A` — white on `#FFC200` fails contrast. White text on `#FF4A3C` is reserved for large/bold button labels.
+- `action` orange-red is for CTAs only; errors use `red-600` so "act here" and "something is wrong" never look the same.
+
+### Typography
+
+- Headings: **Poppins** (bold, geometric-rounded, matches the brand mockups)
+- Body and numbers: **Inter**, with `tabular-nums` on all currency values so price columns align
+- Both loaded via `next/font` (no external CDN), single weight set: 400/600/700
+
+### Layout Patterns & Spacing
+
+- Topbar (`Header`) + centered content in `max-w-7xl`; no sidebar in the MVP
+- Content lives in white cards (`rounded-xl border shadow-sm`) over a `slate-50` page background
+- Spacing in multiples of 4 from the Tailwind scale: `p-4`/`p-6` inside cards, `gap-6` between cards, `space-y-8` between page sections; no arbitrary values (`p-[13px]`)
+- Public quote page: same language in a single narrow column (`max-w-2xl`), clean document style
+
+### Shared UI Library
+
+- **shadcn/ui** on top of Tailwind: accessible Button, Input, Card, Select, Dialog copied into the repo and themed with the brand tokens
+- Custom components (StatusBadge, StatCard, etc.) compose shadcn primitives and follow the same tokens
 
 ## Implementation Priority
 - MVP: sign up and login, pricing calculator, order creation and status updates, public quote approval, cash-flow dashboard
