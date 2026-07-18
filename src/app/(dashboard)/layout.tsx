@@ -1,4 +1,4 @@
-import OrderNavLinks from "@/../components/orders/OrderNavLinks";
+import OrderNavLinks from "@/components/orders/OrderNavLinks";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -6,7 +6,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="min-h-screen w-full">
-      <div className="flex flex-col sm:flex-row w-full">
+      <div className="flex flex-col sm:flex-row w-full border-t border-slate">
         <OrderNavLinks />
         {children}
       </div>

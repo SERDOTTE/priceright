@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
-import Filter from '@/../components/Filter';
+import Filter from '@/components/Filter';
 import { useRouter } from 'next/navigation'
 
 export const FilterList = [

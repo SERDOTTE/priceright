@@ -15,8 +15,8 @@ export default function OrderNavLinks() {
     const pathname = usePathname();
 
     return (
-        <div className='flex sm:w-[184.5]'>
-            <section className='w-full h-auto bg-header2 text-white '>
+        <div className='flex sm:w-52'>
+            <section className='w-52 h-auto bg-header2 text-white '>
                 <nav>
                     <ul className="flex sm:flex-col items-center">
                         {navItems.map((item) => (
