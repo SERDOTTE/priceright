@@ -1,4 +1,4 @@
-import { FilterList } from "@/app/dashboard/page";
+import { FilterList } from "@/app/(dashboard)/dashboard/page";
 import { useState } from "react";
 
 interface OptionsItem {
@@ -12,33 +12,42 @@ interface FilterProps {
     name: string;
     id: string;
     options: OptionsItem[];
-    value?: string;
 }
 
 interface FilterList {
     filters: FilterProps[];
 }
 
-export default function Filter(props: FilterList) {
-    const [filterValues, setFilterValues] = useState(
-        props.filters.reduce((acc, filter) => ({ ...acc, [filter.name]: '' }), {})
+export default function Filter({ filters }: FilterList) {
+    // Initialize state object: { filterName: "selectedValue" }
+    const [ filterValues, setFilterValues ] = useState<Record<string, string>>(() =>
+        filters.reduce((acc, filter) => ({ ...acc, [filter.name]: "" }), {})
     );
 
-    const handleReset = () => {
-        setFilterValues(
-            props.filters.reduce((acc, filter) => ({ ...acc, [filter.name]: '' }), {})
-        );
-    }
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFilterValues((prev) => ({ ...prev, [name]: value }));
+    };
 
+    const handleReset = () => {
+        console.log('dadadfadaf')
+        setFilterValues(
+            filters.reduce((acc, filter) => ({ ...acc, [filter.name]: "" }), {})
+        );
+    };
     return (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3 mx-auto p-4  rounded-xl">
-            {props.filters && props.filters.length > 0 && props.filters.map((filter) => (
+            {filters && filters.length > 0 && filters.map((filter) => (
                 <div key={filter.id || filter.name} className="relative flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
                     {/* Screen reader only label for accessibility */}
                     <label htmlFor={filter.id} className="sr-only">
                         {filter.label}
                     </label>
-                    <select name={filter.name} id={filter.id} defaultValue="" className="appearance-none w-full text-gray-800 text-sm font-medium px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-transparent cursor-pointer">
+                    <select name={filter.name}
+                        value={filterValues[filter.name]}
+                        id={filter.id}
+                        onChange={handleChange}
+                        className="appearance-none w-full text-gray-800 text-sm font-medium px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-transparent cursor-pointer">
                         {/* Use the label as the default placeholder text to match the image */}
                         <option value="" disabled hidden>{filter.label}</option>
 
@@ -56,7 +65,7 @@ export default function Filter(props: FilterList) {
                     </div>
                 </div>
             ))}
-            <div className="relative flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
+            <div onClick={handleReset} className="relative flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
                 <button type="button" onClick={handleReset}
                     className="flex items-center justify-between w-full sm:w-auto px-4 py-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-800 text-sm font-medium transition-colors outline-none hover:cursor-pointer">
                     <span>Reset filters</span>

@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link';
-import Modal from '../../../components/Modal';
 import React, { useState } from 'react';
-import Filter from '../../../components/Filter';
+import Filter from '@/../components/Filter';
+import { useRouter } from 'next/navigation'
 
 export const FilterList = [
   {
@@ -34,11 +34,15 @@ export const FilterList = [
 ];
 
 export default function OrdersDashboard() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const handleNavigation = () => {
+    router.push('/dashboard/orders');
+  }
 
   return (
-    <div className="min-h-screen text-[#2D3436] font-sans">
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    <div className="min-h-screen text-[#2D3436] font-sans flex-1">
+      {/* <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} /> */}
 
       <main className="p-8 max-w-7xl mx-auto">
         <div className="flex max-sm:flex-col max-sm:gap-2 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-5">
@@ -63,7 +67,7 @@ export default function OrdersDashboard() {
           </div>
 
           {/* Opening the modal is now just a link */}
-          <button onClick={() => setIsOpen(true)}
+          <button onClick={handleNavigation}
             className="bg-header2 text-white px-6 py-2 rounded-md font-medium hover:cursor-pointer"
           >+ Create Order
           </button>

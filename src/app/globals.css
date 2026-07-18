@@ -22,29 +22,22 @@
   100% { transform: scale(0); }
 }
 
-  /* Functional Color Mapping */
   --color-header: #023047;
-  /* Deep Space Blue */
   --color-header2:#054667;
   --color-background: #8ECAE6;
-  /* Sky Blue (Light) */
   --color-text-body: #ffffff;
-  /* Recommended white/light for readability on deep background */
-  --color-callout: #FB8500;
-  /* Princeton Orange */
+  --color-button-bg: #FFC200 ;
   --color-button-text: #023047;
-  /* Deep Space Blue for contrast */
-  --color-button-bg: #FFB703;
-  /* Amber Flame */
+  --color-callout: #FF4A3C ;
   --color-subheading: #219EBC;
-  /* Blue Green */
+
 
   /* Fluid Typography Variables */
   --text-hero: clamp(1rem, 3.5vw + 1rem, 5rem);
   --text-heading: clamp(.5rem, 2vw + 1rem, 2.5rem);
   --text-subheading: clamp(.5rem, 1vw + 0.5rem, 1rem);
   --text-body: clamp(1rem, 1vw + 0.5rem, 1.25rem);
-  --text-button: clamp(0.875rem, 0.5vw + 0.5rem, 1rem);
+  --text-button: clamp(0.875rem, 0.5vw + 0.8rem, 1rem);
 
   --color-green: #7A9A85;
   --color-red: #C47D63;
