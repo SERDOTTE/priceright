@@ -16,18 +16,18 @@ export default function OrderNavLinks() {
 
     return (
         <div className='flex sm:w-52'>
-            <section className='w-52 h-auto bg-header2 text-white '>
+            <section className='w-52 h-auto m-1 rounded-2xl bg-header text-white '>
                 <nav>
-                    <ul className="flex sm:flex-col items-center">
+                    <ul className="flex sm:flex-col items-center gap-1 py-1">
                         {navItems.map((item) => (
-                            <li key={item.href} className='w-full'>
+                            <li key={item.href} className='w-full px-1'>
                                 {(() => {
                                     const isActive = pathname === item.href;
                                     return (
                                         <Link
                                             href={item.href}
                                             aria-current={isActive ? 'page' : undefined}
-                                            className={`block px-4 py-4 w-full text-button font-medium text-gray-100 transition duration-300 hover:bg-white hover:text-gray-900 ${isActive ? 'text-gray-700 bg-white' : ' '}`}>
+                                            className={`block px-4 py-4 w-full text-button font-sm text-gray-100 rounded-xl transition duration-300 hover:bg-white hover:text-gray-900 ${isActive ? 'text-gray-700 bg-white' : ' '}`}>
                                             {item.label}
                                         </Link>
                                     );

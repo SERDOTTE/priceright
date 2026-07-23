@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link';
-import React, { useState } from 'react';
 import Filter from '@/components/Filter';
 import { useRouter } from 'next/navigation'
 
@@ -41,7 +39,7 @@ export default function OrdersDashboard() {
   }
 
   return (
-    <div className="min-h-screen text-[#2D3436] font-sans flex-1">
+        <div className="min-h-screen flex-1 w-full m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)]">
       {/* <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} /> */}
 
       <main className="p-8 max-w-7xl mx-auto">

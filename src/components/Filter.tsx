@@ -30,7 +30,6 @@ export default function Filter({ filters }: FilterList) {
     };
 
     const handleReset = () => {
-        console.log('dadadfadaf')
         setFilterValues(
             filters.reduce((acc, filter) => ({ ...acc, [filter.name]: "" }), {})
         );
