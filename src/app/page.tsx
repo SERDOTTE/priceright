@@ -1,116 +1,37 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { buttonVariants } from "@/components/ui/button";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
-    <div>
-      <div className="relative h-dvh w-full">
-        {/* Background Image Container */}
-        <div className="absolute inset-0">
-          <Image
-            src="/licensed-image.jpg"
-            alt="Retail shopping background"
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-black/85" />
-        </div>
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-6 px-4 py-24 text-center">
+      <h1 className="text-4xl font-bold tracking-tight">PriceRight &amp; QuoteEasy</h1>
+      <p className="max-w-xl text-lg text-muted-foreground">
+        Price your work with confidence, manage orders from quote to delivery, and keep
+        track of your cash flow.
+      </p>
 
-        {/* Content Container - Left Aligned */}
-        <div className="relative flex h-full items-center px-0 sm:px-12 max-sm:flex max-sm:justify-center max-sm:text-center">
-          <div className="w-[62.5%] p-8 rounded-lg sm:ml-13 text-white">
-            <section>
-              <p className={`text-[clamp(2.5rem,5vw,5rem)] font-black leading-tight`}>
-                Always Pay the <span className="text-callout">Right Price</span>, <br /> Never Overspend
-              </p>
-              <p className={`text-[clamp(1.3rem,2vw,1.5rem)] leading-5.5 tracking-tight font-[250] italic max-sm:leading-none mt-4`}>
-                Track prices across stores in real-time, get smart deal alerts,
-                and ensure you never miss out on savings again.
-              </p>
-            </section>
-            <span className='border-t border-white block my-4.5 max-sm:my-3 w-auto'></span>
-            <div className="flex justify-start max-sm:justify-center mt-6">
-              <div className='text-[clamp(0.8rem,1.5vw,1.3rem)] flex gap-2 max-sm:flex-col'>
-                <Link
-                  href="/signin"
-                  className=" border-2 border-button-bg text-button-bg px-10 py-4 rounded-lg font-bold hover:bg-button-bg hover:text-black transition-colors">
-                  Log in
-                </Link>
-                <Link href="/signup"
-                  className=" border-2 border-button-bg bg-button-bg text-black px-10 py-4 rounded-lg font-bold hover:bg-button-bg/90 hover:border-button-bg transition-colors">
-                  Sign up
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        {user ? (
+          <Link href="/dashboard" className={buttonVariants()}>
+            Go to your workspace
+          </Link>
+        ) : (
+          <>
+            <Link href="/signup" className={buttonVariants()}>
+              Create an account
+            </Link>
+            <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+              Sign in
+            </Link>
+          </>
+        )}
       </div>
-
-      {/* Main Content Area */}
-      <main className='flex justify-center'>
-        <div className='flex flex-row max-sm:flex-col justify-center items-center'>
-          <section className="welcome h-full sm:mx-auto bg-header2 px-2 py-12 text-center text-gray-200">
-            <div className="welcome-content flex justify-center sm:px-10 items-center  flex-col sm:max-w-250 mx-auto my-0 space-y-6 h-full">
-              <h2 className="brand text-[clamp(1.5rem,5vw,2.5rem)] mb-4 font-bold px-2">
-                Stop Overpaying. <br className="sm:hidden" />
-                <span className="text-header bg-callout px-3 py-1.5 rounded-lg sm:ml-2 inline-block mt-4 sm:mt-0 transform -rotate-2 shadow-lg">
-                  Start Saving.
-                </span>
-              </h2>
-              <p className='text-[clamp(1.2rem,1.2vw,1.5rem)] italic px-4 sm:px-10'>
-                It’s easy to overpay when you don't know the true market value. PRICERIGHT tracks exactly what items cost across your favorite retailers, helping you lock in the lowest price and save money on every purchase.
-              </p>
-              <span className='span flex justify-center w-full mt-8'>
-                <span className='block size-5 rounded-full bg-callout'></span>
-              </span>
-            </div>
-          </section>
-
-          {/* Right Column: Features Section */}
-          <section className="p-12 lg:p-24 flex flex-col justify-center border-l-0 sm:border-l-2 border-gray-500">
-            <div className="max-w-md mx-auto space-y-10 w-full">
-              <h3 className="text-heading font-extrabold text-header">
-                Smart Shopping
-              </h3>
-
-              <div className="space-y-6">
-                {[
-                  { title: "Real-Time Tracking", desc: "Compare live prices from hundreds of retailers instantly.", dotColor: "var(--color-subheading)" },
-                  { title: "Smart Deal Alerts", desc: "Get notified the second your favorite items drop in price.", dotColor: "var(--color-button-bg)" },
-                  { title: "Price History Charts", desc: "Never buy at the peak again with comprehensive historical data.", dotColor: "var(--color-header)" }
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex gap-5 items-start bg-text-body/40 p-5 rounded-2xl shadow-xl hover:bg-text-body/60 transition-colors duration-300">
-                    <div 
-                      className="mt-2 size-3.5 rounded-full shrink-0 shadow-sm" 
-                      style={{ backgroundColor: feature.dotColor }}
-                    />
-                    <div>
-                      <h4 className="font-bold text-header text-(length:--text-subheading) tracking-wide">
-                        {feature.title}
-                      </h4>
-                      <p className="text-header2 font-light text-body mt-2 leading-relaxed">
-                        {feature.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-
-              <div className="pt-8">
-                <Link
-                  href="/tracker"
-                  className="text-button inline-flex items-center justify-center w-full sm:w-auto border-2 border-header bg-header text-text-body px-10 py-3.5 rounded-lg font-bold shadow-lg hover:bg-subheading hover:border-subheading hover:shadow-xl transition-all duration-300 ease-in-out"
-                >
-                  Start Tracking
-                </Link>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
+    </main>
   );
 }
