@@ -23,7 +23,7 @@ export default function LoginPage() {
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardTitle className="font-heading text-2xl font-bold">Welcome back</CardTitle>
           <CardDescription>Sign in to your PriceRight workspace.</CardDescription>
         </CardHeader>
         <CardContent>
