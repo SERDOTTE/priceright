@@ -4,12 +4,70 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  /* Keyframes */
+  --animate-show: 0.5s ease-in-out 0s 1 normal forwards show;
+  --animate-hide: hide 0.5s ease-in-out forwards;
+
+@keyframes show {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+/* New hide keyframe */
+@keyframes hide {
+  0% { transform: scale(1); }
+  100% { transform: scale(0); }
+}
+
+  --color-header: #023047;
+  --color-background2: #8ECAE6;
+  --color-text-body: #ffffff;
+  --color-button-bg: #FFC200 ;
+  --color-button-text: #023047;
+  --color-callout: #FF4A3C ;
+  --color-subheading: #219EBC;
+
+  /* Fluid Typography Variables */
+  --text-hero: clamp(1rem, 3.5vw + 1rem, 5rem);
+  --text-heading: clamp(.5rem, 2vw + 1rem, 2.5rem);
+  --text-subheading: clamp(.5rem, 1vw + 0.5rem, 1rem);
+  --text-body: clamp(1rem, 1vw + 0.5rem, 1.25rem);
+  --text-button: clamp(0.875rem, 0.5vw + 0.8rem, 1rem);
+
+  --color-green: #7A9A85;
+  --color-red: #C47D63;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+button {
+  cursor: pointer;
+}
+
+strong {
+  color: #754f29
+}
+
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,6 +97,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
