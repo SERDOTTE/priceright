@@ -11,29 +11,36 @@ const navItems = [
 ];
 
 export default function OrderNavLinks() {
-
     const pathname = usePathname();
 
     return (
-        <div className='flex sm:w-52'>
-            <section className='w-52 h-auto m-1 rounded-2xl bg-header text-white '>
-                <nav>
-                    <ul className="flex sm:flex-col items-center gap-1 py-1">
-                        {navItems.map((item) => (
-                            <li key={item.href} className='w-full px-1'>
-                                {(() => {
-                                    const isActive = pathname === item.href;
-                                    return (
-                                        <Link
-                                            href={item.href}
-                                            aria-current={isActive ? 'page' : undefined}
-                                            className={`block px-4 py-4 w-full text-button font-sm text-gray-100 rounded-xl transition duration-300 hover:bg-white hover:text-gray-900 ${isActive ? 'text-gray-700 bg-white' : ' '}`}>
-                                            {item.label}
-                                        </Link>
-                                    );
-                                })()}
-                            </li>
-                        ))}
+        <div className="flex sm:w-52">
+            <section 
+                style={{ backgroundColor: "#1A1A1A" }} 
+                className="w-52 h-auto m-1 rounded-2xl text-white shadow-sm"
+            >
+                <nav className="p-2">
+                    <ul className="flex sm:flex-col items-center gap-1.5 py-1">
+                        {navItems.map((item) => {
+                            const isActive = pathname === item.href;
+                            return (
+                                <li key={item.href} className="w-full">
+                                    <Link
+                                        href={item.href}
+                                        aria-current={isActive ? 'page' : undefined}
+                                        style={{
+                                            backgroundColor: isActive ? "#FFC200" : "transparent",
+                                            color: isActive ? "#1A1A1A" : "#FFFFFF"
+                                        }}
+                                        className={`block px-4 py-3.5 w-full text-sm font-semibold rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
+                                            isActive ? 'shadow-sm' : 'text-white/80'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </nav>
             </section>

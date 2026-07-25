@@ -15,7 +15,7 @@ export default async function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <Link href="/" className="text-xl font-bold text-ink">
           {/* Brand yellow as a background chip with ink text (contrast-safe). */}
-          <span className="rounded-md bg-brand px-1.5 py-0.5 text-ink">Price</span>
+          <span className="rounded-md bg-ink px-1.5 py-0.5 text-white">Price</span>
           Right
         </Link>
 

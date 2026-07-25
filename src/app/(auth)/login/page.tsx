@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { signIn, type AuthFormState } from "../actions";
+import { LogIn, AlertCircle } from "lucide-react";
 import { SubmitButton } from "../SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,13 +30,13 @@ export default function LoginPage() {
         <CardContent>
           <form action={formAction} className="flex flex-col gap-4" noValidate>
             {state.error && (
-              <p
-                role="alert"
-                aria-live="polite"
-                className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 ring-1 ring-red-200"
-              >
-                {state.error}
-              </p>
+              <div role="alert" aria-live="polite"
+                className="flex flex-row gap-2 items-center rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-600/20">
+                <AlertCircle className="size-4" />
+                <p>
+                  {state.error}
+                </p>
+              </div>
             )}
 
             <div className="flex flex-col gap-1.5">
@@ -54,7 +55,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <SubmitButton label="Sign in" />
+            <SubmitButton label="Sign in" Icon={LogIn}/>
           </form>
 
           <p className="mt-4 text-center text-sm text-muted-foreground">

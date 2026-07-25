@@ -104,7 +104,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {errorMessage && (
-        <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+        <div className="flex items-center gap-3 rounded-xl border border-red-600/20 bg-red-50 px-4 py-3 text-sm text-red-600">
           <AlertCircle className="h-5 w-5 shrink-0" />
           <span className="font-medium">{errorMessage}</span>
         </div>
@@ -112,17 +112,17 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <User className="h-4 w-4 text-slate-400" />
+          <label className="text-xs font-medium text-foreground flex items-center gap-2">
+            <User className="h-4 w-4 text-muted-foreground" />
             Customer <span className="text-red-500">*</span>
           </label>
           <Select value={customerId} onValueChange={(value) => setCustomerId(value || "")}>
-            <SelectTrigger className="h-11 rounded-xl border-slate-200 bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+            <SelectTrigger className="h-11 rounded-xl border-border bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20">
               <SelectValue placeholder="Select a customer..." />
             </SelectTrigger>
             <SelectContent>
               {customers.length === 0 ? (
-                <div className="p-3 text-sm text-slate-400 text-center">No customers found. Add one first.</div>
+                <div className="p-3 text-sm text-muted-foreground text-center">No customers found. Add one first.</div>
               ) : (
                 customers.map((customer) => (
                   <SelectItem key={customer.id} value={customer.id}>
@@ -135,13 +135,13 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <FileText className="h-4 w-4 text-slate-400" />
+          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+            <FileText className="h-4 w-4 text-muted-foreground" />
             Pricing Sheet Template
-            <span className="text-xs font-normal text-slate-400">Optional</span>
+            <span className="text-xs font-normal text-muted-foreground">Optional</span>
           </label>
           <Select value={pricingSheetId || undefined} onValueChange={(value) => handlePricingSheetSelect(value || "")}>
-            <SelectTrigger className="h-11 rounded-xl border-slate-200 bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+            <SelectTrigger className="h-11 rounded-xl border-border bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20">
               <SelectValue placeholder="Load from pricing model..." />
             </SelectTrigger>
             <SelectContent>
@@ -156,8 +156,8 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-          <FileText className="h-4 w-4 text-slate-400" />
+        <label className="text-sm font-medium text-foreground flex items-center gap-2">
+          <FileText className="h-4 w-4 text-muted-foreground" />
           Project Description
           <span className="text-red-500">*</span>
         </label>
@@ -166,22 +166,22 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe the scope, key milestones, inclusions, and deliverables..."
-          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all shadow-sm resize-none"
+          className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all shadow-sm resize-none"
         />
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-muted-foreground">
           Be specific about deliverables, milestones, and any exclusions.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <DollarSign className="h-4 w-4 text-slate-400" />
+          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
             Total Price (USD)
             <span className="text-red-500">*</span>
           </label>
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-sm font-semibold text-slate-400">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-sm font-semibold text-muted-foreground">
               $
             </span>
             <Input
@@ -191,14 +191,14 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="0.00"
-              className="h-11 rounded-xl border-slate-200 bg-white pl-8 text-sm font-semibold tabular-nums shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="h-11 rounded-xl border-border bg-white pl-8 text-sm font-semibold tabular-nums shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-slate-400" />
+          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
             Target Due Date
             <span className="text-red-500">*</span>
           </label>
@@ -206,24 +206,24 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            className="h-11 rounded-xl border-slate-200 bg-white text-sm shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className="h-11 rounded-xl border-border bg-white text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
           />
         </div>
       </div>
 
       <div className="flex items-center justify-end gap-3 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-          className="h-11 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
-        >
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.back()}
+            className="h-11 rounded-xl border-border text-foreground hover:bg-muted font-medium"
+          >
           Cancel
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
-          className="h-11 rounded-xl bg-callout text-white hover:bg-callout font-semibold shadow-sm transition-all"
+          className="h-11 rounded-xl bg-action text-white hover:bg-action font-semibold shadow-sm transition-all"
         >
           {isLoading ? (
             <>

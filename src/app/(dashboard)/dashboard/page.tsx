@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Filter from '@/components/Filter';
 import { useRouter } from 'next/navigation'
@@ -32,53 +32,63 @@ export const FilterList = [
 ];
 
 export default function OrdersDashboard() {
-  // const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const handleNavigation = () => {
     router.push('/dashboard/orders');
   }
 
   return (
-        <div className="min-h-screen flex-1 w-full m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)]">
-      {/* <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} /> */}
+    <div style={{ color: "#1A1A1A" }}
+      className="min-h-screen flex-1 w-full m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)] bg-white"
+    >
 
       <main className="p-8 max-w-7xl mx-auto">
-        <div className="flex max-sm:flex-col max-sm:gap-2 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-5">
-          <div id="searchBoxContainer">
-            <div className="searchContainer flex items-center justify-between gap-2 h-8 ">
+        <div>
+          <h1 className="text-2xl font-bold">Welcome, {"displayName"}</h1>
+          <p className="text-sm text-muted-foreground">
+            This is your private workspace. Your data is visible only to you.
+          </p>
+        </div>
+        <span className='border-t border-gray-200 my-4  block'></span>
+        <div className="flex max-sm:flex-col max-sm:gap-3 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-4">
+          <div id="searchBoxContainer" className="w-full sm:w-auto flex-1 max-w-md mr-4">
+            <div className="searchContainer flex items-center justify-between gap-2 h-9">
               <input
                 type="search"
                 id="search"
                 name="q"
                 placeholder="Search Orders"
-                className="w-full h-full text-sm rounded-md ring-1 focus:ring-blue-500 bg-transparent outline-none px-2 py-1"
+                style={{ borderColor: "#1A1A1A20", color: "#1A1A1A" }}
+                className="w-full h-full text-xs rounded-lg border bg-transparent outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all shadow-sm"
               />
-              <div className="search-icon bg-callout flex justify-center items-center rounded-full w-13 h-10 hover:cursor-pointer hover:bg-callout/-70">
-                <button aria-label="button" className='hover:cursor-pointer' >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="size-4">
+              <div
+                style={{ backgroundColor: "#FF4A3C" }}
+                className="search-icon flex justify-center items-center rounded-full size-9 hover:cursor-pointer hover:opacity-90 transition-all shrink-0 shadow-sm"
+              >
+                <button aria-label="button" className="hover:cursor-pointer flex items-center justify-center w-full h-full text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="size-3.5 fill-current">
                     <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>
                   </svg>
                 </button>
               </div>
-
             </div>
           </div>
 
-          {/* Opening the modal is now just a link */}
-          <button onClick={handleNavigation}
-            className="bg-header2 text-white px-6 py-2 rounded-md font-medium hover:cursor-pointer"
-          >+ Create Order
+          <button
+            onClick={handleNavigation}
+            style={{ backgroundColor: "#FFC200", color: "#1A1A1A" }}
+            className="px-4 py-2 rounded-lg text-xs font-semibold hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0"
+          >
+            + Create Order
           </button>
         </div>
-        <div className='bg-gray-200 shadow-md/20 rounded-l sm:max-w-250 my-0 mx-auto'>
+
+        <div className='bg-muted shadow-md/20 rounded-lg sm:max-w-250 my-0 mx-auto mb-6'>
           <Filter filters={FilterList} />
         </div>
- 
-        {/* Table rendering goes here (same as before, mapping over 'orders') */}
-        <div className="bg-[#FFFFFF] rounded-lg shadow overflow-hidden">
+
+        <div className="bg-white rounded-lg shadow overflow-hidden sm:max-w-250 mx-auto">
           {/* ... table content ... */}
-          {/* View button inside table: */}
-          {/* <Link href={`/dashboard?viewOrder=${order.id}`}>View</Link> */}
         </div>
       </main>
     </div>
