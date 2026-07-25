@@ -16,7 +16,7 @@ export default async function Header() {
         <Link href="/" className="text-xl font-bold text-ink">
           {/* Brand yellow as a background chip with ink text (contrast-safe). */}
           <span className="rounded-md bg-ink px-1.5 py-0.5 text-white">Price</span>
-          Right
+          <span className="rounded-md bg-brand px-1.5 py-0.5 text-black">Right</span>
         </Link>
 
         {user ? (
