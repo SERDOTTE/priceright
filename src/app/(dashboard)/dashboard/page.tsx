@@ -39,19 +39,19 @@ export default function OrdersDashboard() {
 
   return (
     <div style={{ color: "#1A1A1A" }}
-      className="min-h-screen flex-1 w-full m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)] bg-white"
+      className="min-h-screen flex-1 w-auto m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)] bg-white"
     >
 
       <main className="p-8 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-2xl font-bold">Welcome, {"displayName"}</h1>
+          <h1 className="text-2xl font-bold font-heading">Welcome, {"displayName"}</h1>
           <p className="text-sm text-muted-foreground">
             This is your private workspace. Your data is visible only to you.
           </p>
         </div>
         <span className='border-t border-gray-200 my-4  block'></span>
         <div className="flex max-sm:flex-col max-sm:gap-3 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-4">
-          <div id="searchBoxContainer" className="w-full sm:w-auto flex-1 max-w-md mr-4">
+          <div id="searchBoxContainer" className="w-full sm:w-[50%] max-w-md mr-4">
             <div className="searchContainer flex items-center justify-between gap-2 h-9">
               <input
                 type="search"
@@ -77,7 +77,7 @@ export default function OrdersDashboard() {
           <button
             onClick={handleNavigation}
             style={{ backgroundColor: "#FFC200", color: "#1A1A1A" }}
-            className="px-4 py-2 rounded-lg text-xs font-semibold hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0"
+            className="px-4 py-2 rounded-lg text-xs font-semibold hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0 max-sm:mx-auto"
           >
             + Create Order
           </button>

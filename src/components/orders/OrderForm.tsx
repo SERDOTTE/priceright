@@ -112,12 +112,12 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <label className="text-xs font-medium text-foreground flex items-center gap-2">
+          <label className="text-sm font-medium text-foreground flex items-center gap-2">
             <User className="h-4 w-4 text-muted-foreground" />
             Customer <span className="text-red-500">*</span>
           </label>
           <Select value={customerId} onValueChange={(value) => setCustomerId(value || "")}>
-            <SelectTrigger className="h-11 rounded-xl border-border bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20">
+            <SelectTrigger className="h-11 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20">
               <SelectValue placeholder="Select a customer..." />
             </SelectTrigger>
             <SelectContent>
@@ -141,7 +141,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
             <span className="text-xs font-normal text-muted-foreground">Optional</span>
           </label>
           <Select value={pricingSheetId || undefined} onValueChange={(value) => handlePricingSheetSelect(value || "")}>
-            <SelectTrigger className="h-11 rounded-xl border-border bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20">
+            <SelectTrigger className="h-11 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring/20">
               <SelectValue placeholder="Load from pricing model..." />
             </SelectTrigger>
             <SelectContent>

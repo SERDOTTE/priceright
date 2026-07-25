@@ -35,7 +35,7 @@ export default function RootLayout({
         poppins.variable,
       )}
     >
-      <body className="flex min-h-screen flex-col bg-background text-foreground">
+      <body className="flex min-h-screen flex-col bg-background max-w-full text-foreground ">
         <Header />
         {children}
         <Footer />
