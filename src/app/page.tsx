@@ -15,7 +15,7 @@ export default async function Home() {
         <span className="h-2 w-2 rounded-full bg-action" />
         Streamline Your Workflow
       </div>
-      <h1 className="font-heading text-4xl font-bold tracking-tight text-ink">PriceRight &amp; QuoteEasy</h1>
+      <h1 className="font-heading text-4xl font-bold tracking-tight text-ink dark:text-white">PriceRight &amp; QuoteEasy</h1>
       <p className="max-w-xl text-lg text-muted-foreground">
         Price your work with confidence, manage orders from quote to delivery, and keep
         track of your cash flow.

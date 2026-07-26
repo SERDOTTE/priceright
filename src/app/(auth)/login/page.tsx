@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { signIn, type AuthFormState } from "../actions";
-import { LogIn, AlertCircle } from "lucide-react";
+import { LogIn, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { SubmitButton } from "../SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,7 @@ import {
 const initialState: AuthFormState = {};
 
 export default function LoginPage() {
+  const [ showPassword, setShowPassword ] = useState(false);
   const [state, formAction] = useActionState(signIn, initialState);
 
   return (
@@ -41,21 +42,28 @@ export default function LoginPage() {
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" autoComplete="email" required />
+              <Input id="email" name="email" placeholder="name@example.com" type="email" autoComplete="email" required />
             </div>
-
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 relative">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
+                placeholder="••••••••"
+                minLength={6}
                 required
+                aria-describedby="password-hint"
               />
+              <span onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-[50%] translate-y-[-50%] cursor-pointer">
+                {showPassword ? <Eye className="size-4 text-gray-400" /> : <EyeOff className="size-4 text-gray-400" />}</span>
+              <p id="password-hint" className="text-xs text-muted-foreground">
+                At least 6 characters.
+              </p>
             </div>
 
-            <SubmitButton label="Sign in" Icon={LogIn}/>
+            <SubmitButton label="Sign in" Icon={LogIn} />
           </form>
 
           <p className="mt-4 text-center text-sm text-muted-foreground">

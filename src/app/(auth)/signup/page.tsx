@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { signUp, type AuthFormState } from "../actions";
 import { SubmitButton } from "../SubmitButton";
-import { ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,6 +18,7 @@ import {
 const initialState: AuthFormState = {};
 
 export default function SignUpPage() {
+  const [showPassword, setShowPassword] = useState(false);
   const [state, formAction] = useActionState(signUp, initialState);
 
   return (
@@ -43,25 +44,28 @@ export default function SignUpPage() {
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" type="text" autoComplete="name" required />
+              <Input id="name" name="name" type="text" placeholder="John Doe" autoComplete="name" required />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" autoComplete="email" required />
+              <Input id="email" name="email" type="email" placeholder="name@example.com" autoComplete="email" required />
             </div>
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 relative">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
+                placeholder="••••••••"
                 minLength={6}
                 required
                 aria-describedby="password-hint"
               />
+              <span onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-[50%] translate-y-[-50%] cursor-pointer">
+                {showPassword ? <Eye className="size-4 text-gray-400" /> : <EyeOff className="size-4 text-gray-400" />}</span>
               <p id="password-hint" className="text-xs text-muted-foreground">
                 At least 6 characters.
               </p>

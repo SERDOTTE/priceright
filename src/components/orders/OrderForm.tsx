@@ -102,7 +102,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-8 ">
       {errorMessage && (
         <div className="flex items-center gap-3 rounded-xl border border-red-600/20 bg-red-50 px-4 py-3 text-sm text-red-600">
           <AlertCircle className="h-5 w-5 shrink-0" />
@@ -110,7 +110,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className=" grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground flex items-center gap-2">
             <User className="h-4 w-4 text-muted-foreground" />
@@ -166,7 +166,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe the scope, key milestones, inclusions, and deliverables..."
-          className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all shadow-sm resize-none"
+          className="w-full rounded-xl border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all shadow-sm resize-none"
         />
         <p className="text-xs text-muted-foreground">
           Be specific about deliverables, milestones, and any exclusions.

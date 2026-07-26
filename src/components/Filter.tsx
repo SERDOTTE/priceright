@@ -1,4 +1,6 @@
-import { FilterList } from "@/app/(dashboard)/dashboard/page";
+'use client' 
+
+// import { FilterList } from "@/app/(dashboard)/dashboard/page";
 import { useState } from "react";
 
 interface OptionsItem {

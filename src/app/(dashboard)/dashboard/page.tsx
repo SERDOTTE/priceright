@@ -1,7 +1,7 @@
-﻿'use client'
-
-import Filter from '@/components/Filter';
-import { useRouter } from 'next/navigation'
+﻿import Filter from '@/components/Filter';
+import Name from '@/components/Names';
+import Link from 'next/link'
+import { createClient } from "@/lib/supabase/server";
 
 export const FilterList = [
   {
@@ -31,20 +31,24 @@ export const FilterList = [
   }
 ];
 
-export default function OrdersDashboard() {
-  const router = useRouter();
-  const handleNavigation = () => {
-    router.push('/dashboard/orders');
-  }
+export default async function OrdersDashboard() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  console.log(user)
 
   return (
-    <div style={{ color: "#1A1A1A" }}
-      className="min-h-screen flex-1 w-auto m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)] bg-white"
+    <div
+      className="dark:bg-ink min-h-screen text-dark flex-1 w-auto m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)] bg-white"
     >
 
       <main className="p-8 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-2xl font-bold font-heading">Welcome, {"displayName"}</h1>
+          <h1 className="text-2xl font-bold font-heading">
+            {/* If full_name is undefined, it will pass "Guest" instead */}
+            Welcome, <Name username={user?.user_metadata?.name || "Guest"} fullname={false} />
+          </h1>
           <p className="text-sm text-muted-foreground">
             This is your private workspace. Your data is visible only to you.
           </p>
@@ -74,13 +78,13 @@ export default function OrdersDashboard() {
             </div>
           </div>
 
-          <button
-            onClick={handleNavigation}
+          <Link
+            href={'/dashboard/orders'}
             style={{ backgroundColor: "#FFC200", color: "#1A1A1A" }}
             className="px-4 py-2 rounded-lg text-xs font-semibold hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0 max-sm:mx-auto"
           >
             + Create Order
-          </button>
+          </Link>
         </div>
 
         <div className='bg-muted shadow-md/20 rounded-lg sm:max-w-250 my-0 mx-auto mb-6'>

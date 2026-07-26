@@ -45,7 +45,7 @@ const mockOrders: Order[] = [
     description: "Full-stack web application revamp and dashboard integration.",
     price: 2500.00,
     due_date: "2026-08-15",
-    status: "in_progress",
+    status: "completed",
     payment_status: "pending",
   },
   {

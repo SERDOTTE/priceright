@@ -9,21 +9,31 @@
   --animate-hide: hide 0.5s ease-in-out forwards;
 
   @keyframes show {
-    0% { transform: scale(0); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(0);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 
   @keyframes hide {
-    0% { transform: scale(1); }
-    100% { transform: scale(0); }
+    0% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(0);
+    }
   }
 
   --color-header: #023047;
   --color-background2: #8ECAE6;
   --color-text-body: #ffffff;
-  --color-button-bg: #FFC200 ;
+  --color-button-bg: #FFC200;
   --color-button-text: #023047;
-  --color-callout: #FF4A3C ;
+  --color-callout: #FF4A3C;
   --color-subheading: #219EBC;
 
   /* Fluid Typography Variables */
@@ -44,6 +54,7 @@
   --color-action: #ff4a3c;
   --color-action-foreground: #ffffff;
   --color-ink: #1a1a1a;
+  --color-ink-dark: #4c4c4c;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -112,6 +123,8 @@ strong {
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --breakpoint-sm: 768px;
+  --color-dark: var(--dark)
 }
 
 :root {
@@ -121,8 +134,10 @@ strong {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #ffc200; /* brand yellow, so shadcn Button (auth) is on-brand */
-  --primary-foreground: #1a1a1a; /* ink on brand: contrast-safe */
+  --primary: #ffc200;
+  /* brand yellow, so shadcn Button (auth) is on-brand */
+  --primary-foreground: #1a1a1a;
+  /* ink on brand: contrast-safe */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -132,7 +147,8 @@ strong {
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: #ffc200; /* brand focus ring */
+  --ring: #ffc200;
+  /* brand focus ring */
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -147,10 +163,12 @@ strong {
   --sidebar-accent-foreground: #1A1A1A;
   --sidebar-border: #e2e8f0;
   --sidebar-ring: #FFC200;
+  --dark: #1A1A1A;
+
 }
 
 .dark {
-  --background: #0f172a;
+  --background: var(--color-ink);
   --foreground: #f8fafc;
   --card: #1e293b;
   --card-foreground: #f8fafc;
@@ -181,18 +199,22 @@ strong {
   --sidebar-accent-foreground: #f8fafc;
   --sidebar-border: #334155;
   --sidebar-ring: #FFC200;
+  --dark: #ffffff;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
+
   h1,
   h2,
   h3,
@@ -202,3 +224,7 @@ strong {
     @apply font-heading;
   }
 }
+
+/* body {
+  color: #4c4c4c;
+} */
