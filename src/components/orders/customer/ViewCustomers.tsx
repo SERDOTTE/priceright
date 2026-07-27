@@ -46,10 +46,10 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
     );
 
     return (
-        <div style={{ color: "#1A1A1A" }} className="w-auto box-border  rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)">
+        <div className="w-auto box-border  rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)">
             <main className="w-auto max-w-5xl mx-auto box-border">
                 {/* Top Control Bar: Search & Create Button */}
-                <div className="flex flex-col sm:flex-row gap-3 justify-between items-center rounded-lg mb-6 shadow-md/20 p-4 w-full box-border">
+                <div className="flex flex-col sm:flex-row gap-3 justify-between items-center rounded-lg mb-6 shadow-md/20 p-4 w-full box-border dark:bg-muted">
                     <div id="searchBoxContainer" className="w-full sm:flex-1 max-w-md">
                         <div className="searchContainer flex items-center justify-between gap-2 h-9 w-full">
                             <input
@@ -59,8 +59,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search Orders..."
-                                style={{ borderColor: "#1A1A1A20", color: "#1A1A1A" }}
-                                className="w-full h-full text-xs rounded-lg border bg-transparent outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all shadow-sm"
+                                className="dark:bg-ink w-full h-full text-xs rounded-lg border outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all shadow-sm"
                             />
 
                         </div>
@@ -77,7 +76,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
                     <div className="w-full box-border">
                         <table className="w-full text-left border-collapse text-sm table-auto">
                             <thead>
-                                <tr className="border-b border-ink/10 bg-ink/5 text-ink font-semibold">
+                                <tr className="border-b border-ink/10  dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">
                                     <th className="p-3">Name</th>
                                     <th className="p-3 hidden md:table-cell">Country</th>
                                     <th className="p-3 hidden sm:table-cell">Date Created</th>
@@ -113,7 +112,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
                                                     : 'N/A'}
                                             </td>
                                             <td className="p-3">
-                                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-300/40 dark:text-gray-400 text-ink capitalize truncate">
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-300/40 dark:text-gray-200 text-ink capitalize truncate">
                                                     {order.phone}
                                                 </span>
                                             </td>

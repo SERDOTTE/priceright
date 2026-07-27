@@ -104,7 +104,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form action={formAction} className="flex flex-col gap-5 ">
+                <form action={formAction} className="flex flex-col gap-8 ">
                     {/* {state.message && !state.success && (
                         <div
                             role="alert"
@@ -159,42 +159,43 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                         )}
                     </div>
 
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="country" className="font-medium">
-                            <Globe className="size-4 text-muted-foreground" /> Country                         </Label>
-                        <div className="relative flex items-center">
-                            <Input
-                                id="country"
-                                name="country"
-                                type="text"
-                                placeholder="United States"
-                                autoComplete="country-name"
-                                required
-                                className="pl-5 rounded-xl"
-                            />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="country" className="font-medium">
+                                <Globe className="size-4 text-muted-foreground" /> Country                         </Label>
+                            <div className="relative flex items-center">
+                                <Input
+                                    id="country"
+                                    name="country"
+                                    type="text"
+                                    placeholder="United States"
+                                    autoComplete="country-name"
+                                    required
+                                    className="pl-5 rounded-xl"
+                                />
+                            </div>
+                            {showErrors && state.errors?.country && (
+                                <p className="text-xs text-red-600">{state.errors.country[0]}</p>
+                            )}
                         </div>
-                        {showErrors && state.errors?.country && (
-                            <p className="text-xs text-red-600">{state.errors.country[0]}</p>
-                        )}
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="phone" className="font-medium">
-                            <Phone className="size-4 text-muted-foreground" /> Phone Number                         </Label>
-                        <div className="relative flex items-center">
-                            <Input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                placeholder="+1 (555) 000-0000"
-                                autoComplete="tel"
-                                required
-                                className="pl-5 rounded-xl"
-                            />
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="phone" className="font-medium">
+                                <Phone className="size-4 text-muted-foreground" /> Phone Number                         </Label>
+                            <div className="relative flex items-center">
+                                <Input
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    placeholder="+1 (555) 000-0000"
+                                    autoComplete="tel"
+                                    required
+                                    className="pl-5 rounded-xl"
+                                />
+                            </div>
+                            {showErrors && state.errors?.phone && (
+                                <p className="text-xs text-red-600">{state.errors.phone[0]}</p>
+                            )}
                         </div>
-                        {showErrors && state.errors?.phone && (
-                            <p className="text-xs text-red-600">{state.errors.phone[0]}</p>
-                        )}
                     </div>
 
                     <div className="pt-2">
