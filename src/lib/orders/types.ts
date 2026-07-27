@@ -12,6 +12,8 @@ export interface Customer {
   email: string;
   country: string;
   phone: string;
+  created_at?: string | null;
+
 }
 
 export interface PricingSheet {

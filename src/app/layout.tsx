@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col bg-background max-w-full text-foreground ">
         <Header />
         {children}
-        <Toaster duration={3000} position="top-center" /> {/* Must be mounted here */}
+        <Toaster richColors duration={3000} position="top-center" /> {/* Must be mounted here */}
         <Footer />
       </body>
     </html>

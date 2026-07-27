@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { User, Mail, Globe, Phone, ArrowRight, AlertCircle } from "lucide-react";
@@ -13,7 +13,8 @@ import {
     CardDescription,
     CardContent,
 } from "@/components/ui/card";
-import { SubmitButton } from "../SubmitButton"; // Adjust path if needed based on your file structure
+import { SubmitButton } from "../../SubmitButton"; // Adjust path if needed based on your file structure
+import { useRouter } from 'next/navigation';
 
 const CustomerFormSchema = z.object({
     name: z
@@ -58,20 +59,42 @@ interface CustomerFormProps {
 const initialState: CustomerFormState = {};
 
 export default function CustomerForm({ action }: CustomerFormProps) {
+    const [name, setName] = useState(' ');
+    const [email, setEmail] = useState(' ');
     const [state, formAction] = useActionState(async (prevState: CustomerFormState, formData: FormData) => {
         return await action(prevState, formData);
     }, initialState);
+    const [showErrors, setShowErrors] = useState(false);
+    const router = useRouter();
+
 
     useEffect(() => {
         if (state?.success) {
             toast.success(state.message || "Customer created successfully!");
+            router.refresh();
         } else if (state?.message && !state?.success) {
+            setShowErrors(true);
             toast.error(state.message);
+            const timout = setTimeout(() => {
+                setShowErrors(false);
+                clearTimeout(timout);
+            }, 3000);
+            return () => clearTimeout(timout);
         }
     }, [state]);
 
+    useEffect(() => {
+        if (name) {
+            setEmail(`${name.replace(/\s+/g, '').toLowerCase()}@gmail.com`);
+        } else {
+            setEmail("");
+        }
+    }, [name]);
+
     return (
-        <Card className="p-6 mx-auto w-full max-w-3xl border-slate-200 shadow-sm ">
+        <Card
+            style={{ border: "none", boxShadow: "none" }}
+            className="p-6 w-full max-w-3xl">
             <CardHeader>
                 <CardTitle className="font-heading text-2xl font-bold ">
                     Add New Customer
@@ -81,7 +104,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form action={formAction} className="flex flex-col gap-5" noValidate>
+                <form action={formAction} className="flex flex-col gap-5 ">
                     {/* {state.message && !state.success && (
                         <div
                             role="alert"
@@ -106,16 +129,18 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                 autoComplete="name"
                                 required
                                 className="pl-5 rounded-xl"
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        {state.errors?.name && (
+                        {showErrors && state.errors?.name && (
                             <p className="text-xs text-red-600">{state.errors.name[0]}</p>
                         )}
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="email" className="font-medium">
-                            <Mail className="size-4 text-muted-foreground" /> Email             </Label>
+                            <Mail className="size-4 text-muted-foreground" /> Email
+                        </Label>
                         <div className="relative flex items-center">
                             <Input
                                 id="email"
@@ -123,11 +148,13 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                 type="email"
                                 placeholder="jane@example.com"
                                 autoComplete="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                                 className="pl-5 rounded-xl"
                             />
                         </div>
-                        {state.errors?.email && (
+                        {showErrors && state.errors?.email && (
                             <p className="text-xs text-red-600">{state.errors.email[0]}</p>
                         )}
                     </div>
@@ -146,7 +173,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                 className="pl-5 rounded-xl"
                             />
                         </div>
-                        {state.errors?.country && (
+                        {showErrors && state.errors?.country && (
                             <p className="text-xs text-red-600">{state.errors.country[0]}</p>
                         )}
                     </div>
@@ -165,14 +192,14 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                 className="pl-5 rounded-xl"
                             />
                         </div>
-                        {state.errors?.phone && (
+                        {showErrors && state.errors?.phone && (
                             <p className="text-xs text-red-600">{state.errors.phone[0]}</p>
                         )}
                     </div>
 
                     <div className="pt-2">
                         <SubmitButton label="Create Customer"
-                            className="bg-action hover:bg-action rounded-xl w-auto h-11 px-4 ml-auto text-white"
+                            className="bg-action hover:bg-action rounded-xl w-auto h-11 mt-4 px-4 ml-auto text-white"
                             Icon={ArrowRight} />
                     </div>
                 </form>

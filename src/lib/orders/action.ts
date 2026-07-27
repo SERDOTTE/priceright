@@ -9,7 +9,7 @@ const CustomerFormSchema = z.object({
     name: z
         .string()
         .trim()
-        .min(5, "Customer's name is required.")
+        .min(1, "Customer's name is required.")
         .max(100, "Name must be less than 100 characters."),
     email: z
         .string()
@@ -153,3 +153,20 @@ export async function createCustomer(prevState: State, formData: FormData): Prom
 //         success: true,
 //     };
 // }
+
+export async function selectAllCustomers() {
+    const supabase = await createClient();
+    try {
+        const { data, error } = await supabase
+            .from('customers')
+            .select('*');
+        if (error) throw error;
+        return data;
+        console.log(data);
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return null;
+    }
+}
+
+

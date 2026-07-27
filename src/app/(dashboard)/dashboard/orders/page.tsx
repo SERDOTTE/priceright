@@ -20,7 +20,7 @@ export default async function OrderFormPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-white dark:bg-[#1e293b] shadow-sm">
+        <div className="rounded-2xl border border-border shadow-sm">
           <div className="px-6 sm:px-8 py-6">
             <OrderForm customers={[]} pricingSheets={[]} />
           </div>
