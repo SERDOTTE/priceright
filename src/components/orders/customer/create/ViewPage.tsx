@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Customer } from "@/lib/orders/types";
 import { selectAllCustomers } from "@/lib/orders/action";
 import ViewEditCustomers from "@/components/orders/customer/create/ViewCustomers";
-import Loading from "@/components/Loading";
+import Loading from "../../../AnimateSpin";
 
 async function CustomersList() {
     const customers = await selectAllCustomers();
