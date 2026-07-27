@@ -1,6 +1,7 @@
 
-import CustomersPage from "@/components/orders/customer/ViewPage";
-import AddButton from "@/components/orders/customer/AddButton";
+import CustomersPage from "@/components/orders/customer/create/ViewPage";
+import AddButton from "@/components/orders/customer/create/AddButton";
+import Link from "next/link"
 
 export default async function CustomerFormPage() {
 
@@ -10,7 +11,7 @@ export default async function CustomerFormPage() {
         <div className="flex flex-row justify-between w-full">
           <div className="mb-8">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <span>Dashboard</span>
+              <span><Link href={"/dashboard"} className="underline underline-offset-2">Dashboard</Link></span>
               <span className="text-border">/</span>
               <span className="text-foreground font-medium">Customers</span>
             </div>

@@ -13,8 +13,9 @@ import {
     CardDescription,
     CardContent,
 } from "@/components/ui/card";
-import { SubmitButton } from "../../SubmitButton"; // Adjust path if needed based on your file structure
+import { SubmitButton } from "../../../SubmitButton"; // Adjust path if needed based on your file structure
 import { useRouter } from 'next/navigation';
+import { Customer } from "@/lib/orders/types";
 
 const CustomerFormSchema = z.object({
     name: z
@@ -53,14 +54,15 @@ export type CustomerFormState = {
 };
 
 interface CustomerFormProps {
+    customer: Customer;
     action: (prevState: CustomerFormState, formData: FormData) => Promise<CustomerFormState>;
 }
 
 const initialState: CustomerFormState = {};
 
-export default function CustomerForm({ action }: CustomerFormProps) {
-    const [name, setName] = useState(' ');
-    const [email, setEmail] = useState(' ');
+export default function EditCustomerForm({ action, customer }: CustomerFormProps) {
+    // const [name, setName] = useState(customer.name);
+    // const [email, setEmail] = useState(customer.email);
     const [state, formAction] = useActionState(async (prevState: CustomerFormState, formData: FormData) => {
         return await action(prevState, formData);
     }, initialState);
@@ -75,21 +77,13 @@ export default function CustomerForm({ action }: CustomerFormProps) {
         } else if (state?.message && !state?.success) {
             setShowErrors(true);
             toast.error(state.message);
-            const timout = setTimeout(() => {
+            const timeout = setTimeout(() => {
                 setShowErrors(false);
-                clearTimeout(timout);
+                clearTimeout(timeout);
             }, 3000);
-            return () => clearTimeout(timout);
+            return () => clearTimeout(timeout);
         }
     }, [state]);
-
-    useEffect(() => {
-        if (name) {
-            setEmail(`${name.replace(/\s+/g, '').toLowerCase()}@gmail.com`);
-        } else {
-            setEmail("");
-        }
-    }, [name]);
 
     return (
         <Card
@@ -97,7 +91,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
             className="p-6 w-full max-w-3xl">
             <CardHeader>
                 <CardTitle className="font-heading text-2xl font-bold ">
-                    Add New Customer
+                    Edit Customer
                 </CardTitle>
                 <CardDescription className="text-muted-foreground">
                     Enter your customer's details to manage orders and quotes.
@@ -129,7 +123,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                 autoComplete="name"
                                 required
                                 className="pl-5 rounded-xl"
-                                onChange={(e) => setName(e.target.value)}
+                                defaultValue={customer.name}
                             />
                         </div>
                         {showErrors && state.errors?.name && (
@@ -148,8 +142,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                 type="email"
                                 placeholder="jane@example.com"
                                 autoComplete="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                defaultValue={customer.email}
                                 required
                                 className="pl-5 rounded-xl"
                             />
@@ -171,6 +164,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                     placeholder="United States"
                                     autoComplete="country-name"
                                     required
+                                    defaultValue={customer.country}
                                     className="pl-5 rounded-xl"
                                 />
                             </div>
@@ -189,6 +183,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                                     placeholder="+1 (555) 000-0000"
                                     autoComplete="tel"
                                     required
+                                    defaultValue={customer.phone}
                                     className="pl-5 rounded-xl"
                                 />
                             </div>

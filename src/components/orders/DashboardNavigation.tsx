@@ -37,7 +37,7 @@ export default function OrderNavLinks() {
                         <nav className="p-2">
                             <ul className="flex flex-col items-center gap-1.5 py-1">
                                 {navItems.map((item) => {
-                                    const isActive = pathname === item.href;
+                                    const isActive = pathname === item.href || (item.href === "/dashboard/customers" && pathname.startsWith("/dashboard/customers/edit/"));;
                                     return (
                                         <li key={item.href} className="w-full">
                                             <Link

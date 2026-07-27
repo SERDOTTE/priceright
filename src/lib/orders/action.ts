@@ -156,10 +156,32 @@ export async function createCustomer(prevState: State, formData: FormData): Prom
 
 export async function selectAllCustomers() {
     const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        throw new Error("Unauthorized: User not logged in.");
+    }
+
     try {
         const { data, error } = await supabase
             .from('customers')
-            .select('*');
+            .select('*')
+            .eq("user_id", user.id);
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return null;
+    }
+}
+
+
+export async function selectOneCustomer(id: string) {
+    const supabase = await createClient();
+    try {
+        const { data, error } = await supabase
+            .from('customers')
+            .select('*').eq('id', id).single();
         if (error) throw error;
         return data;
         console.log(data);

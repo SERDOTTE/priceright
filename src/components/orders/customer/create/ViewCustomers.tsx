@@ -70,7 +70,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
                 <div className="bg-muted shadow-md/20 rounded-lg w-full mb-6 p-2 box-border">
                     <Filter filters={FilterList} />
                 </div>
-
+                
                 {/* Orders Table Container */}
                 <div className=" rounded-xl border border-ink/10 shadow-sm  box-border max-h-200 overflow-y-auto scrollbar-thin">
                     <div className="w-full box-border">
@@ -118,7 +118,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
                                             </td>
                                             <td className="p-3 text-right space-x-1.5 whitespace-nowrap">
                                                 <Link
-                                                    href={`/dashboard/edit/${order.id}`}
+                                                    href={`/dashboard/customers/edit/${order.id}`}
                                                     className="inline-flex items-center justify-center size-7 rounded-lg border border-ink/20 bg-white hover:bg-ink/10 dark:text-gray-400 text-ink transition-all"
                                                     title="View / Edit"
                                                 >
