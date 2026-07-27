@@ -3,18 +3,14 @@
 export interface User {
   id: string; // References auth.users.id
   email: string;
-  first_name: string;
-  last_name: string;
-  middle_name?: string | null;
 }
 
 export interface Customer {
   id: string;
   user_id: string;
-  first_name: string;
-  last_name: string;
-  middle_name?: string | null;
+  name: string;
   email: string;
+  country: string;
   phone: string;
 }
 
@@ -37,7 +33,7 @@ export interface Material {
   quantity: number;
 }
 
-export type OrderStatus = 'quote_sent' | 'approved' | 'in_progress' | 'delivered';
+export type OrderStatus = 'sent' | 'approved' | 'in_progress' | 'delivered';
 export type PaymentStatus = 'pending' | 'paid' | 'overdue';
 
 export interface Order {

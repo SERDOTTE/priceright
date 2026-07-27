@@ -13,7 +13,7 @@ export default async function Header() {
 
   return (
     <header className="border-b border-border bg-white dark:bg-ink dark:text-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+      <div className="mx-auto flex items-center justify-between px-4 py-4">
         <Link href="/" className="text-xl font-bold text-ink dark:text-white">
           {/* Brand yellow as a background chip with ink text (contrast-safe). */}
           <span className="rounded-lg bg-brand px-1.5 py-0.5 text-black shadow-sm">Price</span>

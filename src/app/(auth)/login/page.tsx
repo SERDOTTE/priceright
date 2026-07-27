@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { signIn, type AuthFormState } from "../actions";
 import { LogIn, AlertCircle, Eye, EyeOff } from "lucide-react";
-import { SubmitButton } from "../SubmitButton";
+import { SubmitButton } from "../../../components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {

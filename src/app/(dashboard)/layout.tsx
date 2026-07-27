@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import OrderNavLinks from "@/components/orders/OrderNavLinks";
+import OrderNavLinks from "@/components/orders/DashboardNavigation";
 
 export default async function DashboardLayout({
   children,

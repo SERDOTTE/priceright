@@ -16,6 +16,7 @@ import {
 
 const navItems = [
     { href: "/dashboard", label: "Overview" },
+    { href: "/dashboard/customers", label: "Customers" },
     { href: "/dashboard/orders", label: "Create Order" },
     { href: "/dashboard/edit", label: "View/Edit Orders" },
 ];
@@ -60,36 +61,36 @@ export default function OrderNavLinks() {
                 </div>
             </>
         ) : (
-                <NavigationMenu>
-                    <NavigationMenuList>
-                        <NavigationMenuItem>
-                            <NavigationMenuTrigger>Menu</NavigationMenuTrigger>
-                            <NavigationMenuContent className={`bg-ink rounded-xl`}>
-                                <ul className="grid w-100 gap-2 md:w-125 md:grid-cols-2 lg:w-150">
-                                    {navItems.map((item) => {
-                                        const isActive = pathname === item.href;
-                                        return (
-                                            <li key={item.href} className="w-full">
-                                                <Link
-                                                    href={item.href}
-                                                    aria-current={isActive ? 'page' : undefined}
-                                                    style={{
-                                                        backgroundColor: isActive ? "#FFC200" : "transparent",
-                                                        color: isActive ? "#1A1A1A" : "#FFFFFF"
-                                                    }}
-                                                    className={`block px-4 py-3.5 w-full text-sm font-semibold rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isActive ? 'shadow-sm' : 'text-white/80'
-                                                        }`}
-                                                >
-                                                    {item.label}
-                                                </Link>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </NavigationMenuContent>
-                        </NavigationMenuItem>
-                    </NavigationMenuList>
-                </NavigationMenu>
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>Menu</NavigationMenuTrigger>
+                        <NavigationMenuContent className={`bg-ink rounded-xl`}>
+                            <ul className="grid w-100 gap-2 md:w-125 md:grid-cols-2 lg:w-150">
+                                {navItems.map((item) => {
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <li key={item.href} className="w-full">
+                                            <Link
+                                                href={item.href}
+                                                aria-current={isActive ? 'page' : undefined}
+                                                style={{
+                                                    backgroundColor: isActive ? "#FFC200" : "transparent",
+                                                    color: isActive ? "#1A1A1A" : "#FFFFFF"
+                                                }}
+                                                className={`block px-4 py-3.5 w-full text-sm font-semibold rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isActive ? 'shadow-sm' : 'text-white/80'
+                                                    }`}
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
         )
     );
 }
