@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, use, useEffect, useState } from 'react';
-import { RefreshCw, Loader } from 'lucide-react';
+import { RefreshCw, Loader, Columns } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/AnimateSpin';
 import CustomerRows from './CustomerRows';
@@ -41,8 +41,10 @@ export const FilterList = [
 
 export default function ViewCustomers({
     customersPromise,
+    onDelete,
 }: {
     customersPromise: Promise<Customer[]>;
+    onDelete?: () => void;
 }) {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,9 +57,9 @@ export default function ViewCustomers({
     };
 
     useEffect(() => {
-        if (isRefreshing){
+        if (isRefreshing) {
             toast("Refreshing data...", {
-                icon: <Loader  className='animate-spin size-5'/>
+                icon: <Loader className='animate-spin size-5' />
             })
         }
     }, [isRefreshing])
@@ -97,7 +99,7 @@ export default function ViewCustomers({
             {/* Orders Table — only this section suspends while data loads.
                     `use(promise)` triggers the Suspense fallback until the data resolves. */}
             <Suspense fallback={<Loading />}>
-                <CustomersTable customersPromise={customersPromise} searchQuery={searchQuery} />
+                <CustomersTable customersPromise={customersPromise} searchQuery={searchQuery} onDelete={() => onDelete}/>
             </Suspense>
         </main>
     );
@@ -106,27 +108,62 @@ export default function ViewCustomers({
 function CustomersTable({
     customersPromise,
     searchQuery,
+    onDelete,
 }: {
     customersPromise: Promise<Customer[]>;
     searchQuery: string;
+    onDelete?: (customerId: string) => void;
 }) {
     const customers = use(customersPromise);
+    const [visibleColumns, setVisibleColumns] = useState({
+        name: true,
+        country: true,
+        dateCreated: true,
+        phone: true,
+        actions: true,
+    });
+
+    const toggleColumn = (column: keyof typeof visibleColumns) => {
+        setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
+    };
 
     return (
         <div className="rounded-xl border border-ink/10 shadow-sm box-border max-h-170 flex flex-col overflow-hidden">
+            <div className="p-3 border-b border-ink/10 dark:border dark:border-muted-foreground">
+                <details className="relative flex text-left w-auto">
+                    <summary className="cursor-pointer inline-flex gap-1 justify-center w-auto rounded-md border border-gray-300 shadow-sm px-2 py-1 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
+                        <Columns className='size-5' /> Columns
+                    </summary>
+                    <div className="absolute left-0 mt-12 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">                        
+                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        {Object.keys(visibleColumns).map((column) => (
+                            <label key={column} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <input
+                                    type="checkbox"
+                                    className="mr-2"
+                                    checked={visibleColumns[column as keyof typeof visibleColumns]}
+                                    onChange={() => toggleColumn(column as keyof typeof visibleColumns)}
+                                />
+                                {column.charAt(0).toUpperCase() + column.slice(1)}
+                            </label>
+                        ))}
+                    </div>
+                    </div>
+                </details>
+            </div>
             <div className=" box-border overflow-y-auto overflow-x-auto scroll-fade scrollbar-thin scroll-smooth">
                 <table className="w-full text-left border-collapse text-sm table-auto">
                     <thead>
                         <tr className="border-b border-ink/10 dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">
-                            <th className="p-3">Name</th>
-                            <th className="p-3 hidden md:table-cell">Country</th>
-                            <th className="p-3 hidden sm:table-cell truncate">Date Created</th>
-                            <th className="p-3">Phone</th>
-                            <th className="p-3 text-right">Actions</th>
+                            {visibleColumns.name && <th className="p-3">Name</th>}
+                            {visibleColumns.country && <th className="p-3 hidden md:table-cell">Country</th>}
+                            {visibleColumns.dateCreated && <th className="p-3 hidden sm:table-cell truncate">Date Created</th>}
+                            {visibleColumns.phone && <th className="p-3">Phone</th>}
+                            {visibleColumns.actions && <th className="p-3 text-right">Actions</th>}
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-ink/10">
-                        <CustomerRows customers={customers} searchQuery={searchQuery} />
+                        <CustomerRows customers={customers} searchQuery={searchQuery} visibleColumns={visibleColumns}/>
                     </tbody>
                 </table>
             </div>

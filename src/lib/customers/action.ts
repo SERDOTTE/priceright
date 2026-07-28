@@ -149,50 +149,39 @@ export async function updateCustomer(id: string | number, prevState: State, form
     } catch (error) {
         console.error("Unexpected error:", error);
         return {
-            message: 'Database Error: Failed to Update project.'
+            message: 'Database Error: Failed to Update customer.'
         }
     }
 }
-// export async function deleteProject(id: number) {
-//     await sql`DELETE FROM projects WHERE id = ${id}`;
-//     revalidatePath('/projects');
-// }
 
-// export async function updateProject(id: string | number, prevState: State, formData: FormData): Promise<State> {
-//     const parsed = ProjectFormSchema.safeParse(getProjectData(formData));
 
-//     if (!parsed.success) {
-//         return {
-//             errors: parsed.error.flatten().fieldErrors,
-//             message: 'Missing or invalid fields. Failed to create project.',
-//         };
-//     }
+export async function deleteCustomer(id: string | number) {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-//     const { title, description, type, technologies, link } = parsed.data;
+    if (authError || !user) {
+        throw new Error("Unauthorized: User not logged in.");
+    }
 
-//     try {
-//         await sql`UPDATE projects  
-//         SET 
-//         title = ${title},
-//         description = ${description},
-//         type = ${type},
-//         technologies = ${technologies as any}::text[],
-//         link = ${link}
-//         WHERE id = ${id}`;
-//     } catch (error) {
-//         // throw new Error("Failed to update project.");
-//         return {
-//             message: 'Database Error: Failed to create project.'
-//         }
-//     }
-//     revalidatePath('/projects');
-//     revalidatePath('/projects/edit');
-//     return {
-//         message: 'Project updated successfully.',
-//         errors: {},
-//         success: true,
-//     };
-// }
+    try {
+        const { error } = await supabase
+            .from('customers')
+            .delete()
+            .eq('id', id)
+        if (error) {
+            console.error("Supabase insert error:", error);
+            return { message: 'Database error: Failed to update customer.' };
+        }
+        revalidatePath('/dashboard/customers');
+        return { success: true, message: 'Customer deleted successfully!' };
+    }catch (error) {
+        console.error("Unexpected error:", error);
+        return {
+            message: 'Database Error: Failed to delete customer.'
+        }
+    }
+}
+
 
 export async function selectAllCustomers() {
     const supabase = await createClient();
@@ -215,13 +204,18 @@ export async function selectAllCustomers() {
     }
 }
 
-
 export async function selectOneCustomer(id: string) {
     const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        throw new Error("Unauthorized: User not logged in.");
+    }
+
     try {
         const { data, error } = await supabase
             .from('customers')
-            .select('*').eq('id', id).single();
+            .select('*').eq('id', id).eq('user_id', user.id).single();
         if (error) throw error;
         return data;
         console.log(data);

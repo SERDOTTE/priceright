@@ -17,7 +17,6 @@ export function SubmitButton({ label, Icon, className }: IconButtonProps) {
   return (
     <Button 
       type="submit" 
-      // 2. Merge default classes with the passed className prop
       className={cn("w-full flex items-center justify-center gap-2", className)} 
       disabled={pending} 
       aria-disabled={pending}
