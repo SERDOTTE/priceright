@@ -1,4 +1,4 @@
-import EditCustomersPage from "@/components/orders/customer/edit/ViewPage";
+import EditCustomersPage from "@/components/dashboard/customers/edit/ViewPage";
 import Link from "next/link"
 
 export default async function CustomerFormPage({ params }: { params: Promise<{ id?: string }> }) {

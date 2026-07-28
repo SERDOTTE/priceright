@@ -1,6 +1,6 @@
 import { Customer } from "@/lib/supabase/types";
 import { selectOneCustomer, updateCustomer } from "@/lib/customers/action";
-import EditCustomerForm from "@/components/orders/customer/edit/EditCustomerForm";
+import EditCustomerForm from "@/components/dashboard/customers/edit/EditCustomerForm";
 
 interface PageProps {
     params: Promise<{ id?: string }>;

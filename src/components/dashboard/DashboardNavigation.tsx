@@ -17,7 +17,7 @@ import {
 const navItems = [
     { href: "/dashboard", label: "Overview" },
     { href: "/dashboard/customers", label: "Customers" },
-    { href: "/dashboard/orders", label: "Create Order" },
+    { href: "/dashboard/orders", label: "Orders" },
     // { href: "/dashboard/edit", label: "View/Edit Orders" },
 ];
 

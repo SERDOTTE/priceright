@@ -1,4 +1,4 @@
-import OrderForm from "@/components/orders/OrderForm";
+import OrderForm from "@/components/dashboard/orders/OrderForm";
 
 export default async function OrderFormPage() {
 

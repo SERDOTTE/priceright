@@ -1,6 +1,6 @@
 
-import CustomersPage from "@/components/orders/customer/create/ViewPage";
-import AddButton from "@/components/orders/customer/create/AddButton";
+import CustomersPage from "@/components/dashboard/customers/create/ViewPage";
+import AddButton from "@/components/dashboard/customers/create/AddButton";
 import Link from "next/link"
 
 export default async function CustomerFormPage() {

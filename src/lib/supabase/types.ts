@@ -13,7 +13,6 @@ export interface Customer {
   country: string;
   phone: string;
   created_at?: string | null;
-
 }
 
 export interface PricingSheet {
