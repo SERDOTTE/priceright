@@ -39,7 +39,7 @@ export default function Filter({ filters }: FilterList) {
     return (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3 mx-auto p-4  rounded-xl">
             {filters && filters.length > 0 && filters.map((filter) => (
-                <div key={filter.id || filter.name} className="relative flex flex-col rounded-lg border border-border shadow-sm hover:bg-muted transition-colors">
+                <div key={filter.id || filter.name} className="relative flex flex-col bg-white dark:bg-ink rounded-lg border border-border shadow-sm hover:bg-muted">
                     {/* Screen reader only label for accessibility */}
                     <label htmlFor={filter.id} className="sr-only">
                         {filter.label}
@@ -48,7 +48,7 @@ export default function Filter({ filters }: FilterList) {
                         value={filterValues[filter.name]}
                         id={filter.id}
                         onChange={handleChange}
-                        className="appearance-none w-full text-foreground text-sm font-medium px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-ring bg-transparent cursor-pointer ">
+                        className="appearance-none w-full text-foreground dark:text-muted-foreground text-sm font-medium px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-ring bg-transparent cursor-pointer ">
                         {/* Use the label as the default placeholder text to match the image */}
                         <option value="" disabled hidden>{filter.label}</option>
 
@@ -66,9 +66,9 @@ export default function Filter({ filters }: FilterList) {
                     </div>
                 </div>
             ))}
-            <div onClick={handleReset} className="relative flex flex-col rounded-lg border border-border shadow-sm hover:bg-muted transition-colors">
+            <div onClick={handleReset} className="dark:text-muted-foreground  relative flex flex-col rounded-lg border border-border shadow-sm hover:bg-mute">
                 <button type="button" onClick={handleReset}
-                    className="flex items-center justify-between w-full sm:w-auto px-4 py-3 rounded-lg border border-border shadow-sm hover:bg-muted text-foreground text-sm font-medium transition-colors outline-none hover:cursor-pointer">
+                    className="bg-white dark:bg-ink flex items-center justify-between w-full sm:w-auto px-4 py-3 rounded-lg border border-border shadow-sm hover:bg-muted  text-sm font-medium outline-none hover:cursor-pointer">
                     <span>Reset filters</span>
 
                     {/* Counter-clockwise Undo Arrow SVG */}
