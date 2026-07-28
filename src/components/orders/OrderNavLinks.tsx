@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 const navItems = [
     { href: "/dashboard", label: "Overview" },
     { href: "/dashboard/orders", label: "Create Order" },
-    { href: "/dashboard/edit", label: "View/Edit Orders" },
+    { href: "/dashboard/orders/list", label: "View Orders" },
 ];
 
 export default function OrderNavLinks() {
