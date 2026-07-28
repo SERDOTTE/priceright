@@ -36,7 +36,7 @@ export default function AddButton() {
                 <div className="self-center">
                     <Button onClick={() => setIsOpen(true)} className={'px-3'}><Plus />Create Customer</Button>
                 </div>
-                <DialogContent className="sm:max-w-200.25">
+                <DialogContent className="sm:max-w-150.25">
                     <CustomerForm action={createCustomer} />
                 </DialogContent>
             </Dialog>

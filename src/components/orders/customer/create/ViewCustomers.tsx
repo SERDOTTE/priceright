@@ -68,18 +68,18 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
 
                 {/* Filter Component Section */}
                 <div className="bg-muted shadow-md/20 rounded-lg w-full mb-6 p-2 box-border">
-                    <Filter filters={FilterList} />
+                    {/* <Filter filters={FilterList} /> */}
                 </div>
                 
                 {/* Orders Table Container */}
-                <div className=" rounded-xl border border-ink/10 shadow-sm  box-border max-h-200 overflow-y-auto scrollbar-thin">
+                <div className=" rounded-xl border border-ink/10 shadow-sm  box-border max-h-200 overflow-x-auto overflow-y-auto scrollbar-thin w-full">
                     <div className="w-full box-border">
                         <table className="w-full text-left border-collapse text-sm table-auto">
                             <thead>
                                 <tr className="border-b border-ink/10  dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">
                                     <th className="p-3">Name</th>
                                     <th className="p-3 hidden md:table-cell">Country</th>
-                                    <th className="p-3 hidden sm:table-cell">Date Created</th>
+                                    <th className="p-3 hidden sm:table-cell truncate">Date Created</th>
                                     <th className="p-3 ">Phone</th>
                                     <th className="p-3 text-right">Actions</th>
                                 </tr>
@@ -100,7 +100,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
                                                     <div className="text-ink/60 dark:text-gray-400 text-[10px]">{order.email}</div>
                                                 )}
                                             </td>
-                                            <td title={order.country} className="p-3 text-ink/80 dark:text-gray-400 hidden md:table-cell max-w-20 truncate text-ellipsis ">
+                                            <td title={order.country} className="p-3 text-ink/80 dark:text-gray-400 hidden md:table-cell truncate text-ellipsis ">
                                                 {order.country}
                                             </td>
                                             {/* <td className="p-3 font-semibold tabular-nums text-ink">

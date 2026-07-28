@@ -6,7 +6,7 @@ import Loading from "../../../AnimateSpin";
 
 async function CustomersList() {
     const customers = await selectAllCustomers();
-    await new Promise((res) => setTimeout(res, 5000)); 
+    // await new Promise((res) => setTimeout(res, 5000)); 
 
     return <ViewEditCustomers customers={customers as Customer[]} />;
 }

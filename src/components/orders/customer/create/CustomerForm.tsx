@@ -94,7 +94,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
     return (
         <Card
             style={{ border: "none", boxShadow: "none" }}
-            className="p-6 w-full max-w-3xl">
+            className="py-6 px-3 w-full max-w-3xl">
             <CardHeader>
                 <CardTitle className="font-heading text-2xl font-bold ">
                     Add New Customer
