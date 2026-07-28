@@ -5,7 +5,7 @@ import { RefreshCw, Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/AnimateSpin';
 import CustomerRows from './CustomerRows';
-import { Customer } from '@/lib/orders/types';
+import { Customer } from '@/lib/supabase/types';
 import Filter from '@/components/Filter';
 import { toast } from 'sonner';
 

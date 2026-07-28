@@ -65,19 +65,8 @@ export default async function OrdersDashboard() {
                 style={{ borderColor: "#1A1A1A20", color: "#1A1A1A" }}
                 className="w-full h-full text-xs rounded-lg border bg-transparent outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all shadow-sm"
               />
-              <div
-                style={{ backgroundColor: "#FF4A3C" }}
-                className="search-icon flex justify-center items-center rounded-full size-9 hover:cursor-pointer hover:opacity-90 transition-all shrink-0 shadow-sm"
-              >
-                <button aria-label="button" className="hover:cursor-pointer flex items-center justify-center w-full h-full text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="size-3.5 fill-current">
-                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>
-                  </svg>
-                </button>
-              </div>
             </div>
           </div>
-
           <Link
             href={'/dashboard/orders'}
             style={{ backgroundColor: "#FFC200", color: "#1A1A1A" }}
@@ -87,7 +76,7 @@ export default async function OrdersDashboard() {
           </Link>
         </div>
 
-        <div className='bg-muted shadow-md/20 rounded-lg sm:max-w-250 my-0 mx-auto mb-6'>
+        <div className='bg-muted p-2 shadow-md/20 rounded-lg sm:max-w-250 my-0 mx-auto mb-6'>
           <Filter filters={FilterList} />
         </div>
 

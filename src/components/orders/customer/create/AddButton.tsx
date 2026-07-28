@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import CustomerForm from "./CustomerForm";
-import { createCustomer } from "@/lib/orders/action";
+import { createCustomer } from "@/lib/customers/action";
 import {
     Drawer,
     DrawerClose,
@@ -37,7 +37,7 @@ export default function AddButton() {
                     <Button onClick={() => setIsOpen(true)} className={'px-3'}><Plus />Create Customer</Button>
                 </div>
                 <DialogContent className="sm:max-w-150.25">
-                    <CustomerForm action={createCustomer} />
+                    <CustomerForm action={createCustomer} onSuccess={()=>setIsOpen(false)}/>
                 </DialogContent>
             </Dialog>
         )
@@ -48,7 +48,7 @@ export default function AddButton() {
                 <Button onClick={() => setIsOpen(true)} className={'px-3'}><Plus />Create Customer</Button>
             </div>            
             <DrawerContent className={'py-5'}>
-                <CustomerForm action={createCustomer} />
+                <CustomerForm action={createCustomer}  onSuccess={()=>setIsOpen(false)}/>
             </DrawerContent>
         </Drawer>
     )

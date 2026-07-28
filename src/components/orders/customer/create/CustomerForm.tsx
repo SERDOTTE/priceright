@@ -14,7 +14,6 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { SubmitButton } from "../../../SubmitButton"; // Adjust path if needed based on your file structure
-import { useRouter } from 'next/navigation';
 
 const CustomerFormSchema = z.object({
     name: z
@@ -53,24 +52,25 @@ export type CustomerFormState = {
 };
 
 interface CustomerFormProps {
+    onSuccess?: () => void;
     action: (prevState: CustomerFormState, formData: FormData) => Promise<CustomerFormState>;
 }
 
 const initialState: CustomerFormState = {};
 
-export default function CustomerForm({ action }: CustomerFormProps) {
+export default function CustomerForm({ action, onSuccess }: CustomerFormProps) {
     const [name, setName] = useState(' ');
     const [email, setEmail] = useState(' ');
     const [state, formAction] = useActionState(async (prevState: CustomerFormState, formData: FormData) => {
         return await action(prevState, formData);
     }, initialState);
     const [showErrors, setShowErrors] = useState(false);
-    const router = useRouter();
 
 
     useEffect(() => {
         if (state?.success) {
             toast.success(state.message || "Customer created successfully!");
+            onSuccess?.()
             // router.refresh();
         } else if (state?.message && !state?.success) {
             setShowErrors(true);

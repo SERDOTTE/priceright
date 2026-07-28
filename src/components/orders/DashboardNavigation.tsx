@@ -68,8 +68,8 @@ export default function OrderNavLinks() {
                         <NavigationMenuContent className={`bg-ink rounded-xl`}>
                             <ul className="grid w-100 gap-2 md:w-125 md:grid-cols-2 lg:w-150">
                                 {navItems.map((item) => {
-                                    const isActive = pathname === item.href;
-                                    return (
+                                    const isActive = pathname === item.href || (item.href === "/dashboard/customers" && pathname.startsWith("/dashboard/customers/edit/"));
+                                     return (
                                         <li key={item.href} className="w-full">
                                             <Link
                                                 href={item.href}

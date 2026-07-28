@@ -9,13 +9,12 @@ import { Label } from "@/components/ui/label";
 import {
     Card,
     CardHeader,
-    CardTitle,
     CardDescription,
     CardContent,
 } from "@/components/ui/card";
 import { SubmitButton } from "../../../SubmitButton"; // Adjust path if needed based on your file structure
-import { useRouter } from 'next/navigation';
-import { Customer } from "@/lib/orders/types";
+import { Customer } from "@/lib/supabase/types";
+import { useRouter } from 'next/navigation'
 
 const CustomerFormSchema = z.object({
     name: z
@@ -63,17 +62,19 @@ const initialState: CustomerFormState = {};
 export default function EditCustomerForm({ action, customer }: CustomerFormProps) {
     // const [name, setName] = useState(customer.name);
     // const [email, setEmail] = useState(customer.email);
-    const [state, formAction] = useActionState(async (prevState: CustomerFormState, formData: FormData) => {
-        return await action(prevState, formData);
-    }, initialState);
+    const [state, formAction] = useActionState(
+        async (prevState: CustomerFormState, formData: FormData) => {
+            return await action(prevState, formData);
+        }, initialState);
     const [showErrors, setShowErrors] = useState(false);
     const router = useRouter();
 
 
+
     useEffect(() => {
         if (state?.success) {
-            toast.success(state.message || "Customer created successfully!");
-            router.refresh();
+            toast.success(state.message || "Customer updated successfully!");
+            router.push('/dashboard/customers');
         } else if (state?.message && !state?.success) {
             setShowErrors(true);
             toast.error(state.message);
@@ -88,13 +89,10 @@ export default function EditCustomerForm({ action, customer }: CustomerFormProps
     return (
         <Card
             // style={{ boxShadow: "none" }}
-            className="p-6 w-full max-w-3xl">
+            className="p-6 w-full max-w-3xl max-sm:mt-10">
             <CardHeader>
-                <CardTitle className="font-heading text-2xl font-bold ">
-                    Edit Customer
-                </CardTitle>
                 <CardDescription className="text-muted-foreground">
-                    Enter your customer's details to manage orders and quotes.
+                    Update your customer's details to manage orders and quotes.
                 </CardDescription>
             </CardHeader>
             <CardContent>

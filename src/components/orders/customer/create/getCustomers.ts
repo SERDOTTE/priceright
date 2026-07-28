@@ -1,5 +1,5 @@
-import { Customer } from '@/lib/orders/types';
-import { selectAllCustomers } from '@/lib/orders/action';
+import { Customer } from '@/lib/supabase/types';
+import { selectAllCustomers } from '@/lib/customers/action';
 import { promise } from 'zod';
 
 export default async function getCustomers(): Promise<Customer[]> {

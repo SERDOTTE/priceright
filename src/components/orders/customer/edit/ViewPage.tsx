@@ -1,5 +1,5 @@
-import { Customer } from "@/lib/orders/types";
-import { selectOneCustomer, createCustomer } from "@/lib/orders/action";
+import { Customer } from "@/lib/supabase/types";
+import { selectOneCustomer, updateCustomer } from "@/lib/customers/action";
 import EditCustomerForm from "@/components/orders/customer/edit/EditCustomerForm";
 
 interface PageProps {
@@ -21,7 +21,7 @@ export default async function EditCustomersPage({ params }: PageProps) {
     return (
     <div className="max-w-full">
         {customer ? (
-            <EditCustomerForm action={createCustomer} customer={customer} />
+            <EditCustomerForm action={updateCustomer.bind(null, customer.id)} customer={customer} />
         ) : (
             <p>Customer not found.</p>
         )}

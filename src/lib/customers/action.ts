@@ -113,6 +113,46 @@ export async function createCustomer(prevState: State, formData: FormData): Prom
     }
 }
 
+export async function updateCustomer(id: string | number, prevState: State, formData: FormData): Promise<State> {
+
+    const supabase = await createClient();
+    const parsed = CustomerFormSchema.safeParse(getCustomerData(formData));
+
+    if (!parsed.success) {
+        return {
+            errors: parsed.error.flatten().fieldErrors,
+            message: 'Missing or invalid fields. Failed to update project.',
+        };
+    }
+
+    const { name, email, country, phone } = parsed.data;
+
+    try {
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+            return { message: 'Unauthorized: You must be logged in.' };
+        }
+        const { data, error } = await supabase
+            .from('customers')
+            .update({
+                name,
+                email,
+                country,
+                phone,
+            }).eq('id', id);
+        if (error) {
+            console.error("Supabase insert error:", error);
+            return { message: 'Database error: Failed to update customer.' };
+        }
+        revalidatePath('/dashboard/customers');
+        return { success: true, message: 'Customer updated successfully!' };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return {
+            message: 'Database Error: Failed to Update project.'
+        }
+    }
+}
 // export async function deleteProject(id: number) {
 //     await sql`DELETE FROM projects WHERE id = ${id}`;
 //     revalidatePath('/projects');
@@ -166,7 +206,7 @@ export async function selectAllCustomers() {
         const { data, error } = await supabase
             .from('customers')
             .select('*')
-            .eq("user_id", user.id);
+            .eq("user_id", user.id).order('created_at', { ascending: true });
         if (error) throw error;
         return data;
     } catch (error) {

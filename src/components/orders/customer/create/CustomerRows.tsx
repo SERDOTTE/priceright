@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Customer } from '@/lib/orders/types';
+import { Customer } from '@/lib/supabase/types';
 import { Edit2, Trash2 } from 'lucide-react';
 
 export default function CustomerRows({
