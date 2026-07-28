@@ -17,8 +17,8 @@ interface QuoteViewProps {
 
 export function QuoteView({ quote, children }: QuoteViewProps) {
   return (
-    <div className="max-w-2xl mx-auto p-6 sm:p-10">
-      <div className="rounded-xl border border-ink/10 shadow-sm p-6 sm:p-8 space-y-6">
+    <div className="w-full max-w-2xl mx-auto p-6 sm:p-10">
+      <div className="w-full rounded-xl border border-ink/10 shadow-sm p-6 sm:p-8 space-y-6">
         <div>
           <p className="text-sm text-ink/60">Quote for</p>
           <h1 className="font-heading text-2xl font-bold text-ink">{quote.customerName}</h1>
@@ -26,7 +26,7 @@ export function QuoteView({ quote, children }: QuoteViewProps) {
 
         <p className="text-ink/80">{quote.description}</p>
 
-        <div className="flex items-center justify-between border-t border-ink/10 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 pt-6">
           <div>
             <p className="text-sm text-ink/60">Total price</p>
             <p className="text-2xl font-bold tabular-nums text-ink">${quote.price.toFixed(2)}</p>
@@ -37,7 +37,7 @@ export function QuoteView({ quote, children }: QuoteViewProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-ink/10 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 pt-6">
           <StatusBadge status={quote.quoteStatus} />
           {quote.quoteStatus === "approved" ? (
             <p className="text-sm text-ink/60">
