@@ -1,6 +1,20 @@
 import OrderForm from "@/components/orders/OrderForm";
+import { createClient } from "@/lib/supabase/server";
 
-export default function OrderFormPage() {
+export default async function OrderFormPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data: customers } = user
+    ? await supabase
+        .from("customers")
+        .select("id, name, email")
+        .eq("user_id", user.id)
+        .order("name")
+    : { data: [] };
+
   return (
         <div className="min-h-screen flex-1 w-full m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
@@ -20,7 +34,7 @@ export default function OrderFormPage() {
 
         <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="px-6 sm:px-8 py-6">
-            <OrderForm customers={[]} pricingSheets={[]} />
+            <OrderForm customers={customers ?? []} pricingSheets={[]} />
           </div>
         </div>
       </div>
