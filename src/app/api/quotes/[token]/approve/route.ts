@@ -1,0 +1,20 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+
+interface RouteContext {
+  params: Promise<{ token: string }>;
+}
+
+export async function POST(_request: Request, { params }: RouteContext) {
+  const { token } = await params;
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("approve_quote_by_token", { p_token: token });
+
+  if (error) {
+    return NextResponse.json({ message: "Quote not found." }, { status: 404 });
+  }
+
+  const row = Array.isArray(data) ? data[0] : null;
+  return NextResponse.json({ status: row?.quote_status, approvedAt: row?.approved_at }, { status: 200 });
+}
