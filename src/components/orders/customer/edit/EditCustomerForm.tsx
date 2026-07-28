@@ -87,7 +87,7 @@ export default function EditCustomerForm({ action, customer }: CustomerFormProps
 
     return (
         <Card
-            style={{ border: "none", boxShadow: "none" }}
+            // style={{ boxShadow: "none" }}
             className="p-6 w-full max-w-3xl">
             <CardHeader>
                 <CardTitle className="font-heading text-2xl font-bold ">
@@ -193,9 +193,9 @@ export default function EditCustomerForm({ action, customer }: CustomerFormProps
                         </div>
                     </div>
 
-                    <div className="pt-2">
-                        <SubmitButton label="Create Customer"
-                            className="bg-action hover:bg-action rounded-xl w-auto h-11 mt-4 px-4 ml-auto text-white"
+                    <div>
+                        <SubmitButton label="Update Customer"
+                            className="bg-action hover:bg-action rounded-xl w-auto h-11 px-4 ml-auto text-white"
                             Icon={ArrowRight} />
                     </div>
                 </form>

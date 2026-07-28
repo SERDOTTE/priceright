@@ -71,15 +71,15 @@ export default function CustomerForm({ action }: CustomerFormProps) {
     useEffect(() => {
         if (state?.success) {
             toast.success(state.message || "Customer created successfully!");
-            router.refresh();
+            // router.refresh();
         } else if (state?.message && !state?.success) {
             setShowErrors(true);
             toast.error(state.message);
-            const timout = setTimeout(() => {
+            const timeout = setTimeout(() => {
                 setShowErrors(false);
-                clearTimeout(timout);
+                clearTimeout(timeout);
             }, 3000);
-            return () => clearTimeout(timout);
+            return () => clearTimeout(timeout);
         }
     }, [state]);
 
@@ -116,7 +116,7 @@ export default function CustomerForm({ action }: CustomerFormProps) {
                         </div>
                     )} */}
 
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2"> 
                         <Label htmlFor="name" className=" font-medium">
                             <User className="size-4 text-muted-foreground" /> Name
                         </Label>

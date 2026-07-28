@@ -1,12 +1,14 @@
 'use client';
 
-import { Suspense, use, useState } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { Suspense, use, useEffect, useState } from 'react';
+import { RefreshCw, Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/AnimateSpin';
 import CustomerRows from './CustomerRows';
 import { Customer } from '@/lib/orders/types';
 import Filter from '@/components/Filter';
+import { toast } from 'sonner';
+
 
 
 export const FilterList = [
@@ -51,6 +53,14 @@ export default function ViewCustomers({
         router.refresh();
         setTimeout(() => setIsRefreshing(false), 500);
     };
+
+    useEffect(() => {
+        if (isRefreshing){
+            toast("Refreshing data...", {
+                icon: <Loader  className='animate-spin size-5'/>
+            })
+        }
+    }, [isRefreshing])
 
     return (
         <main className="w-auto max-w-5xl mx-auto box-border">
@@ -104,7 +114,7 @@ function CustomersTable({
 
     return (
         <div className="rounded-xl border border-ink/10 shadow-sm box-border max-h-170 flex flex-col overflow-hidden">
-            <div className="w-full box-border overflow-y-auto scroll-fade scrollbar-thin scroll-smooth">
+            <div className=" box-border overflow-y-auto overflow-x-auto scroll-fade scrollbar-thin scroll-smooth">
                 <table className="w-full text-left border-collapse text-sm table-auto">
                     <thead>
                         <tr className="border-b border-ink/10 dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">
