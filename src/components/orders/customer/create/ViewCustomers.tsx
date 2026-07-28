@@ -5,7 +5,7 @@ import { Customer } from '@/lib/orders/types';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Filter from '@/components/Filter';
-import { Edit2, Trash2 } from 'lucide-react';
+import { RefreshCw, Edit2, Trash2 } from 'lucide-react';
 
 export const FilterList = [
     {
@@ -27,10 +27,11 @@ export const FilterList = [
     }
 ];
 
-export default function ViewEditCustomers({ customers }: { customers: Customer[] }) {
+export default function ViewEditCustomers({ customers, fetch }: { customers: Customer[]; fetch: () => Promise<Customer[] | void> }) {
     const router = useRouter();
     const [orders, setOrders] = useState<Customer[]>(customers);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const handleNavigation = () => {
         router.push('/dashboard/orders');
@@ -38,6 +39,21 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
 
     const handleDelete = (id: string) => {
         setOrders(orders.filter(order => order.id !== id));
+    };
+
+    const handleRefresh = async () => {
+        setIsRefreshing(true);
+        try {
+            const freshData = await fetch();
+            if (freshData) {
+                setOrders(freshData);
+            }
+            router.refresh();
+        } catch (error) {
+            console.error("Failed to refresh data:", error);
+        } finally {
+            setTimeout(() => setIsRefreshing(false), 500);
+        }
     };
 
     const filteredOrders = orders.filter(order =>
@@ -50,7 +66,7 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
             <main className="w-auto max-w-5xl mx-auto box-border">
                 {/* Top Control Bar: Search & Create Button */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-between items-center rounded-lg mb-6 shadow-md/20 p-4 w-full box-border dark:bg-muted">
-                    <div id="searchBoxContainer" className="w-full sm:flex-1 max-w-md">
+                    <div id="searchBoxContainer" className="w-full sm:flex-1 sm:max-w-[50%]">
                         <div className="searchContainer flex items-center justify-between gap-2 h-9 w-full">
                             <input
                                 type="search"
@@ -64,16 +80,24 @@ export default function ViewEditCustomers({ customers }: { customers: Customer[]
 
                         </div>
                     </div>
+                    <button
+                        onClick={handleRefresh}
+                        disabled={isRefreshing}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-ink/20 bg-white hover:bg-ink/5 dark:bg-muted dark:text-gray-300 text-ink text-sm font-medium transition-all disabled:opacity-50"
+                    >
+                        <RefreshCw className={`size-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                        <span>Refresh</span>
+                    </button>
                 </div>
 
                 {/* Filter Component Section */}
                 <div className="bg-muted shadow-md/20 rounded-lg w-full mb-6 p-2 box-border">
                     {/* <Filter filters={FilterList} /> */}
                 </div>
-                
+
                 {/* Orders Table Container */}
-                <div className=" rounded-xl border border-ink/10 shadow-sm  box-border max-h-200 overflow-x-auto overflow-y-auto scrollbar-thin w-full">
-                    <div className="w-full box-border">
+                <div className=" rounded-xl border border-ink/10 shadow-sm  box-border max-h-200 flex flex-col overflow-hidden">
+                    <div className="w-full box-border overflow-y-auto scroll-fade scrollbar-thin">
                         <table className="w-full text-left border-collapse text-sm table-auto">
                             <thead>
                                 <tr className="border-b border-ink/10  dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">

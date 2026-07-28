@@ -6,9 +6,13 @@ import Loading from "../../../AnimateSpin";
 
 async function CustomersList() {
     const customers = await selectAllCustomers();
-    // await new Promise((res) => setTimeout(res, 5000)); 
+    await new Promise((res) => setTimeout(res, 5000)); 
 
-    return <ViewEditCustomers customers={customers as Customer[]} />;
+    return <ViewEditCustomers customers={customers as Customer[]}
+     fetch={async () => {
+        'use server'
+                const freshCustomers = await selectAllCustomers();
+                return freshCustomers as Customer[];}}/>;
 }
 
 export default function CustomersPage() {
