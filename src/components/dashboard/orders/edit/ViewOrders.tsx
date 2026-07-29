@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, Suspense, use } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Filter from '@/components/Filter';
 import { Edit2, Trash2, Loader, RefreshCw, Columns } from 'lucide-react';
@@ -9,6 +8,7 @@ import { OrderRowsProps } from '@/lib/supabase/types';
 import { toast } from 'sonner'
 import Loading from '@/components/AnimateSpin';
 import OrderRows from './OrderRows';
+import useMediaQuery from '@/components/useMediaQuery';
 
 export const FilterList = [
     {
@@ -118,42 +118,58 @@ function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
         actions: true,
         createdAt: true,
     });
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
+useEffect(() => {
+        if (isMobile) {
+            setVisibleColumns((prev) => ({
+                ...prev,
+                description: false,
+                dueDate: false,
+                createdAt: false,
+                actions: false,
+            }));
+        }
+    }, [isMobile]);
+    
     const toggleColumn = (column: keyof typeof visibleColumns) => {
         setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
     };
 
     return (
-        <div className="rounded-xl border border-ink/10 shadow-sm box-border max-h-170 flex flex-col overflow-hidden">
-            <div className="p-3 border-b border-ink/10 dark:border dark:border-muted-foreground">
-                <details className="relative flex text-left w-auto">
-                    <summary className="cursor-pointer inline-flex gap-1 justify-center w-auto rounded-md border border-gray-300 shadow-sm px-2 py-1 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
-                        <Columns className='size-5' /> Columns
+        <div className="rounded-xl border border-ink/10 shadow-sm box-border flex flex-col">
+            {/* Columns Toggle Bar - separated from overflow-hidden container */}
+            <div className="p-3 border-b border-ink/10 dark:border dark:border-muted-foreground relative z-20">
+                <details className="relative inline-block text-left">
+                    <summary className="cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white dark:bg-muted shadow-sm px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
+                        <Columns className='size-4' /> Columns
                     </summary>
-                    <div className="absolute left-0 mt-12 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 max-h-60 overflow-y-auto scrollbar-thin">
-                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <div className="absolute left-0 mt-2 w-56 rounded-md shadow-xl bg-white dark:bg-ink ring-1 ring-black ring-opacity-5 z-30 max-h-60 overflow-y-auto">
+                        <div className="py-1" role="menu">
                             {Object.keys(visibleColumns).map((column) => (
-                                <label key={column} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <label key={column} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-muted cursor-pointer">
                                     <input
                                         type="checkbox"
-                                        className="mr-2"
+                                        className="mr-2 rounded border-gray-300 text-brand focus:ring-brand"
                                         checked={visibleColumns[column as keyof typeof visibleColumns]}
                                         onChange={() => toggleColumn(column as keyof typeof visibleColumns)}
                                     />
-                                    {column.charAt(0).toUpperCase() + column.slice(1)}
+                                    {column.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                                 </label>
                             ))}
                         </div>
                     </div>
                 </details>
             </div>
-            <div className=" box-border overflow-y-auto overflow-x-auto scroll-fade scrollbar-thin scroll-smooth">
+
+            {/* Scrollable Table Container */}
+            <div className="max-h-170 overflow-y-auto overflow-x-auto scroll-fade scrollbar-thin scroll-smooth">
                 <table className="w-full text-left border-collapse text-sm table-auto">
-                    <thead>
+                    <thead className="sticky top-0 z-10">
                         <tr className="border-b border-ink/10 dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">
                             {visibleColumns.customer && <th className="p-3">Customer</th>}
-                            {visibleColumns.description && <th className="p-3 hidden md:table-cell truncate">Description</th>}
-                            {visibleColumns.price && <th className="p-3 hidden sm:table-cell truncate">Price</th>}
+                            {visibleColumns.description && <th className="p-3 md:table-cell truncate">Description</th>}
+                            {visibleColumns.price && <th className="p-3 sm:table-cell truncate">Price</th>}
                             {visibleColumns.dueDate && <th className="p-3 truncate">Due Date</th>}
                             {visibleColumns.status && <th className="p-3">Status</th>}
                             {visibleColumns.paymentStatus && <th className="p-3 truncate">Payment Status</th>}

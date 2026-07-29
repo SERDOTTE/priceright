@@ -66,7 +66,7 @@ export default function OrderRows({
                         </td>
                     )}
                     {visibleColumns.description && (
-                        <td className="p-3 text-ink/80 dark:text-gray-400 hidden md:table-cell max-w-50 truncate">
+                        <td className="p-3 text-ink/80 dark:text-gray-400 md:table-cell max-w-50 truncate">
                             {order.allOrders.description}
                         </td>
                     )}
@@ -76,7 +76,7 @@ export default function OrderRows({
                         </td>
                     )}
                     {visibleColumns.dueDate && (
-                        <td className="p-3 text-ink/80 tabular-nums hidden sm:table-cell dark:text-gray-400">
+                        <td className="p-3 text-ink/80 tabular-nums sm:table-cell dark:text-gray-400">
                             {order.allOrders.due_date}
                         </td>
                     )}
@@ -95,7 +95,7 @@ export default function OrderRows({
                         </td>
                     )}
                     {visibleColumns.createdAt && (
-                        <td className="p-3 text-ink/80 truncate tabular-nums dark:text-gray-400 hidden sm:table-cell">
+                        <td className="p-3 text-ink/80 truncate tabular-nums dark:text-gray-400  sm:table-cell">
                             {order.allOrders.created_at
                                 ? new Date(order.allOrders.created_at).toLocaleDateString('en-US')
                                 : 'N/A'}
