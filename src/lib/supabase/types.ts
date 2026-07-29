@@ -47,6 +47,7 @@ export interface Order {
   due_date: string; // ISO date string
   payment_status: PaymentStatus;
   paid_at?: string | null; // ISO timestamp
+  created_at?: string | null;
 }
 
 export type QuoteStatus = 'pending' | 'approved';
@@ -58,3 +59,9 @@ export interface Quote {
   status: QuoteStatus;
   approved_at?: string | null;
 }
+
+export interface OrderRowsProps {
+    customer: Customer;
+    allOrders: Order;
+}
+

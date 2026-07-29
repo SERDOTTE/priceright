@@ -154,26 +154,31 @@ export async function createOrder(prevState: OrderState, formData: FormData): Pr
 // }
 
 
-// export async function selectAllCustomers() {
-//     const supabase = await createClient();
-//     const { data: { user }, error: authError } = await supabase.auth.getUser();
+export async function selectAllOrders() {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-//     if (authError || !user) {
-//         throw new Error("Unauthorized: User not logged in.");
-//     }
+    if (authError || !user) {
+        throw new Error("Unauthorized: User not logged in.");
+    }
 
-//     try {
-//         const { data, error } = await supabase
-//             .from('customers')
-//             .select('*')
-//             .eq("user_id", user.id).order('created_at', { ascending: true });
-//         if (error) throw error;
-//         return data;
-//     } catch (error) {
-//         console.error("Unexpected error:", error);
-//         return null;
-//     }
-// }
+    try {
+        const { data, error } = await supabase
+            .from('orders')
+            .select(`
+                *,
+                customers ( name, email )
+            `)
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: true });
+        if (error) throw error;
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return null;
+    }
+}
 
 // export async function selectOneCustomer(id: string) {
 //     const supabase = await createClient();

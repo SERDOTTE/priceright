@@ -1,4 +1,4 @@
-import OrderFormPage from "@/components/dashboard/orders/ViewPage";
+import OrderFormPage from "@/components/dashboard/orders/create/ViewPage";
 
 export default async function OrderPage() {
 
@@ -9,7 +9,7 @@ export default async function OrderPage() {
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <span>Dashboard</span>
             <span className="text-border">/</span>
-            <span className="text-foreground font-medium">Create Order</span>
+            <span className="text-foreground font-medium">Create Orders</span>
           </div>
           <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">
             Create New Order
