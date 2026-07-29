@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { OrderRowsProps } from '@/lib/supabase/types';
 import { Edit2 } from 'lucide-react';
+import Delete from '../edit/DeleteOrder';
 // import Delete from '../edit/DeleteCustomer';
 
 
@@ -70,7 +71,7 @@ export default function OrderRows({
                         </td>
                     )}
                     {visibleColumns.price && (
-                        <td className="p-3 font-semibold tabular-nums text-ink dark:text-gray-200">
+                        <td className="p-3 font-medium tabular-nums text-ink dark:text-gray-200">
                             ${order.allOrders.price.toFixed(2)}
                         </td>
                     )}
@@ -94,7 +95,7 @@ export default function OrderRows({
                         </td>
                     )}
                     {visibleColumns.createdAt && (
-                        <td className="p-3 text-ink/80 truncate dark:text-gray-400 hidden sm:table-cell">
+                        <td className="p-3 text-ink/80 truncate tabular-nums dark:text-gray-400 hidden sm:table-cell">
                             {order.allOrders.created_at
                                 ? new Date(order.allOrders.created_at).toLocaleDateString('en-US')
                                 : 'N/A'}
@@ -109,14 +110,7 @@ export default function OrderRows({
                             >
                                 <Edit2 className="size-3.5" />
                             </Link>
-                            {/* <button
-                                onClick={() => handleDelete(order.id)}
-                                style={{ color: "#FF4A3C" }}
-                                className="inline-flex items-center justify-center size-7 rounded-lg border border-action/30 bg-action/10 hover:bg-action/20 transition-all"
-                                title="Delete Order"
-                            >
-                                <Trash2 className="size-3.5" />
-                            </button> */}
+                            <Delete id={order.allOrders?.id} />
                         </td>
                     )}
                 </tr>

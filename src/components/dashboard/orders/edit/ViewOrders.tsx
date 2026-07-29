@@ -66,8 +66,9 @@ export default function ViewOrders({ ordersPromise, onDelete, }: {
 
     return (
         <main className="w-auto max-w-5xl mx-auto box-border">
-            <div className="flex flex-col sm:flex-row gap-3 justify-between items-center rounded-lg mb-6 shadow-md/20 p-4 w-full box-border">
-                <div id="searchBoxContainer" className="w-full sm:flex-1 max-w-md">
+            {/* Top Control Bar: Search & Refresh — renders immediately, never suspends */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-between items-center rounded-lg mb-6 shadow-md/20 p-4 w-full box-border dark:bg-muted">
+                <div id="searchBoxContainer" className="w-full sm:flex-1 sm:max-w-[50%]">
                     <div className="searchContainer flex items-center justify-between gap-2 h-9 w-full">
                         <input
                             type="search"
@@ -75,22 +76,20 @@ export default function ViewOrders({ ordersPromise, onDelete, }: {
                             name="q"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search Orders..."
-                            style={{ borderColor: "#1A1A1A20", color: "#1A1A1A" }}
-                            className="w-full h-full text-xs rounded-lg border bg-transparent outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all shadow-sm"
+                            placeholder="Search by name, country, or date..."
+                            className="dark:bg-ink w-full h-full text-xs rounded-lg border outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 shadow-sm"
                         />
                     </div>
-                    <button
-                        onClick={handleRefresh}
-                        disabled={isRefreshing}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-ink/20 bg-white hover:bg-ink/5 dark:bg-muted dark:border-muted-foreground text-sm font-medium disabled:opacity-50"
-                    >
-                        <RefreshCw className={`size-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                        <span>Refresh</span>
-                    </button>
                 </div>
+                <button
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-ink/20 bg-white hover:bg-ink/5 dark:bg-muted dark:border-muted-foreground text-sm font-medium disabled:opacity-50"
+                >
+                    <RefreshCw className={`size-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                    <span>Refresh</span>
+                </button>
             </div>
-
             {/* Filter Component Section */}
             <div className="bg-muted shadow-md/20 rounded-lg w-full mb-6 p-2 box-border">
                 <Filter filters={FilterList} />
@@ -131,7 +130,7 @@ function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
                     <summary className="cursor-pointer inline-flex gap-1 justify-center w-auto rounded-md border border-gray-300 shadow-sm px-2 py-1 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
                         <Columns className='size-5' /> Columns
                     </summary>
-                    <div className="absolute left-0 mt-12 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                    <div className="absolute left-0 mt-12 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 max-h-60 overflow-y-auto scrollbar-thin">
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                             {Object.keys(visibleColumns).map((column) => (
                                 <label key={column} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -158,7 +157,7 @@ function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
                             {visibleColumns.dueDate && <th className="p-3 truncate">Due Date</th>}
                             {visibleColumns.status && <th className="p-3">Status</th>}
                             {visibleColumns.paymentStatus && <th className="p-3 truncate">Payment Status</th>}
-                            {visibleColumns.createdAt && <th className="p-3 text-right truncate">Date Created</th>}
+                            {visibleColumns.createdAt && <th className="p-3 text-left truncate">Date Created</th>}
                             {visibleColumns.actions && <th className="p-3 text-right">Actions</th>}
                         </tr>
                     </thead>
@@ -170,13 +169,3 @@ function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
         </div>
     )
 }
-{/* <thead>
-    <tr className="border-b border-ink/10 bg-ink/5 text-ink font-semibold">
-        <th className="p-3">Customer</th>
-        <th className="p-3 hidden md:table-cell">Description</th>
-        <th className="p-3">Price</th>
-        <th className="p-3 hidden sm:table-cell">Due Date</th>
-        <th className="p-3">Status</th>
-        <th className="p-3 text-right">Actions</th>
-    </tr>
-</thead> */}

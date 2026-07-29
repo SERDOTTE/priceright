@@ -36,7 +36,7 @@ export default function RootLayout({
         poppins.variable,
       )}
     >
-      <body className="flex min-h-screen flex-col bg-background max-w-full text-foreground ">
+      <body className="flex min-h-screen flex-col bg-background max-w-full text-foreground overflow-x-hidden">
         <Header />
         {children}
         <Toaster richColors duration={3000} position="top-center" /> {/* Must be mounted here */}

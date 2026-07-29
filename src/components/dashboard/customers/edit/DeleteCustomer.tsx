@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteCustomer } from "@/lib/customers/action";
-import { Trash2, Loader } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 interface DeleteProps {
     id: string | number;
@@ -23,9 +23,9 @@ export default function Delete({ id }: DeleteProps) {
                         .catch((error) => reject(error));
                 }),
                 {
-                    loading: "Deleting meeting...",
-                    success: () => "Meeting deleted successfully!",
-                    error: "Failed to delete meeting. Please try again.",
+                    loading: "Deleting Customer...",
+                    success: () => "Customer deleted successfully!",
+                    error: "Failed to delete Customer. Please try again.",
                 }
             );
             // window.location.reload();

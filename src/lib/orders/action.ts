@@ -152,8 +152,6 @@ export async function createOrder(prevState: OrderState, formData: FormData): Pr
 //         }
 //     }
 // }
-
-
 export async function selectAllOrders() {
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -172,7 +170,7 @@ export async function selectAllOrders() {
             .eq('user_id', user.id)
             .order('created_at', { ascending: true });
         if (error) throw error;
-        
+
         if (!data) {
             return [];
         }
@@ -212,4 +210,38 @@ export async function selectAllOrders() {
 //     }
 // }
 
+export async function deleteOrder(id: string | number) {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
+    if (authError || !user) {
+        throw new Error("Unauthorized: User not logged in.");
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('orders')
+            .delete()
+            .eq('id', id)
+            .eq('user_id', user.id)
+            .select();
+
+        if (error) {
+            console.error("Supabase delete error:", error);
+            return { success: false, message: 'Database error: Failed to delete Order. Try again later.' };
+        }
+
+        if (!data || data.length === 0) {
+            return { success: false, message: 'Order not found or you do not have permission to delete it.' };
+        }
+
+        revalidatePath('/dashboard/orders');
+        return { success: true, message: 'Order deleted successfully!' };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return {
+            success: false,
+            message: 'Database Error: Failed to delete Order.'
+        };
+    }
+}
