@@ -139,7 +139,7 @@ useEffect(() => {
     return (
         <div className="rounded-xl border border-ink/10 shadow-sm box-border flex flex-col">
             {/* Columns Toggle Bar - separated from overflow-hidden container */}
-            <div className="p-3 border-b border-ink/10 dark:border dark:border-muted-foreground relative z-20">
+            <div className="p-3 border-b border-ink/10 dark:border dark:rounded-t-xl dark:border-muted-foreground relative z-20">
                 <details className="relative inline-block text-left">
                     <summary className="cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white dark:bg-muted shadow-sm px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
                         <Columns className='size-4' /> Columns
@@ -163,7 +163,7 @@ useEffect(() => {
             </div>
 
             {/* Scrollable Table Container */}
-            <div className="max-h-170 overflow-y-auto overflow-x-auto scroll-fade scrollbar-thin scroll-smooth">
+            <div className="max-h-170 overflow-y-auto overflow-x-auto scroll-fade-x scrollbar-thin scroll-smooth">
                 <table className="w-full text-left border-collapse text-sm table-auto">
                     <thead className="sticky top-0 z-10">
                         <tr className="border-b border-ink/10 dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">

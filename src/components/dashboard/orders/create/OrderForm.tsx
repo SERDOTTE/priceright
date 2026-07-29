@@ -347,7 +347,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
               <SelectTrigger className="h-12 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20">
                 <SelectValue placeholder="Select status..." />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border shadow-lg">
+              <SelectContent className="rounded-xl border-border shadow-lg"alignItemWithTrigger={false}>
                 <SelectItem value="quote_sent" className="cursor-pointer">Quote Sent</SelectItem>
                 <SelectItem value="approved" className="cursor-pointer">Approved</SelectItem>
                 <SelectItem value="in_progress" className="cursor-pointer">In Progress</SelectItem>
@@ -368,7 +368,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
               <SelectTrigger className="h-12 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20">
                 <SelectValue placeholder={"Select payment status..."} />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border shadow-lg">
+              <SelectContent className="rounded-xl border-border shadow-lg" alignItemWithTrigger={false}>
                 <SelectItem value="pending" className="cursor-pointer">Pending</SelectItem>
                 <SelectItem value="paid" className="cursor-pointer">Paid</SelectItem>
                 <SelectItem value="overdue" className="cursor-pointer">Overdue</SelectItem>

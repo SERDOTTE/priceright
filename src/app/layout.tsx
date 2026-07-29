@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner"
+import { Loader } from "lucide-react";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -39,7 +40,11 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col bg-background max-w-full text-foreground overflow-x-hidden">
         <Header />
         {children}
-        <Toaster richColors duration={3000} position="top-center" /> {/* Must be mounted here */}
+        <Toaster
+        icons={{
+          loading: <Loader className="size-5 animate-spin"/>,
+        }}
+        richColors duration={3000} position="top-center" /> {/* Must be mounted here */}
         <Footer />
       </body>
     </html>
