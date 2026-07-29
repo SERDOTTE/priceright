@@ -13,12 +13,12 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { LayoutDashboard, Users, ShoppingCart, ListTodo } from 'lucide-react';
+import { LayoutDashboard, Users, Plus, ListTodo } from 'lucide-react';
 
 const navItems = [
     { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
     { href: "/dashboard/customers", label: "Customers", icon: Users },
-    { href: "/dashboard/orders/create", label: "Orders", icon: ShoppingCart },
+    { href: "/dashboard/orders/create", label: "Orders", icon: Plus },
     { href: "/dashboard/orders", label: "All Orders", icon: ListTodo },
 ];
 

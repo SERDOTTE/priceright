@@ -167,13 +167,24 @@ export async function selectAllOrders() {
             .from('orders')
             .select(`
                 *,
-                customers ( name, email )
+                customers ( id, name, email )
             `)
             .eq('user_id', user.id)
             .order('created_at', { ascending: true });
         if (error) throw error;
-        console.log(data)
-        return data;
+        
+        if (!data) {
+            return [];
+        }
+
+        const mappedData = data.map(order => {
+            const { customers, ...allOrders } = order;
+            return {
+                allOrders,
+                customer: customers
+            };
+        });
+        return mappedData;
     } catch (error) {
         console.error("Unexpected error:", error);
         return null;

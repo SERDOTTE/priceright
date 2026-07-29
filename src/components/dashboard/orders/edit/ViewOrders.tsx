@@ -153,16 +153,16 @@ function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
                     <thead>
                         <tr className="border-b border-ink/10 dark:bg-muted dark:text-gray-400 bg-ink/5 font-semibold">
                             {visibleColumns.customer && <th className="p-3">Customer</th>}
-                            {visibleColumns.description && <th className="p-3 hidden md:table-cell">Description</th>}
+                            {visibleColumns.description && <th className="p-3 hidden md:table-cell truncate">Description</th>}
                             {visibleColumns.price && <th className="p-3 hidden sm:table-cell truncate">Price</th>}
-                            {visibleColumns.dueDate && <th className="p-3">Due Date</th>}
+                            {visibleColumns.dueDate && <th className="p-3 truncate">Due Date</th>}
                             {visibleColumns.status && <th className="p-3">Status</th>}
-                            {visibleColumns.paymentStatus && <th className="p-3">Payment Status</th>}
-                            {visibleColumns.createdAt && <th className="p-3 text-right">Date Created</th>}
+                            {visibleColumns.paymentStatus && <th className="p-3 truncate">Payment Status</th>}
+                            {visibleColumns.createdAt && <th className="p-3 text-right truncate">Date Created</th>}
                             {visibleColumns.actions && <th className="p-3 text-right">Actions</th>}
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-ink/10">
+                    <tbody className="divide-y divide-ink/10 truncate">
                         <OrderRows orders={orders} searchQuery={searchQuery} visibleColumns={visibleColumns} />
                     </tbody>
                 </table>
