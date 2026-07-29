@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { AlertCircle, Calendar, Check, ChevronsUpDown, DollarSign, FileText, User, Loader2, Tag, CreditCard } from "lucide-react";
+import { AlertCircle, Calendar, Check, ChevronsUpDown, DollarSign, FileText, User, Loader, Tag, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { createOrder, OrderState } from "@/lib/orders/action";
+// import { PricingSheet } from "@/lib/supabase/types";
 
 interface Customer {
   id: string;
@@ -25,94 +27,123 @@ interface PricingSheet {
 
 interface OrderFormProps {
   customers: Customer[];
-  pricingSheets: PricingSheet[];
+  pricingSheets?: PricingSheet[];
 }
 
 export default function OrderForm({ customers, pricingSheets }: OrderFormProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [customerId, setCustomerId] = useState("");
   const [customerOpen, setCustomerOpen] = useState(false);
+  const [pricingSheetId, setPricingSheetId] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [status, setStatus] = useState("quote_sent");
-  const [paymentStatus, setPaymentStatus] = useState("pending");
-  const [pricingSheetId, setPricingSheetId] = useState<string | null>(null);
+  const [status, setStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
+
+  const initialState: OrderState = { message: null, errors: {} };
+  const [state, formAction, isPending] = useActionState(async (prevState: OrderState, formData: FormData) => {
+    formData.append("customer_id", customerId);
+    formData.append("status", status);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("payment_status", paymentStatus);
+    formData.append("due_date", dueDate);
+    if (pricingSheetId) {
+      formData.append("pricing_sheet_id", pricingSheetId);
+    }
+    const result = await createOrder(prevState, formData);
+    if (result.success) {
+      router.refresh();
+    }
+    return result;
+  }, initialState);
+
+  useEffect(() => {
+  if (state.success) {
+    toast.success("Order created successfully!");
+
+    setCustomerId("");
+    setPricingSheetId(null);
+    setDescription("");
+    setPrice("");
+    setDueDate("");
+    setStatus("");
+    setPaymentStatus("");
+  }
+}, [state]);
 
   const selectedCustomer = customers.find((c) => c.id === customerId);
-
-  const handlePricingSheetSelect = (sheetId: string | null) => {
+  const handlePricingSheetSelect = (sheetId: string) => {
     setPricingSheetId(sheetId);
-    if (!sheetId) return;
+    if (!sheetId || !pricingSheets) return;
     const selected = pricingSheets.find((s) => s.id === sheetId);
     if (selected && selected.suggested_price) {
       setPrice(selected.suggested_price.toString());
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage(null);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   setErrorMessage(null);
 
-    if (!customerId) {
-      setErrorMessage("Please select a customer for this order.");
-      setIsLoading(false);
-      return;
-    }
-    if (!description.trim()) {
-      setErrorMessage("Please provide a description of the work.");
-      setIsLoading(false);
-      return;
-    }
-    if (!price || Number(price) <= 0) {
-      setErrorMessage("Please enter a valid price greater than zero.");
-      setIsLoading(false);
-      return;
-    }
-    if (!dueDate) {
-      setErrorMessage("Please select a target due date.");
-      setIsLoading(false);
-      return;
-    }
+  //   if (!customerId) {
+  //     setErrorMessage("Please select a customer for this order.");
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  //   if (!description.trim()) {
+  //     setErrorMessage("Please provide a description of the work.");
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  //   if (!price || Number(price) <= 0) {
+  //     setErrorMessage("Please enter a valid price greater than zero.");
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  //   if (!dueDate) {
+  //     setErrorMessage("Please select a target due date.");
+  //     setIsLoading(false);
+  //     return;
+  //   }
 
-    try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customer_id: customerId,
-          description: description.trim(),
-          price: parseFloat(price),
-          due_date: dueDate,
-          status,
-          payment_status: paymentStatus,
-        }),
-      });
+  //   try {
+  //     const response = await fetch("/api/orders", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         customer_id: customerId,
+  //         description: description.trim(),
+  //         price: parseFloat(price),
+  //         due_date: dueDate,
+  //         status,
+  //         payment_status: paymentStatus,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create order.");
-      }
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.message || "Failed to create order.");
+  //     }
 
-      router.push("/dashboard");
-      router.refresh();
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setErrorMessage(err.message);
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     router.push("/dashboard");
+  //     router.refresh();
+  //   } catch (err: unknown) {
+  //     if (err instanceof Error) {
+  //       setErrorMessage(err.message);
+  //     } else {
+  //       setErrorMessage("An unexpected error occurred. Please try again.");
+  //     }
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
+    <form action={formAction} className="space-y-6 max-w-5xl mx-auto">
       {/* {errorMessage && (
         <div className="flex items-center gap-3 rounded-xl border border-red-600/25 bg-red-50 px-4 py-3.5 text-sm text-red-600 shadow-sm animate-in fade-in-50">
           <AlertCircle className="h-5 w-5 shrink-0" />
@@ -147,8 +178,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                       : "Search or select a customer..."}
                   </span>
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              }>
+                </Button>}>
               </PopoverTrigger>
               <PopoverContent className="w-(--radix-popover-trigger-width) p-0 rounded-xl shadow-lg border-border">
                 <Command>
@@ -185,6 +215,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 </Command>
               </PopoverContent>
             </Popover>
+            {state.errors?.customer_id && (
+              <p className="text-xs text-red-600">{state.errors.customer_id[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -200,7 +233,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 <SelectValue placeholder="Load from pricing model..." />
               </SelectTrigger>
               <SelectContent className="rounded-xl border-border shadow-lg">
-                {pricingSheets.map((sheet) => (
+                {pricingSheets && pricingSheets.map((sheet) => (
                   <SelectItem key={sheet.id} value={sheet.id} className="cursor-pointer">
                     {sheet.name} {sheet.suggested_price ? `• Ref: $${sheet.suggested_price}` : ""}
                   </SelectItem>
@@ -230,6 +263,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
             placeholder="Describe the scope, key milestones, inclusions, and deliverables..."
             className="w-full rounded-xl border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all shadow-xs resize-none"
           />
+          {state.errors?.description && (
+            <p className="text-xs text-red-600">{state.errors.description[0]}</p>
+          )}
           <p className="text-xs text-muted-foreground">
             Be specific about deliverables, milestones, and any project exclusions.
           </p>
@@ -237,14 +273,14 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
       </div>
 
       {/* Section 3: Commercial Terms & Tracking */}
-{/* Section 3: Commercial Terms & Tracking */}
+      {/* Section 3: Commercial Terms & Tracking */}
       <div className="rounded-2xl border border-border bg-card p-6 shadow-xs space-y-5">
         <div className="border-b border-border pb-4">
           <h3 className="text-base font-semibold text-foreground">Commercial Terms</h3>
           <p className="text-xs text-muted-foreground mt-0.5">Specify pricing metrics, deadlines, and operational statuses.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
             <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
               <DollarSign className="h-3.5 w-3.5" />
@@ -264,6 +300,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 className="rounded-xl border-border bg-white pl-8 text-sm font-semibold tabular-nums shadow-xs transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
               />
             </div>
+            {state.errors?.price && (
+              <p className="text-xs text-red-600">{state.errors.price[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -277,6 +316,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
               onChange={(e) => setDueDate(e.target.value)}
               className="rounded-xl border-border bg-white text-sm shadow-xs transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
             />
+            {state.errors?.due_date && (
+              <p className="text-xs text-red-600">{state.errors.due_date[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -295,6 +337,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 <SelectItem value="delivered" className="cursor-pointer">Delivered</SelectItem>
               </SelectContent>
             </Select>
+            {state.errors?.status && (
+              <p className="text-xs text-red-600">{state.errors.status[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -304,7 +349,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
             </label>
             <Select value={paymentStatus} onValueChange={(paymentStatus) => setPaymentStatus(paymentStatus as string)}>
               <SelectTrigger className="h-12 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20">
-                <SelectValue placeholder="Select payment status..." />
+                <SelectValue placeholder={"Select payment status..."} />
               </SelectTrigger>
               <SelectContent className="rounded-xl border-border shadow-lg">
                 <SelectItem value="pending" className="cursor-pointer">Pending</SelectItem>
@@ -312,6 +357,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 <SelectItem value="overdue" className="cursor-pointer">Overdue</SelectItem>
               </SelectContent>
             </Select>
+            {state.errors?.payment_status && (
+              <p className="text-xs text-red-600">{state.errors.payment_status[0]}</p>
+            )}
           </div>
         </div>
       </div>
@@ -320,12 +368,12 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="h-11 px-6 rounded-xl bg-action text-white hover:bg-action/90 font-semibold shadow-xs transition-all cursor-pointer"
         >
-          {isLoading ? (
+          {isPending ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader className="w-4 h-4 mr-2 animate-spin" />
               Creating Order...
             </>
           ) : (

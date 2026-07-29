@@ -1,7 +1,6 @@
-import OrderForm from "@/components/dashboard/orders/OrderForm";
+import OrderFormPage from "@/components/dashboard/orders/ViewPage";
 
-export default async function OrderFormPage() {
-
+export default async function OrderPage() {
 
   return (
         <div className="dark:bg-ink min-h-screen flex-1 w-auto m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)]">
@@ -22,7 +21,7 @@ export default async function OrderFormPage() {
 
         <div className="rounded-2xl border border-border shadow-sm">
           <div className="px-6 sm:px-8 py-6">
-            <OrderForm customers={[]} pricingSheets={[]} />
+            <OrderFormPage />
           </div>
         </div>
       </div>

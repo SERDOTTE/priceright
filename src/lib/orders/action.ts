@@ -5,223 +5,195 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const OrderFormSchema = z.object({
-    name: z
-        .string()
-        .trim()
-        .min(1, "Customer's name is required.")
-        .max(100, "Name must be less than 100 characters."),
-    email: z
-        .string()
-        .trim()
-        .email("Please enter a valid email address.")
-        .max(50, "Email must be less than 50 characters."),
-    country: z
-        .string()
-        .trim()
-        .min(1, "Country is required")
-        .max(100, "Country must be less than 100 characters"),
-    phone: z
-        .string()
-        .trim()
-        .min(1, "Customer's phone number is required.")
-        .max(
-            20,
-            "Phone number must be less than 20 characters."
-        ),
+    customer_id: z.string().min(1, "Customer is required."),
+    description: z.string().trim().min(1, "Project description is required."),
+    price: z.coerce.number().positive("Price must be greater than zero."),
+    due_date: z.string().min(1, "Target due date is required."),
+    status: z.enum(["quote_sent", "approved", "in_progress", "delivered"], "Status is required."),
+    payment_status: z.enum(["pending", "paid", "overdue"], "Payment status is required."),
 });
 
-export type State = {
+export type OrderState = {
     errors?: {
-        name?: string[];
-        email?: string[];
-        country?: string[]
-        phone?: string[]
+        customer_id?: string[];
+        description?: string[];
+        price?: string[];
+        due_date?: string[];
+        status?: string[];
+        payment_status?: string[];
     };
     message?: string | null;
     success?: boolean;
 }
 
-/**
- * Converts FormData into a validated object.
- */
-function getCustomerData(
-    formData: FormData
-) {
+function getOrderData(formData: FormData) {
     return {
-        name:
-            String(
-                formData.get("name") ?? ""
-            ),
-        email:
-            String(
-                formData.get("email") ?? ""
-            ),
-        country:
-            String(
-                formData.get("country") ?? ""
-            ),
-        phone:
-            String(
-                formData.get("phone") ?? ""
-            ),
+        customer_id: String(formData.get("customer_id") ?? ""),
+        description: String(formData.get("description") ?? ""),
+        price: formData.get("price"),
+        due_date: String(formData.get("due_date") ?? ""),
+        status: String(formData.get("status") ?? "quote_sent"),
+        payment_status: String(formData.get("payment_status") ?? "pending"),
     };
 }
 
-
-export async function createCustomer(prevState: State, formData: FormData): Promise<State> {
-
+export async function createOrder(prevState: OrderState, formData: FormData): Promise<OrderState> {
     const supabase = await createClient();
-    const parsed = CustomerFormSchema.safeParse(getCustomerData(formData));
-    // if (!parsed.success) {
-    //     throw new Error('Invalid project input.' + parsed.error.toString());
-    // }
+    const parsed = OrderFormSchema.safeParse(getOrderData(formData));
+
     if (!parsed.success) {
         return {
             errors: parsed.error.flatten().fieldErrors,
-            message: 'Missing or invalid fields. Failed to create project.',
+            message: 'Missing or invalid fields. Failed to create order.',
         };
     }
 
-    const { name, email, country, phone } = parsed.data;
+    const { customer_id, description, price, due_date, status, payment_status } = parsed.data;
 
     try {
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         if (authError || !user) {
             return { message: 'Unauthorized: You must be logged in.' };
         }
-        const { data, error } = await supabase
-            .from('customers')
+
+        const paidAt = payment_status === 'paid' ? new Date().toISOString() : null;
+
+        const { error } = await supabase
+            .from('orders')
             .insert({
                 user_id: user.id,
-                name,
-                email,
-                country,
-                phone,
+                customer_id,
+                description,
+                price,
+                due_date,
+                status,
+                payment_status,
+                paid_at: paidAt,
             });
+
         if (error) {
             console.error("Supabase insert error:", error);
-            return { message: 'Database error: Failed to create customer.' };
+            return { message: 'Database error: Failed to create order.' };
         }
-        revalidatePath('/dashboard/customers');
-        return { success: true, message: 'Customer created successfully!' };
+
+        revalidatePath('/dashboard');
+        return { success: true, message: 'Order created successfully!' };
     } catch (error) {
         console.error("Unexpected error:", error);
-        return {
-            message: 'Database Error: Failed to create project.'
-        }
+        return { message: 'Database Error: Failed to create order.' };
     }
 }
 
-export async function updateCustomer(id: string | number, prevState: State, formData: FormData): Promise<State> {
+// export async function updateCustomer(id: string | number, prevState: State, formData: FormData): Promise<State> {
 
-    const supabase = await createClient();
-    const parsed = CustomerFormSchema.safeParse(getCustomerData(formData));
+//     const supabase = await createClient();
+//     const parsed = CustomerFormSchema.safeParse(getCustomerData(formData));
 
-    if (!parsed.success) {
-        return {
-            errors: parsed.error.flatten().fieldErrors,
-            message: 'Missing or invalid fields. Failed to update project.',
-        };
-    }
+//     if (!parsed.success) {
+//         return {
+//             errors: parsed.error.flatten().fieldErrors,
+//             message: 'Missing or invalid fields. Failed to update project.',
+//         };
+//     }
 
-    const { name, email, country, phone } = parsed.data;
+//     const { name, email, country, phone } = parsed.data;
 
-    try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) {
-            return { message: 'Unauthorized: You must be logged in.' };
-        }
-        const { data, error } = await supabase
-            .from('customers')
-            .update({
-                name,
-                email,
-                country,
-                phone,
-            }).eq('id', id);
-        if (error) {
-            console.error("Supabase insert error:", error);
-            return { message: 'Database error: Failed to update customer.' };
-        }
-        revalidatePath('/dashboard/customers');
-        return { success: true, message: 'Customer updated successfully!' };
-    } catch (error) {
-        console.error("Unexpected error:", error);
-        return {
-            message: 'Database Error: Failed to Update customer.'
-        }
-    }
-}
-
-
-export async function deleteCustomer(id: string | number) {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-        throw new Error("Unauthorized: User not logged in.");
-    }
-
-    try {
-        const { error } = await supabase
-            .from('customers')
-            .delete()
-            .eq('id', id)
-        if (error) {
-            console.error("Supabase insert error:", error);
-            return { message: 'Database error: Failed to update customer.' };
-        }
-        revalidatePath('/dashboard/customers');
-        return { success: true, message: 'Customer deleted successfully!' };
-    }catch (error) {
-        console.error("Unexpected error:", error);
-        return {
-            message: 'Database Error: Failed to delete customer.'
-        }
-    }
-}
+//     try {
+//         const { data: { user }, error: authError } = await supabase.auth.getUser();
+//         if (authError || !user) {
+//             return { message: 'Unauthorized: You must be logged in.' };
+//         }
+//         const { data, error } = await supabase
+//             .from('customers')
+//             .update({
+//                 name,
+//                 email,
+//                 country,
+//                 phone,
+//             }).eq('id', id);
+//         if (error) {
+//             console.error("Supabase insert error:", error);
+//             return { message: 'Database error: Failed to update customer.' };
+//         }
+//         revalidatePath('/dashboard/customers');
+//         return { success: true, message: 'Customer updated successfully!' };
+//     } catch (error) {
+//         console.error("Unexpected error:", error);
+//         return {
+//             message: 'Database Error: Failed to Update customer.'
+//         }
+//     }
+// }
 
 
-export async function selectAllCustomers() {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+// export async function deleteCustomer(id: string | number) {
+//     const supabase = await createClient();
+//     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    if (authError || !user) {
-        throw new Error("Unauthorized: User not logged in.");
-    }
+//     if (authError || !user) {
+//         throw new Error("Unauthorized: User not logged in.");
+//     }
 
-    try {
-        const { data, error } = await supabase
-            .from('customers')
-            .select('*')
-            .eq("user_id", user.id).order('created_at', { ascending: true });
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        console.error("Unexpected error:", error);
-        return null;
-    }
-}
+//     try {
+//         const { error } = await supabase
+//             .from('customers')
+//             .delete()
+//             .eq('id', id)
+//         if (error) {
+//             console.error("Supabase insert error:", error);
+//             return { message: 'Database error: Failed to update customer.' };
+//         }
+//         revalidatePath('/dashboard/customers');
+//         return { success: true, message: 'Customer deleted successfully!' };
+//     }catch (error) {
+//         console.error("Unexpected error:", error);
+//         return {
+//             message: 'Database Error: Failed to delete customer.'
+//         }
+//     }
+// }
 
-export async function selectOneCustomer(id: string) {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    if (authError || !user) {
-        throw new Error("Unauthorized: User not logged in.");
-    }
+// export async function selectAllCustomers() {
+//     const supabase = await createClient();
+//     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    try {
-        const { data, error } = await supabase
-            .from('customers')
-            .select('*').eq('id', id).eq('user_id', user.id).single();
-        if (error) throw error;
-        return data;
-        console.log(data);
-    } catch (error) {
-        console.error("Unexpected error:", error);
-        return null;
-    }
-}
+//     if (authError || !user) {
+//         throw new Error("Unauthorized: User not logged in.");
+//     }
+
+//     try {
+//         const { data, error } = await supabase
+//             .from('customers')
+//             .select('*')
+//             .eq("user_id", user.id).order('created_at', { ascending: true });
+//         if (error) throw error;
+//         return data;
+//     } catch (error) {
+//         console.error("Unexpected error:", error);
+//         return null;
+//     }
+// }
+
+// export async function selectOneCustomer(id: string) {
+//     const supabase = await createClient();
+//     const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+//     if (authError || !user) {
+//         throw new Error("Unauthorized: User not logged in.");
+//     }
+
+//     try {
+//         const { data, error } = await supabase
+//             .from('customers')
+//             .select('*').eq('id', id).eq('user_id', user.id).single();
+//         if (error) throw error;
+//         return data;
+//         console.log(data);
+//     } catch (error) {
+//         console.error("Unexpected error:", error);
+//         return null;
+//     }
+// }
 
 

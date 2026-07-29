@@ -70,7 +70,7 @@ export default async function OrdersDashboard() {
           <Link
             href={'/dashboard/orders'}
             style={{ backgroundColor: "#FFC200", color: "#1A1A1A" }}
-            className="px-4 py-2 rounded-lg text-xs font-semibold hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0 max-sm:mx-auto"
+            className="px-4 py-2 rounded-lg text-sm hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0 max-sm:mx-auto"
           >
             + Create Order
           </Link>
