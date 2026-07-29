@@ -1,43 +1,35 @@
-import OrderForm from "@/components/orders/OrderForm";
-import { createClient } from "@/lib/supabase/server";
+import OrdersPage from "@/components/dashboard/orders/edit/ViewPage";
+import Link from "next/link";
 
-export default async function OrderFormPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: customers } = user
-    ? await supabase
-        .from("customers")
-        .select("id, name, email")
-        .eq("user_id", user.id)
-        .order("name")
-    : { data: [] };
-
+export default function OrderPage() {
   return (
-        <div className="min-h-screen flex-1 w-full m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
-            <span>Dashboard</span>
-            <span className="text-slate-300">/</span>
-            <span className="text-slate-900 font-medium">Create Order</span>
+    <div className="dark:bg-ink min-h-screen flex-1 w-auto m-1 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)]">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <div className="flex flex-row justify-between w-full">
+          <div className="mb-8">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+              <span>
+                <Link href="/dashboard" className="underline underline-offset-2">
+                  Dashboard
+                </Link>
+              </span>
+              <span className="text-border">/</span>
+              <span className="text-foreground font-medium">Orders</span>
+            </div>
+            <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">
+              View & Adjust orders
+            </h1>
+            <p className="text-muted-foreground">
+              Review active client orders, monitor <span>PriceRight</span> automated pricing
+              rules, and manage adjustments.
+            </p>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            Create New Order
-          </h1>
-          <p className="mt-2 text-slate-500">
-            Capture client requirements and generate a quote.
-          </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="px-6 sm:px-8 py-6">
-            <OrderForm customers={customers ?? []} pricingSheets={[]} />
-          </div>
+        <div className="pt-2">
+          <OrdersPage />
         </div>
-      </div>
+      </main>
     </div>
   );
 }

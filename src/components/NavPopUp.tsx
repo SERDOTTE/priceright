@@ -42,7 +42,7 @@ export default function NavPopUp() {
 
             {/* Conditionally render the nav menu */}
             {isOpen && (
-                <nav aria-label="Primary" className='bg-white absolute right-0 mt-2 rounded-lg py-2 shadow-md border border-gray-300 w-48 z-5'>
+                <nav aria-label="Primary" className='bg-white absolute right-0 mt-2 rounded-lg py-2 shadow-md border border-border w-48 z-5'>
                     <ul className="flex flex-col gap-1 text-sm text-black text-left items-start w-auto">
                         {[
                             { href: '/', label: 'Home' },
@@ -55,7 +55,7 @@ export default function NavPopUp() {
                                 <li key={item.href} className='px-2 w-full'>
                                     <Link
                                         href={item.href}
-                                        className="block rounded-md py-2 px-1 text-button text-brand-text transition hover:bg-gray-100"
+                                        className="block rounded-md py-2 px-1 text-sm text-ink transition hover:bg-muted"
                                         onClick={() => setIsOpen(false)}
                                     >
                                         {item.label}
@@ -64,14 +64,14 @@ export default function NavPopUp() {
                             ))}
                         {isLoggedIn && (
                             <div className="flex flex-col w-full">
-                                <span className='border-gray w-full border-t my-2'></span>
-                                <Button className='cursor-pointer bg-callout my-0 mx-auto'>Log out</Button>
+                                <span className='border-border w-full border-t my-2'></span>
+                                <Button className='cursor-pointer bg-action my-0 mx-auto'>Log out</Button>
                             </div>
                         )}
                         {!isLoggedIn && (
                             <div className="flex flex-col w-full">
-                                <span className='border-gray w-full border-t my-2'></span>
-                                <Button className='cursor-pointer bg-callout my-0 mx-auto'>Log in</Button>
+                                <span className='border-border w-full border-t my-2'></span>
+                                <Button className='cursor-pointer bg-action my-0 mx-auto'>Log in</Button>
                             </div>
                         )}
                     </ul>

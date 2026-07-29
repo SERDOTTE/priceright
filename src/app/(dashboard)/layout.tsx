@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import OrderNavLinks from "@/components/orders/OrderNavLinks";
+import OrderNavLinks from "@/components/dashboard/DashboardNavigation";
 
 export default async function DashboardLayout({
   children,
@@ -19,10 +19,10 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen w-full">
-      <div className="flex flex-col sm:flex-row w-full border-t border-slate">
+    <div className="min-h-screen w-full overflow-x-hidden text-base dark:bg-white!">
+      <div className="flex flex-col sm:flex-row w-full min-w-0 border-t border-border">
         <OrderNavLinks />
-        {children}
+        <div className="flex-1 min-w-0 *:scrollbar-thin">{children}</div>
       </div>
     </div>
   );
