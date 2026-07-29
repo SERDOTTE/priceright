@@ -11,6 +11,7 @@ import { AlertCircle, Calendar, Check, ChevronsUpDown, DollarSign, FileText, Use
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createOrder, OrderState } from "@/lib/orders/action";
+import { error } from "console";
 // import { PricingSheet } from "@/lib/supabase/types";
 
 interface Customer {
@@ -32,7 +33,7 @@ interface OrderFormProps {
 
 export default function OrderForm({ customers, pricingSheets }: OrderFormProps) {
   const router = useRouter();
-
+  const [showError, setShowError] = useState(false);
   const [customerId, setCustomerId] = useState("");
   const [customerOpen, setCustomerOpen] = useState(false);
   const [pricingSheetId, setPricingSheetId] = useState<string | null>(null);
@@ -61,18 +62,35 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
   }, initialState);
 
   useEffect(() => {
-  if (state.success) {
-    toast.success("Order created successfully!");
-
-    setCustomerId("");
-    setPricingSheetId(null);
-    setDescription("");
-    setPrice("");
-    setDueDate("");
-    setStatus("");
-    setPaymentStatus("");
-  }
-}, [state]);
+    if (state.success) {
+      toast.success("Order created successfully!");
+      setCustomerId("");
+      setPricingSheetId(null);
+      setDescription("");
+      setPrice("");
+      setDueDate("");
+      setStatus("");
+      setPaymentStatus("");
+    }
+    if (state.errors) {
+      setShowError(true)
+      const timeout = setTimeout(() => {
+        setShowError(false);
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+      // toast.error(state.message, {
+      //   description: (
+      //     <ul className="list-disc pl-5">
+      //       {state.errors && Object.entries(state.errors).map(([key, value]) => (
+      //         <li key={key} className="text-red-400">
+      //           <strong>{key}:</strong> {value}
+      //         </li>
+      //       ))}
+      //     </ul>
+      //   ),
+      // })
+  }, [state]);
 
   const selectedCustomer = customers.find((c) => c.id === customerId);
   const handlePricingSheetSelect = (sheetId: string) => {
@@ -160,7 +178,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-2 flex flex-col">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
               <User className="h-3.5 w-3.5" />
               Customer <span className="text-red-600">*</span>
             </label>
@@ -215,21 +233,21 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 </Command>
               </PopoverContent>
             </Popover>
-            {state.errors?.customer_id && (
+            {showError && state.errors?.customer_id && (
               <p className="text-xs text-red-600">{state.errors.customer_id[0]}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+            <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <FileText className="h-3.5 w-3.5" />
                 Pricing Sheet Template
               </span>
               <span className="text-xs font-normal lowercase text-muted-foreground">Optional</span>
             </label>
-            <Select value={pricingSheetId || undefined} onValueChange={(value) => handlePricingSheetSelect(value || "")}>
-              <SelectTrigger className="h-11 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20">
+            <Select value={pricingSheetId || undefined} onValueChange={(value) => handlePricingSheetSelect(value || "")} modal={false}>
+              <SelectTrigger aria-expanded={false} className="h-11 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20">
                 <SelectValue placeholder="Load from pricing model..." />
               </SelectTrigger>
               <SelectContent className="rounded-xl border-border shadow-lg">
@@ -252,7 +270,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
         </div>
 
         <div className="space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+          <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
             <FileText className="h-3.5 w-3.5" />
             Project Description <span className="text-red-600">*</span>
           </label>
@@ -263,16 +281,15 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
             placeholder="Describe the scope, key milestones, inclusions, and deliverables..."
             className="w-full rounded-xl border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all shadow-xs resize-none"
           />
-          {state.errors?.description && (
-            <p className="text-xs text-red-600">{state.errors.description[0]}</p>
-          )}
           <p className="text-xs text-muted-foreground">
             Be specific about deliverables, milestones, and any project exclusions.
           </p>
+          {showError && state.errors?.description && (
+            <p className="text-xs text-red-600">{state.errors.description[0]}</p>
+          )}
         </div>
       </div>
 
-      {/* Section 3: Commercial Terms & Tracking */}
       {/* Section 3: Commercial Terms & Tracking */}
       <div className="rounded-2xl border border-border bg-card p-6 shadow-xs space-y-5">
         <div className="border-b border-border pb-4">
@@ -282,7 +299,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
               <DollarSign className="h-3.5 w-3.5" />
               Total Price (USD) <span className="text-red-600">*</span>
             </label>
@@ -300,13 +317,13 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 className="rounded-xl border-border bg-white pl-8 text-sm font-semibold tabular-nums shadow-xs transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
               />
             </div>
-            {state.errors?.price && (
+            {showError && state.errors?.price && (
               <p className="text-xs text-red-600">{state.errors.price[0]}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
               <Calendar className="h-3.5 w-3.5" />
               Target Due Date <span className="text-red-600">*</span>
             </label>
@@ -316,13 +333,13 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
               onChange={(e) => setDueDate(e.target.value)}
               className="rounded-xl border-border bg-white text-sm shadow-xs transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
             />
-            {state.errors?.due_date && (
+            {showError && state.errors?.due_date && (
               <p className="text-xs text-red-600">{state.errors.due_date[0]}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
               <Tag className="h-3.5 w-3.5" />
               Initial Status
             </label>
@@ -337,13 +354,13 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 <SelectItem value="delivered" className="cursor-pointer">Delivered</SelectItem>
               </SelectContent>
             </Select>
-            {state.errors?.status && (
+            {showError && state.errors?.status && (
               <p className="text-xs text-red-600">{state.errors.status[0]}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
               <CreditCard className="h-3.5 w-3.5" />
               Payment Status
             </label>
@@ -357,7 +374,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                 <SelectItem value="overdue" className="cursor-pointer">Overdue</SelectItem>
               </SelectContent>
             </Select>
-            {state.errors?.payment_status && (
+            {showError && state.errors?.payment_status && (
               <p className="text-xs text-red-600">{state.errors.payment_status[0]}</p>
             )}
           </div>

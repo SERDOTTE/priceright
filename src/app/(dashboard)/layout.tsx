@@ -19,11 +19,13 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen text-base dark:bg-white!">
-      <div className="flex flex-col sm:flex-row w-full border-t border-border">
-        <OrderNavLinks />
-        {children}
-      </div>
+<div className="min-h-screen w-full overflow-x-hidden text-base dark:bg-white!">
+  <div className="flex flex-col sm:flex-row w-full min-w-0 border-t border-border">
+    <OrderNavLinks />
+    <div className="flex-1 min-w-0">
+      {children}
     </div>
-  );
+  </div>
+</div>
+  )
 }
