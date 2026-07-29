@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { OrderRowsProps } from '@/lib/supabase/types';
 import { Edit2 } from 'lucide-react';
 import Delete from '../edit/DeleteOrder';
-// import Delete from '../edit/DeleteCustomer';
+import { orderStatusColors, paymentStatusColors } from '@/lib/supabase/types';
 
 
 export default function OrderRows({
@@ -82,14 +82,14 @@ export default function OrderRows({
                     )}
                     {visibleColumns.status && (
                         <td className="p-3">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand/20 text-ink capitalize">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize ${orderStatusColors[order.allOrders.status] || 'bg-gray-500/20 text-gray-700'}`}>
                                 {order.allOrders.status.replace('_', ' ')}
                             </span>
                         </td>
                     )}
                     {visibleColumns.paymentStatus && (
                         <td className="p-3">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand/20 text-ink capitalize">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize ${order.allOrders.payment_status ? paymentStatusColors[order.allOrders.payment_status] : 'bg-gray-500/20 text-gray-700'}`}>
                                 {order.allOrders.payment_status?.replace('_', ' ') || 'N/A'}
                             </span>
                         </td>

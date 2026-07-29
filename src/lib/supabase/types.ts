@@ -65,3 +65,17 @@ export interface OrderRowsProps {
     allOrders: Order;
 }
 
+
+// Add these color mappings here:
+export const orderStatusColors: Record<OrderStatus, string> = {
+    sent: 'bg-blue-500/20 text-blue-700 dark:text-blue-300',
+    approved: 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300',
+    in_progress: 'bg-purple-500/20 text-purple-700 dark:text-purple-300',
+    delivered: 'bg-green-500/20 text-green-700 dark:text-green-300',
+};
+
+export const paymentStatusColors: Record<PaymentStatus, string> = {
+    pending: 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300',
+    paid: 'bg-green-500/20 text-green-700 dark:text-green-300',
+    overdue: 'bg-red-500/20 text-red-700 dark:text-red-300',
+};
