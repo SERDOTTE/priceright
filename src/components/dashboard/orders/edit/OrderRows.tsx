@@ -18,10 +18,14 @@ import { toast } from 'sonner';
 export default function OrderRows({
     orders,
     searchQuery,
+    statusFilterValue,
+    paymentFilterValue,
     visibleColumns,
 }: {
     orders: OrderRowsProps[];
     searchQuery: string;
+    statusFilterValue: string | undefined;
+    paymentFilterValue: string | undefined;
     visibleColumns: {
         customer: boolean,
         description: boolean,
@@ -34,6 +38,8 @@ export default function OrderRows({
     };
 }) {
     const q = searchQuery.trim().toLowerCase();
+    const statusFilter = statusFilterValue?.trim().toLowerCase();
+    const paymentFilter = paymentFilterValue?.trim().toLowerCase();
     const [editingId, setEditingId] = useState<string | null>(null);
     const [customerOpen, setCustomerOpen] = useState(false);
     const [customerId, setCustomerId] = useState("");
@@ -48,23 +54,48 @@ export default function OrderRows({
         paymentStatus: '',
     });
 
+
     const selectedCustomer = allCustomers?.find((c) => c.id === customerId);
 
-    const filtered = q
-        ? orders.filter((item) => {
-            const order = item.allOrders;
-            const dateString = order.created_at
-                ? new Date(order.created_at).toLocaleDateString('en-US')
-                : '';
+    // let filtered;
+    // filtered = q
+    //     ? orders.filter((item) => {
+    //         const order = item.allOrders;
+    //         const dateString = order.created_at
+    //             ? new Date(order.created_at).toLocaleDateString('en-US')
+    //             : '';
 
-            return (
-                order.description?.toLowerCase().includes(q) ||
-                order.status?.toLowerCase().includes(q) ||
-                dateString.toLowerCase().includes(q) ||
-                item.customer.name?.toLowerCase().includes(q)
-            );
-        })
-        : orders;
+    //         return (
+    //             order.description?.toLowerCase().includes(q) ||
+    //             order.status?.toLowerCase().includes(q) ||
+    //             dateString.toLowerCase().includes(q) ||
+    //             item.customer.name?.toLowerCase().includes(q)
+    //         );
+    //     })
+    //     : orders;
+    let filtered = orders.filter((item) => {
+        const order = item.allOrders;
+        const dateString = order.created_at
+            ? new Date(order.created_at).toLocaleDateString('en-US')
+            : '';
+
+        // Search query match
+        const matchesSearch = !q || (
+            order.description?.toLowerCase().includes(q) ||
+            order.status?.toLowerCase().includes(q) ||
+            dateString.toLowerCase().includes(q) ||
+            item.customer.name?.toLowerCase().includes(q)
+        );
+
+        // Filter value match
+        const matchesStatus = statusFilter === 'all' || (order.status && order.status.toLowerCase() === statusFilter);
+        const matchesPayment = paymentFilter === 'all' || (order.payment_status && order.payment_status.toLowerCase() === paymentFilter);
+
+        const matchesFilter = matchesStatus && matchesPayment;
+
+        return matchesSearch && matchesFilter;
+    });
+
 
     // Fetch customers on mount
     useEffect(() => {
@@ -121,8 +152,6 @@ export default function OrderRows({
                 setCustomerId("");
             } else {
                 console.error("Validation Errors:", result?.errors);
-                let errorMessage = result?.message || "Failed to update order.";
-
                 // if (result?.errors) {
                 //     const errorList = Object.values(result.errors)
                 //         .flat()
@@ -157,7 +186,7 @@ export default function OrderRows({
     if (filtered.length === 0) {
         return (
             <tr>
-                <td colSpan={Object.values(visibleColumns).filter(Boolean).length} className="p-6 text-center text-ink/60">
+                <td colSpan={Object.values(visibleColumns).filter(Boolean).length} className="p-6 text-center">
                     No orders found matching your criteria.
                 </td>
             </tr>
@@ -262,16 +291,16 @@ export default function OrderRows({
                                                 </span>
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>}></PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0 border-none shadow-none rounded-xl">
-                                                <textarea
-                                                    name="description"
-                                                    value={editForm.description}
-                                                    onChange={handleChange}
-                                                    rows={6}
-                                                    cols={40}
-                                                    className="scrollbar-none w-full p-1 border rounded-xl resize-none"
-                                                ></textarea>
-                                            </PopoverContent>
+                                        <PopoverContent className="w-auto p-0 border-none shadow-none rounded-xl">
+                                            <textarea
+                                                name="description"
+                                                value={editForm.description}
+                                                onChange={handleChange}
+                                                rows={6}
+                                                cols={40}
+                                                className="scrollbar-none w-full p-1 border rounded-xl resize-none"
+                                            ></textarea>
+                                        </PopoverContent>
                                     </Popover>
                                 ) : (
                                     item.allOrders.description
