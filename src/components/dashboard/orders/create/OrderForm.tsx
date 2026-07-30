@@ -190,7 +190,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>}>
               </PopoverTrigger>
-              <PopoverContent className="w-80 p-0 rounded-xl shadow-lg border-border">
+              <PopoverContent className="w-(--radix-popover-content-width) p-0 rounded-xl shadow-lg border-border">
                 <Command>
                   <CommandInput placeholder="Search customer by name or email..." className="h-10 text-sm" />
                   <CommandList>
