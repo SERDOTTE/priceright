@@ -16,20 +16,23 @@ export default function Delete({ id }: DeleteProps) {
         if (isDeleting) return;
         setIsDeleting(true);
         try {
-            await toast.promise(
-                new Promise((resolve, reject) => {
-                    deleteCustomer(id)
-                        .then(() => resolve(true))
-                        .catch((error) => reject(error));
-                }),
-                {
-                    loading: "Deleting Customer...",
-                    success: () => "Customer deleted successfully!",
-                    error: "Failed to delete Customer. Please try again.",
+            const promise = async () => {
+                setIsDeleting(true);
+                const res = await deleteCustomer(id);
+                if (!res.success) {
+                    throw new Error(res.message || "Failed to delete order");
                 }
-            );
-            // window.location.reload();
-        } catch {
+                return res;
+            };
+
+            await toast.promise(promise(), {
+                loading: "Deleting Customer...",
+                success: "Customer deleted successfully!",
+                error: (err) => err.message || "Failed to delete Customer. Please try again.",
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
             setIsDeleting(false);
         }
     }

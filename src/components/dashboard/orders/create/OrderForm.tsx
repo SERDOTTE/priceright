@@ -11,8 +11,6 @@ import { AlertCircle, Calendar, Check, ChevronsUpDown, DollarSign, FileText, Use
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createOrder, OrderState } from "@/lib/orders/action";
-import { error } from "console";
-// import { PricingSheet } from "@/lib/supabase/types";
 
 interface Customer {
   id: string;
