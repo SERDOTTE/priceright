@@ -7,10 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { AlertCircle, Calendar, Check, ChevronsUpDown, DollarSign, FileText, User, Loader, Tag, CreditCard } from "lucide-react";
+import { AlertCircle, Calendar as CalendarIcon, Check, ChevronsUpDown, DollarSign, FileText, User, Loader, Tag, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { createOrder, OrderState } from "@/lib/orders/action";
+import { Calendar } from "@/components/ui/calendar"
+import { format } from 'date-fns'
+
 
 interface Customer {
   id: string;
@@ -37,7 +40,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
   const [pricingSheetId, setPricingSheetId] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState<Date | undefined>(new Date());
   const [status, setStatus] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
 
@@ -48,7 +51,9 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
     formData.append("description", description);
     formData.append("price", price);
     formData.append("payment_status", paymentStatus);
-    formData.append("due_date", dueDate);
+    if (dueDate) {
+      formData.append("due_date", dueDate.toISOString());
+    }
     if (pricingSheetId) {
       formData.append("pricing_sheet_id", pricingSheetId);
     }
@@ -66,7 +71,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
       setPricingSheetId(null);
       setDescription("");
       setPrice("");
-      setDueDate("");
+      setDueDate(undefined);
       setStatus("");
       setPaymentStatus("");
     }
@@ -185,7 +190,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>}>
               </PopoverTrigger>
-              <PopoverContent className="w-(--radix-popover-trigger-width) p-0 rounded-xl shadow-lg border-border">
+              <PopoverContent className="w-80 p-0 rounded-xl shadow-lg border-border">
                 <Command>
                   <CommandInput placeholder="Search customer by name or email..." className="h-10 text-sm" />
                   <CommandList>
@@ -311,15 +316,30 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
 
           <div className="space-y-2">
             <label className="text-xs font-semibold uppercase text-muted-foreground flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5" />
+              <CalendarIcon className="h-3.5 w-3.5" />
               Target Due Date <span className="text-red-600">*</span>
             </label>
-            <Input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="rounded-xl border-border bg-white text-sm shadow-xs transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
-            />
+            <Popover>
+              <PopoverTrigger render={
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal rounded-xl border-border bg-white text-sm shadow-xs transition-all focus:border-ring focus:ring-2 focus:ring-ring/20",
+                    !dueDate && "text-muted-foreground"
+                  )}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                </Button>
+              }>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start" >
+                <Calendar
+                  mode="single"
+                  selected={dueDate}
+                  onSelect={setDueDate}
+                />
+              </PopoverContent>
+            </Popover>
             {showError && state.errors?.due_date && (
               <p className="text-xs text-red-600">{state.errors.due_date[0]}</p>
             )}
@@ -334,7 +354,7 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
               <SelectTrigger className="h-12 w-full rounded-xl border-border bg-white pl-3.5 text-sm shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20">
                 <SelectValue placeholder="Select status..." />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-border shadow-lg"alignItemWithTrigger={false}>
+              <SelectContent className="rounded-xl border-border shadow-lg" alignItemWithTrigger={false}>
                 <SelectItem value="quote_sent" className="cursor-pointer">Quote Sent</SelectItem>
                 <SelectItem value="approved" className="cursor-pointer">Approved</SelectItem>
                 <SelectItem value="in_progress" className="cursor-pointer">In Progress</SelectItem>
