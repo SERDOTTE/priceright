@@ -144,7 +144,7 @@ useEffect(() => {
                     <summary className="cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white dark:bg-muted shadow-sm px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
                         <Columns className='size-4' /> Columns
                     </summary>
-                    <div className="absolute left-0 mt-2 w-56 rounded-md shadow-xl bg-white dark:bg-ink ring-1 ring-black ring-opacity-5 z-30 max-h-60 overflow-y-auto">
+                    <div className="absolute left-0 mt-2 w-56 rounded-md shadow-xl bg-white dark:bg-ink ring-1 ring-black ring-opacity-5 z-30 max-h-60 overflow-y-auto scrollbar-thin">
                         <div className="py-1" role="menu">
                             {Object.keys(visibleColumns).map((column) => (
                                 <label key={column} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-muted cursor-pointer">

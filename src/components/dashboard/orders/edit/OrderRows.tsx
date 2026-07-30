@@ -13,6 +13,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { selectAllCustomers } from '@/lib/customers/action';
 import { cn } from "@/lib/utils";
 import { updateOrder } from '@/lib/orders/action';
+import { toast } from 'sonner';
 
 export default function OrderRows({
     orders,
@@ -47,7 +48,7 @@ export default function OrderRows({
     });
 
     const selectedCustomer = allCustomers?.find((c) => c.id === customerId);
-    
+
     const filtered = q
         ? orders.filter((item) => {
             const order = item.allOrders;
@@ -108,13 +109,24 @@ export default function OrderRows({
         const targetCustomerId = customerId || initialCustomerId;
         formData.append('customer_id', targetCustomerId);
         formData.append('due_date', " ");
-        const result = await updateOrder(id, null as any, formData);
+        const toastId = toast.loading("Updating order...");
 
-        if (result?.success) {
-            setEditingId(null);
-            setCustomerId("");
-        } else {
-            console.error(result?.message || "Failed to update order");
+        try {
+            const result = await updateOrder(id, null as any, formData);
+
+            if (result?.success) {
+                // 2. Success toast
+                toast.success("Order updated successfully!", { id: toastId });
+                setEditingId(null);
+                setCustomerId("");
+            } else {
+                // 3. Error toast with details if available
+                console.error("Validation Errors:", result?.errors);
+                toast.error(result?.message || "Failed to update order.", { id: toastId });
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error);
+            toast.error("An unexpected error occurred.", { id: toastId });
         }
     };
 
@@ -141,7 +153,7 @@ export default function OrderRows({
                             <td className="p-3">
                                 {isEditing ? (
                                     <Popover open={customerOpen} onOpenChange={setCustomerOpen}>
-                                        <PopoverTrigger 
+                                        <PopoverTrigger
                                             render={<Button
                                                 variant="outline"
                                                 role="combobox"
