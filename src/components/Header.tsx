@@ -31,12 +31,13 @@ export default async function Header() {
               </button>
             </form>
           ) : (
+            user ? (
             <Link
               href="/login"
               className="rounded-md px-3 py-1.5 text-sm font-semibold text-ink hover:bg-secondary dark:text-white"
             >
               Sign in
-            </Link>
+            </Link> ) : (" ")
           )}
         </div>
       </div>

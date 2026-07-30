@@ -6,5 +6,4 @@ import { selectAllOrders } from '@/lib/orders/action';
 export default async function getOrders(): Promise<OrderRowsProps[]> {
     const orders = await selectAllOrders();
     return orders ?? [] as OrderRowsProps[];
-
 }

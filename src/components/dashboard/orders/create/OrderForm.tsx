@@ -79,17 +79,6 @@ export default function OrderForm({ customers, pricingSheets }: OrderFormProps) 
       }, 5000);
       return () => clearTimeout(timeout);
     }
-      // toast.error(state.message, {
-      //   description: (
-      //     <ul className="list-disc pl-5">
-      //       {state.errors && Object.entries(state.errors).map(([key, value]) => (
-      //         <li key={key} className="text-red-400">
-      //           <strong>{key}:</strong> {value}
-      //         </li>
-      //       ))}
-      //     </ul>
-      //   ),
-      // })
   }, [state]);
 
   const selectedCustomer = customers.find((c) => c.id === customerId);
