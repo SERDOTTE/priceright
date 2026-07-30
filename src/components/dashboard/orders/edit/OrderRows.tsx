@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { selectAllCustomers } from '@/lib/customers/action';
 import { cn } from "@/lib/utils";
-import { updateOrder } from '@/lib/orders/action';
+import { OrderState, updateOrder } from '@/lib/orders/action';
 import { toast } from 'sonner';
 
 export default function OrderRows({
@@ -38,6 +38,7 @@ export default function OrderRows({
     const [customerOpen, setCustomerOpen] = useState(false);
     const [customerId, setCustomerId] = useState("");
     const [allCustomers, setAllCustomers] = useState<Customer[] | null>(null);
+    const initialState: OrderState = { message: null, errors: {} };
 
     const [editForm, setEditForm] = useState({
         customerName: '',
@@ -98,31 +99,54 @@ export default function OrderRows({
     };
 
     // Handle saving row updates explicitly on user action
-    const handleSave = async (id: string, initialCustomerId: string) => {
+    const handleSave = async (id: string, initialCustomerId: string, prevState: OrderState = initialState) => {
         const formData = new FormData();
         formData.append('description', editForm.description);
         formData.append('price', editForm.price);
         formData.append('status', editForm.status);
         formData.append('payment_status', editForm.paymentStatus);
 
-        // Use newly selected customerId if available, otherwise fall back to initial
         const targetCustomerId = customerId || initialCustomerId;
         formData.append('customer_id', targetCustomerId);
         formData.append('due_date', " ");
         const toastId = toast.loading("Updating order...");
 
         try {
-            const result = await updateOrder(id, null as any, formData);
+            // Pass prevState here instead of null as any
+            const result = await updateOrder(id, prevState, formData);
 
             if (result?.success) {
-                // 2. Success toast
                 toast.success("Order updated successfully!", { id: toastId });
                 setEditingId(null);
                 setCustomerId("");
             } else {
-                // 3. Error toast with details if available
                 console.error("Validation Errors:", result?.errors);
-                toast.error(result?.message || "Failed to update order.", { id: toastId });
+                let errorMessage = result?.message || "Failed to update order.";
+
+                // if (result?.errors) {
+                //     const errorList = Object.values(result.errors)
+                //         .flat()
+                //         .map(err => `• ${err}`)
+                //         .join("\n");
+                //     if (errorList) {
+                //         errorMessage = `${errorMessage}\n${errorList}`;
+                //     }
+                // }
+                let errorContent = (
+                    <div>
+                        <p className="font-semibold">{result?.message || "Failed to update order."}</p>
+                        {result?.errors && (
+                            <ul className="list-disc pl-4 mt-1 text-sm">
+                                {Object.values(result.errors)
+                                    .flat()
+                                    .map((err, index) => (
+                                        <li key={index}>{err}</li>
+                                    ))}
+                            </ul>
+                        )}
+                    </div>
+                );
+                toast.error(errorContent, { id: toastId });
             }
         } catch (error) {
             console.error("Unexpected error:", error);

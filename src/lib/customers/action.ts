@@ -121,7 +121,7 @@ export async function updateCustomer(id: string | number, prevState: State, form
     if (!parsed.success) {
         return {
             errors: parsed.error.flatten().fieldErrors,
-            message: 'Missing or invalid fields. Failed to update project.',
+            message: 'Missing or invalid fields. Failed to update project',
         };
     }
 
