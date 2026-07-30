@@ -89,7 +89,7 @@ export default function OrderRows({
     };
 
     // Handle input changes
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEditForm((prev) => ({ ...prev, [name]: value }));
     };
@@ -246,13 +246,33 @@ export default function OrderRows({
                         {visibleColumns.description && (
                             <td className="p-3 text-ink/80 dark:text-gray-400 md:table-cell max-w-50 truncate">
                                 {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="description"
-                                        value={editForm.description}
-                                        onChange={handleChange}
-                                        className="w-full p-1 h-9 border rounded-xl dark:bg-gray-800 dark:text-white"
-                                    />
+                                    <Popover>
+                                        <PopoverTrigger
+                                            render={<Button
+                                                variant="outline"
+                                                role="combobox"
+                                                aria-expanded={customerOpen}
+                                                className="w-full justify-between rounded-xl border-border bg-white px-3.5 text-sm font-normal shadow-xs transition-all hover:bg-muted/50 focus:border-ring focus:ring-2 focus:ring-ring/20"
+                                            >
+                                                <span className="truncate">
+                                                    {selectedCustomer?.name
+                                                        ? editForm.description
+                                                        : "Search or select a customer..."
+                                                    }
+                                                </span>
+                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>}></PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0 border-none shadow-none rounded-xl">
+                                                <textarea
+                                                    name="description"
+                                                    value={editForm.description}
+                                                    onChange={handleChange}
+                                                    rows={6}
+                                                    cols={40}
+                                                    className="scrollbar-none w-full p-1 border rounded-xl resize-none"
+                                                ></textarea>
+                                            </PopoverContent>
+                                    </Popover>
                                 ) : (
                                     item.allOrders.description
                                 )}
