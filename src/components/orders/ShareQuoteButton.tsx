@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Share2 } from "lucide-react";
+import { Share2, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -77,7 +77,11 @@ export function ShareQuoteButton({ orderId }: ShareQuoteButtonProps) {
             <div className="flex items-center gap-2">
               <Input readOnly value={link} className="h-8 text-xs" />
               <Button type="button" size="sm" onClick={handleCopy} className="h-8 shrink-0">
-                {copied ? "Copied!" : "Copy"}
+                {copied ? "Copied!" : (
+                  <>
+                    <Copy className="size-3.5" />Copy
+                  </>
+                )}
               </Button>
             </div>
           ) : null}
