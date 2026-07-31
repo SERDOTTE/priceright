@@ -45,7 +45,7 @@ export default function RootLayout({
             loading: <Loader className="size-5 animate-spin" />,
           }}
           richColors
-          duration={3000}
+          duration={4000}
           position="top-center"
         />
         <Footer />

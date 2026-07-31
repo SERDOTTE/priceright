@@ -325,3 +325,37 @@ export async function selectTargetProfit(): Promise<TargetProfit | null> {
 
   return (data?.[0] as TargetProfit | undefined) ?? null;
 }
+
+export async function deleteMaterial(
+  id: string | number,
+) {
+  const supabase = await createClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("Unauthorized: User not logged in.");
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('material_costs')
+      .delete()
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      console.error("Supabase delete material error:", error);
+      return {
+        message: formatDbErrorMessage(error, "Database error: Failed to delete material."),
+      };
+    }
+    if (!data || data.length === 0) {
+      return { success: false, message: 'Material not found or you do not have permission to delete it.' };
+    }
+    revalidatePath("/dashboard/costs/materials");
+    return { success: true, message: "Material delete successfully!" };
+  } catch (error) {
+    console.error("Unexpected delete material error:", error);
+    return { message: "Database Error: Failed to delete material." };
+  }
+}

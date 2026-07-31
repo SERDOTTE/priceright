@@ -2,14 +2,15 @@
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Pencil, Plus, Save } from "lucide-react";
+import { Pencil, Plus, Save, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SubmitButton } from "@/components/SubmitButton";
-import { createMaterialsBatch, type MaterialState, updateMaterial } from "@/lib/costs/action";
+import { createMaterialsBatch, type MaterialState, updateMaterial, deleteMaterial } from "@/lib/costs/action";
 import type { Material } from "@/lib/supabase/types";
+import Delete from "./DeleteMaterial";
 
 type MaterialDraft = {
   name: string;
@@ -37,7 +38,7 @@ function MaterialEditRow({ material }: { material: Material }) {
   }, [state]);
 
   return (
-    <form action={formAction} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-3 rounded-xl border border-border p-3">
+    <form action={formAction} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-3 rounded-xl border border-border p-3 items-end">
       <div className="flex flex-col gap-2">
         <Label htmlFor={`name-${material.id}`}>Name</Label>
         <Input id={`name-${material.id}`} name="name" defaultValue={material.name} required className="rounded-xl" />
@@ -63,11 +64,12 @@ function MaterialEditRow({ material }: { material: Material }) {
         <SubmitButton
           label="Update"
           Icon={Pencil}
-          className="bg-action hover:bg-action rounded-xl h-10 px-4 text-white"
+          className="bg-action hover:bg-action rounded-xl h-10 px-4 text-white w-full md:w-auto"
         />
+      <Delete id={material.id}/>
       </div>
 
-        {(state.errors?.name || state.errors?.unit || state.errors?.value) && (
+      {(state.errors?.name || state.errors?.unit || state.errors?.value) && (
         <p className="text-xs text-red-600 md:col-span-4">
           {state.errors?.name?.[0] || state.errors?.unit?.[0] || state.errors?.value?.[0]}
         </p>
@@ -115,6 +117,10 @@ export default function MaterialCostsForm({ materials }: { materials: Material[]
     setItems((prev) => [...prev, { ...initialDraft }]);
   };
 
+  const removeItem = (index: number) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const updateItem = (index: number, field: keyof MaterialDraft, value: string) => {
     setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   };
@@ -130,65 +136,84 @@ export default function MaterialCostsForm({ materials }: { materials: Material[]
           <form action={formAction} className="flex flex-col gap-6">
             <input type="hidden" name="items_payload" value={payload} />
 
-            {items.map((item, index) => (
-              <div key={`material-draft-${index}`} className="grid grid-cols-1 md:grid-cols-3 gap-4 rounded-xl border border-border p-4">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor={`draft-name-${index}`}>Name</Label>
-                  <Input
-                    id={`draft-name-${index}`}
-                    placeholder="Material name"
-                    value={item.name}
-                    onChange={(event) => updateItem(index, "name", event.target.value)}
-                    className="rounded-xl"
-                    required
-                  />
+            <div className="flex flex-col gap-4">
+              {items.map((item, index) => (
+                <div key={`material-draft-${index}`} className="flex items-end gap-3 rounded-xl border border-border p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor={`draft-name-${index}`}>Name</Label>
+                      <Input
+                        id={`draft-name-${index}`}
+                        placeholder="Material name"
+                        value={item.name}
+                        onChange={(event) => updateItem(index, "name", event.target.value)}
+                        className="rounded-xl"
+                        required
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor={`draft-unit-${index}`}>Unit</Label>
+                      <Input
+                        id={`draft-unit-${index}`}
+                        placeholder="kg, meter, unit..."
+                        value={item.unit}
+                        onChange={(event) => updateItem(index, "unit", event.target.value)}
+                        className="rounded-xl"
+                        required
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor={`draft-value-${index}`}>Value</Label>
+                      <Input
+                        id={`draft-value-${index}`}
+                        placeholder="0.00"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        value={item.value}
+                        onChange={(event) => updateItem(index, "value", event.target.value)}
+                        className="rounded-xl"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Delete button for local row */}
+                  {items.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeItem(index)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl h-10 w-10 shrink-0"
+                      title="Remove row"
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  )}
                 </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor={`draft-unit-${index}`}>Unit</Label>
-                  <Input
-                    id={`draft-unit-${index}`}
-                    placeholder="kg, meter, unit..."
-                    value={item.unit}
-                    onChange={(event) => updateItem(index, "unit", event.target.value)}
-                    className="rounded-xl"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor={`draft-value-${index}`}>Value</Label>
-                  <Input
-                    id={`draft-value-${index}`}
-                    placeholder="0.00"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    value={item.value}
-                    onChange={(event) => updateItem(index, "value", event.target.value)}
-                    className="rounded-xl"
-                    required
-                  />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
             {state.errors?.items_payload && (
               <p className="text-xs text-red-600">{state.errors.items_payload[0]}</p>
             )}
 
-            <div className="flex flex-wrap items-center justify-end gap-3">
+            {/* Improved button layout: aligned, distinct styles, full-width support on smaller screens */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={addItem}
-                className="rounded-xl"
+                className="rounded-xl w-full sm:w-auto h-10 px-4"
               >
-                <Plus className="size-4" />
+                <Plus className="size-4 mr-2" />
                 Add more item
               </Button>
               <SubmitButton
-                label="Save"
+                label="Save All Materials"
                 Icon={Save}
-                className="bg-action hover:bg-action rounded-xl h-10 px-5 text-white"
+                className="bg-action hover:bg-action/90 rounded-xl h-10 px-6 text-white w-full sm:w-auto"
               />
             </div>
           </form>
@@ -198,7 +223,7 @@ export default function MaterialCostsForm({ materials }: { materials: Material[]
       <Card className="p-6 w-full">
         <CardHeader>
           <CardTitle className="font-heading text-xl font-semibold">Update Registered Materials</CardTitle>
-          <CardDescription>Use the Alterar button to update any existing material item.</CardDescription>
+          <CardDescription>Use the Update button to modify any existing material item.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {materials.length === 0 ? (

@@ -299,7 +299,7 @@ export default function OrderRows({
                                                 onChange={handleChange}
                                                 rows={6}
                                                 cols={40}
-                                                className="scrollbar-none w-full p-1 border rounded-xl resize-none"
+                                                className="scrollbar-none w-full p-1 px-2 border rounded-xl resize-none"
                                             ></textarea>
                                         </PopoverContent>
                                     </Popover>
