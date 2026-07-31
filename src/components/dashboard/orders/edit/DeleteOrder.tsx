@@ -13,7 +13,6 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button";
-import { PopoverClose } from '@base-ui/react/popover';
 
 interface DeleteProps {
     id: string | number;
@@ -44,9 +43,7 @@ export default function Delete({ id }: DeleteProps) {
             });
         } catch (error) {
             console.error(error);
-        } finally {
-            setIsDeleting(false);
-        }
+        } 
     };
 
     return (
@@ -67,11 +64,18 @@ export default function Delete({ id }: DeleteProps) {
                         </PopoverDescription>
                     </PopoverHeader>
                     <div className="flex gap-2 justify-center">
-                        <Button onClick={() => setIsOpen(false)} variant={"outline"} className={"bg-white px-5"}>No</Button>
+                        <Button 
+                        onClick={() => setIsOpen(false)} 
+                        variant={"outline"} 
+                        className={"bg-white px-5"}
+                        disabled={isDeleting}>No</Button>
                         <Button variant={"destructive"}
                             className={"bg-action text-white border-action px-5"}
                             disabled={isDeleting}
-                            onClick={handleDelete}>Yes</Button>
+                            onClick={() => {
+                                setIsDeleting(true)
+                                handleDelete()
+                            }}>Yes</Button>
                     </div>
                 </PopoverContent>
             </Popover>

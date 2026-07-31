@@ -121,7 +121,7 @@ export async function updateCustomer(id: string | number, prevState: State, form
     if (!parsed.success) {
         return {
             errors: parsed.error.flatten().fieldErrors,
-            message: 'Missing or invalid fields. Failed to update project.',
+            message: 'Missing or invalid fields. Failed to update project',
         };
     }
 
@@ -139,7 +139,7 @@ export async function updateCustomer(id: string | number, prevState: State, form
                 email,
                 country,
                 phone,
-            }).eq('id', id);
+            }).eq('id', id).eq('user_id', user.id);
         if (error) {
             console.error("Supabase insert error:", error);
             return { message: 'Database error: Failed to update customer.' };

@@ -34,7 +34,7 @@ export interface Material {
   quantity: number;
 }
 
-export type OrderStatus = 'sent' | 'approved' | 'in_progress' | 'delivered';
+export type OrderStatus = 'quote_sent' | 'approved' | 'in_progress' | 'delivered';
 export type PaymentStatus = 'pending' | 'paid' | 'overdue';
 
 export interface Order {
@@ -68,7 +68,7 @@ export interface OrderRowsProps {
 
 // Add these color mappings here:
 export const orderStatusColors: Record<OrderStatus, string> = {
-    sent: 'bg-blue-500/20 text-blue-700 dark:text-blue-300',
+    quote_sent: 'bg-blue-500/20 text-blue-700 dark:text-blue-300',
     approved: 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300',
     in_progress: 'bg-purple-500/20 text-purple-700 dark:text-purple-300',
     delivered: 'bg-green-500/20 text-green-700 dark:text-green-300',

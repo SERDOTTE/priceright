@@ -246,3 +246,48 @@ export async function deleteOrder(id: string | number) {
     };
   }
 }
+
+export async function updateOrder(id: string | number, prevState: OrderState, formData: FormData) {
+    const supabase = await createClient(); 
+    const parsed = OrderFormSchema.safeParse(getOrderData(formData));
+
+    if (!parsed.success) {
+        return {
+            errors: parsed.error.flatten().fieldErrors,
+            message: 'Missing or invalid fields. Failed to update Order.',
+        };
+    }
+
+    const { customer_id, description, price, status, payment_status } = parsed.data;
+
+    try {
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+            return { message: 'Unauthorized: You must be logged in.' };
+        }
+
+        const { error } = await supabase
+            .from('orders')
+            .update({
+                customer_id,
+                description,
+                price,
+                status,
+                payment_status,
+            })
+            .eq('id', id);
+
+        if (error) {
+            console.error("Supabase update error:", error);
+            return { message: 'Database error: Failed to update order.' };
+        }
+
+        revalidatePath('/dashboard/orders');
+        return { success: true, message: 'Order updated successfully!' };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return {
+            message: 'Database Error: Failed to update order.'
+        };
+    }
+}

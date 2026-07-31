@@ -39,7 +39,7 @@ export default function CustomerRows({
         return (
             <tr>
                 <td colSpan={Object.values(visibleColumns).filter(Boolean).length} className="p-6 text-center text-ink/60">
-                    No orders found matching your criteria.
+                    No Customers found. Refresh or create a new Customer
                 </td>
             </tr>
         );

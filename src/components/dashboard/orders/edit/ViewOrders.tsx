@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Filter from '@/components/Filter';
 import { Edit2, Trash2, Loader, RefreshCw, Columns } from 'lucide-react';
 import { OrderRowsProps } from '@/lib/supabase/types';
@@ -12,16 +12,16 @@ import useMediaQuery from '@/components/useMediaQuery';
 
 export const FilterList = [
     {
-        title: "Order Status", label: "Status", htmlFor: "orderStatus", name: "status", id: "orderStatus",
+        title: "Order Status", label: "All Statuses", name: "status", id: "orderStatus",
         options: [
-            { value: "all", label: "All Orders" },
+            { value: "all", label: "All Statuses" },
             { value: "quote_sent", label: "Quote Sent" },
             { value: "in_progress", label: "In Progress" },
-            { value: "completed", label: "Completed" },
+            { value: "approved", label: "Approved" },
         ]
     },
     {
-        title: "Payment Status", label: "Payment", htmlFor: "paymentStatus", name: "payment_status", id: "paymentStatus",
+        title: "Payment Status", label: "All Payments", name: "payment_status", id: "paymentStatus",
         options: [
             { value: "all", label: "All Payments" },
             { value: "pending", label: "Pending" },
@@ -35,8 +35,11 @@ export default function ViewOrders({ ordersPromise, onDelete, }: {
     onDelete?: () => void;
 }) {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [searchQuery, setSearchQuery] = useState('');
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [statusFilterValue, seStatusFilterValue] = useState('all');
+    const [paymentFilterValue, setPaymentFilterValue] = useState('all');
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
@@ -63,6 +66,17 @@ export default function ViewOrders({ ordersPromise, onDelete, }: {
     //     order.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     //     order.description.toLowerCase().includes(searchQuery.toLowerCase())
     // );
+
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (params.has('status') || params.has('payment_status')) {
+            seStatusFilterValue(params.get('status') || 'all');
+            setPaymentFilterValue(params.get('payment_status') || 'all');
+        } else {
+            seStatusFilterValue('all');
+            setPaymentFilterValue('all');
+        }
+    }, [searchParams])
 
     return (
         <main className="w-auto max-w-5xl mx-auto box-border">
@@ -93,18 +107,20 @@ export default function ViewOrders({ ordersPromise, onDelete, }: {
             {/* Filter Component Section */}
             <div className="bg-muted shadow-md/20 rounded-lg w-full mb-6 p-2 box-border">
                 <Filter filters={FilterList} />
-            </div>
+            </div>            
 
             <Suspense fallback={<Loading />}>
-                <OrdersTable ordersPromise={ordersPromise} searchQuery={searchQuery} onDelete={() => onDelete} />
+                <OrdersTable ordersPromise={ordersPromise} searchQuery={searchQuery} onDelete={() => onDelete} statusFilterValue={statusFilterValue} paymentFilterValue={paymentFilterValue} />
             </Suspense>
         </main >
     );
 }
 
-function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
+function OrdersTable({ ordersPromise, searchQuery, statusFilterValue, paymentFilterValue, onDelete }: {
     ordersPromise: Promise<OrderRowsProps[]>;
     searchQuery: string;
+    statusFilterValue: string | undefined;
+    paymentFilterValue: string | undefined;
     onDelete?: (orderId: string) => void;
 }) {
     const orders = use(ordersPromise);
@@ -120,7 +136,7 @@ function OrdersTable({ ordersPromise, searchQuery, onDelete }: {
     });
     const isMobile = useMediaQuery('(max-width: 768px)');
 
-useEffect(() => {
+    useEffect(() => {
         if (isMobile) {
             setVisibleColumns((prev) => ({
                 ...prev,
@@ -131,7 +147,7 @@ useEffect(() => {
             }));
         }
     }, [isMobile]);
-    
+
     const toggleColumn = (column: keyof typeof visibleColumns) => {
         setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
     };
@@ -144,7 +160,7 @@ useEffect(() => {
                     <summary className="cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white dark:bg-muted shadow-sm px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
                         <Columns className='size-4' /> Columns
                     </summary>
-                    <div className="absolute left-0 mt-2 w-56 rounded-md shadow-xl bg-white dark:bg-ink ring-1 ring-black ring-opacity-5 z-30 max-h-60 overflow-y-auto">
+                    <div className="absolute left-0 mt-2 w-56 rounded-md shadow-xl bg-white dark:bg-ink ring-1 ring-black ring-opacity-5 z-30 max-h-60 overflow-y-auto scrollbar-thin">
                         <div className="py-1" role="menu">
                             {Object.keys(visibleColumns).map((column) => (
                                 <label key={column} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-muted cursor-pointer">
@@ -178,7 +194,7 @@ useEffect(() => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-ink/10 truncate">
-                        <OrderRows orders={orders} searchQuery={searchQuery} visibleColumns={visibleColumns} />
+                        <OrderRows orders={orders} searchQuery={searchQuery} visibleColumns={visibleColumns} statusFilterValue={statusFilterValue} paymentFilterValue={paymentFilterValue} />
                     </tbody>
                 </table>
             </div>
