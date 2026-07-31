@@ -1,12 +1,13 @@
 # Supabase SQL setup
 
-This repo does not run migrations automatically. Apply these scripts in the
-shared Supabase **SQL Editor** before testing share-quote flows.
+Already applied on the team's **shared** Supabase project. Teammates do **not**
+need to run these again for normal development.
 
-Run in order:
+Re-run only if recreating the database (or spinning up a new Supabase project).
+Order:
 
 1. `quote_rpc.sql` — public token RPCs + unique indexes on `quotes`
 2. `orders_quotes_rls.sql` — owner-scoped RLS for `orders` / `quotes`
 3. `fix_order_status_check.sql` — allow `quote_sent` status values
 
-Idempotent: safe to re-run (`CREATE OR REPLACE` / `DROP POLICY IF EXISTS`).
+Scripts are idempotent (`CREATE OR REPLACE` / `DROP POLICY IF EXISTS`).
