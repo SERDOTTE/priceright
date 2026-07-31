@@ -3,7 +3,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import type { Order } from "@/lib/orders/types";
 
 const OrderFormSchema = z.object({
   customer_id: z.string().min(1, "Customer is required."),
@@ -84,31 +83,6 @@ export async function createOrder(prevState: OrderState, formData: FormData): Pr
     console.error("Unexpected error:", error);
     return { message: "Database Error: Failed to create order." };
   }
-}
-
-export async function listOrders(): Promise<Array<Order & { customer_name: string }>> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return [];
-
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*, customers(name)")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Supabase select error (orders):", error.message);
-    return [];
-  }
-
-  return (data ?? []).map((row) => {
-    const { customers, ...order } = row as Order & { customers: { name: string } | null };
-    return { ...order, customer_name: customers?.name ?? "Unknown customer" };
-  });
 }
 
 export async function generateQuoteLink(

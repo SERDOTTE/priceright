@@ -13,6 +13,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { selectAllCustomers } from '@/lib/customers/action';
 import { cn } from "@/lib/utils";
 import { OrderState, updateOrder } from '@/lib/orders/action';
+import { ShareQuoteButton } from '@/components/orders/ShareQuoteButton';
 import { toast } from 'sonner';
 
 export default function OrderRows({
@@ -418,6 +419,7 @@ export default function OrderRows({
                                     </div>
                                 ) : (
                                     <>
+                                        <ShareQuoteButton orderId={orderId} />
                                         <Button
                                             type="button"
                                             onClick={() => handleEditClick(item)}
