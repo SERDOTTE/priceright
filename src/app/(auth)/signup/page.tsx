@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { signUp, type AuthFormState } from "../actions";
-import { SubmitButton } from "../../../components/SubmitButton";
+import { SubmitButton } from "@/components/SubmitButton";
 import { ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,23 +33,38 @@ export default function SignUpPage() {
         <CardContent>
           <form action={formAction} className="flex flex-col gap-4" noValidate>
             {state.error && (
-              <div role="alert" aria-live="polite"
-                className="flex flex-row gap-2 items-center rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-600/20">
+              <div
+                role="alert"
+                aria-live="polite"
+                className="flex flex-row gap-2 items-center rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-600/20"
+              >
                 <AlertCircle className="size-4" />
-                <p>
-                  {state.error}
-                </p>
+                <p>{state.error}</p>
               </div>
             )}
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" type="text" placeholder="John Doe" autoComplete="name" required />
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                autoComplete="name"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="name@example.com" autoComplete="email" required />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="name@example.com"
+                autoComplete="email"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-1.5 relative">
@@ -64,8 +79,16 @@ export default function SignUpPage() {
                 required
                 aria-describedby="password-hint"
               />
-              <span onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-[50%] translate-y-[-50%] cursor-pointer">
-                {showPassword ? <Eye className="size-4 text-gray-400" /> : <EyeOff className="size-4 text-gray-400" />}</span>
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-[50%] translate-y-[-50%] cursor-pointer"
+              >
+                {showPassword ? (
+                  <Eye className="size-4 text-gray-400" />
+                ) : (
+                  <EyeOff className="size-4 text-gray-400" />
+                )}
+              </span>
               <p id="password-hint" className="text-xs text-muted-foreground">
                 At least 6 characters.
               </p>
@@ -82,6 +105,6 @@ export default function SignUpPage() {
           </p>
         </CardContent>
       </Card>
-    </main >
+    </main>
   );
 }

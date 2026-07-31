@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { signIn, type AuthFormState } from "../actions";
 import { LogIn, AlertCircle, Eye, EyeOff } from "lucide-react";
-import { SubmitButton } from "../../../components/SubmitButton";
+import { SubmitButton } from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,7 +18,7 @@ import {
 const initialState: AuthFormState = {};
 
 export default function LoginPage() {
-  const [ showPassword, setShowPassword ] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [state, formAction] = useActionState(signIn, initialState);
 
   return (
@@ -31,18 +31,26 @@ export default function LoginPage() {
         <CardContent>
           <form action={formAction} className="flex flex-col gap-4" noValidate>
             {state.error && (
-              <div role="alert" aria-live="polite"
-                className="flex flex-row gap-2 items-center rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-600/20">
+              <div
+                role="alert"
+                aria-live="polite"
+                className="flex flex-row gap-2 items-center rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-600/20"
+              >
                 <AlertCircle className="size-4" />
-                <p>
-                  {state.error}
-                </p>
+                <p>{state.error}</p>
               </div>
             )}
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" placeholder="name@example.com" type="email" autoComplete="email" required />
+              <Input
+                id="email"
+                name="email"
+                placeholder="name@example.com"
+                type="email"
+                autoComplete="email"
+                required
+              />
             </div>
             <div className="flex flex-col gap-1.5 relative">
               <Label htmlFor="password">Password</Label>
@@ -56,8 +64,16 @@ export default function LoginPage() {
                 required
                 aria-describedby="password-hint"
               />
-              <span onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-[50%] translate-y-[-50%] cursor-pointer">
-                {showPassword ? <Eye className="size-4 text-gray-400" /> : <EyeOff className="size-4 text-gray-400" />}</span>
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-[50%] translate-y-[-50%] cursor-pointer"
+              >
+                {showPassword ? (
+                  <Eye className="size-4 text-gray-400" />
+                ) : (
+                  <EyeOff className="size-4 text-gray-400" />
+                )}
+              </span>
               <p id="password-hint" className="text-xs text-muted-foreground">
                 At least 6 characters.
               </p>

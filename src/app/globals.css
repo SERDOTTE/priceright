@@ -132,10 +132,8 @@ strong {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  /* brand yellow, so shadcn Button (auth) is on-brand */
-  --primary-foreground: oklch(0.985 0 0);
-  /* ink on brand: contrast-safe */
+  --primary: #ffc200; /* brand yellow, so shadcn Button (auth) is on-brand */
+  --primary-foreground: #1a1a1a; /* ink on brand: contrast-safe */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -145,8 +143,7 @@ strong {
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: #ffc200;
-  /* brand focus ring */
+  --ring: #ffc200; /* brand focus ring */
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

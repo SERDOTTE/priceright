@@ -4,10 +4,10 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 import { Loader } from "lucide-react";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -41,10 +41,13 @@ export default function RootLayout({
         <Header />
         {children}
         <Toaster
-        icons={{
-          loading: <Loader className="size-5 animate-spin"/>,
-        }}
-        richColors duration={3000} position="top-center" /> {/* Must be mounted here */}
+          icons={{
+            loading: <Loader className="size-5 animate-spin" />,
+          }}
+          richColors
+          duration={3000}
+          position="top-center"
+        />
         <Footer />
       </body>
     </html>
