@@ -1,0 +1,213 @@
+"use client";
+
+import { useActionState, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { Pencil, Plus, Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SubmitButton } from "@/components/SubmitButton";
+import { createMaterialsBatch, type MaterialState, updateMaterial } from "@/lib/costs/action";
+import type { Material } from "@/lib/supabase/types";
+
+type MaterialDraft = {
+  name: string;
+  unit: string;
+  value: string;
+};
+
+const initialDraft: MaterialDraft = {
+  name: "",
+  unit: "",
+  value: "",
+};
+
+const initialState: MaterialState = {};
+
+function MaterialEditRow({ material }: { material: Material }) {
+  const [state, formAction] = useActionState(updateMaterial.bind(null, material.id), initialState);
+
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(state.message || "Material updated successfully!");
+    } else if (state?.message && !state?.success) {
+      toast.error(state.message);
+    }
+  }, [state]);
+
+  return (
+    <form action={formAction} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-3 rounded-xl border border-border p-3">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor={`name-${material.id}`}>Name</Label>
+        <Input id={`name-${material.id}`} name="name" defaultValue={material.name} required className="rounded-xl" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor={`unit-${material.id}`}>Unit</Label>
+        <Input id={`unit-${material.id}`} name="unit" defaultValue={material.unit} required className="rounded-xl" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor={`value-${material.id}`}>Value</Label>
+        <Input
+          id={`value-${material.id}`}
+          name="value"
+          type="number"
+          step="0.01"
+          min="0.01"
+          defaultValue={material.value}
+          required
+          className="rounded-xl"
+        />
+      </div>
+      <div className="flex items-end">
+        <SubmitButton
+          label="Update"
+          Icon={Pencil}
+          className="bg-action hover:bg-action rounded-xl h-10 px-4 text-white"
+        />
+      </div>
+
+        {(state.errors?.name || state.errors?.unit || state.errors?.value) && (
+        <p className="text-xs text-red-600 md:col-span-4">
+          {state.errors?.name?.[0] || state.errors?.unit?.[0] || state.errors?.value?.[0]}
+        </p>
+      )}
+    </form>
+  );
+}
+
+export default function MaterialCostsForm({ materials }: { materials: Material[] }) {
+  const [items, setItems] = useState<MaterialDraft[]>([initialDraft]);
+  const [state, formAction] = useActionState(
+    async (prevState: MaterialState, formData: FormData) => {
+      const result = await createMaterialsBatch(prevState, formData);
+      if (result.success) {
+        setItems([{ ...initialDraft }]);
+      }
+      return result;
+    },
+    initialState
+  );
+
+  const payload = useMemo(
+    () =>
+      JSON.stringify(
+        items
+          .map((item) => ({
+            name: item.name.trim(),
+            unit: item.unit.trim(),
+            value: item.value,
+          }))
+          .filter((item) => item.name || item.unit || item.value)
+      ),
+    [items]
+  );
+
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(state.message || "Materials saved successfully!");
+    } else if (state?.message && !state?.success) {
+      toast.error(state.message);
+    }
+  }, [state]);
+
+  const addItem = () => {
+    setItems((prev) => [...prev, { ...initialDraft }]);
+  };
+
+  const updateItem = (index: number, field: keyof MaterialDraft, value: string) => {
+    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
+  };
+
+  return (
+    <div className="flex flex-col gap-8">
+      <Card className="p-6 w-full">
+        <CardHeader>
+          <CardTitle className="font-heading text-2xl font-bold">Material Costs</CardTitle>
+          <CardDescription>Add your materials with name, unit, and cost value.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction} className="flex flex-col gap-6">
+            <input type="hidden" name="items_payload" value={payload} />
+
+            {items.map((item, index) => (
+              <div key={`material-draft-${index}`} className="grid grid-cols-1 md:grid-cols-3 gap-4 rounded-xl border border-border p-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor={`draft-name-${index}`}>Name</Label>
+                  <Input
+                    id={`draft-name-${index}`}
+                    placeholder="Material name"
+                    value={item.name}
+                    onChange={(event) => updateItem(index, "name", event.target.value)}
+                    className="rounded-xl"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor={`draft-unit-${index}`}>Unit</Label>
+                  <Input
+                    id={`draft-unit-${index}`}
+                    placeholder="kg, meter, unit..."
+                    value={item.unit}
+                    onChange={(event) => updateItem(index, "unit", event.target.value)}
+                    className="rounded-xl"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor={`draft-value-${index}`}>Value</Label>
+                  <Input
+                    id={`draft-value-${index}`}
+                    placeholder="0.00"
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    value={item.value}
+                    onChange={(event) => updateItem(index, "value", event.target.value)}
+                    className="rounded-xl"
+                    required
+                  />
+                </div>
+              </div>
+            ))}
+
+            {state.errors?.items_payload && (
+              <p className="text-xs text-red-600">{state.errors.items_payload[0]}</p>
+            )}
+
+            <div className="flex flex-wrap items-center justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={addItem}
+                className="rounded-xl"
+              >
+                <Plus className="size-4" />
+                Add more item
+              </Button>
+              <SubmitButton
+                label="Save"
+                Icon={Save}
+                className="bg-action hover:bg-action rounded-xl h-10 px-5 text-white"
+              />
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card className="p-6 w-full">
+        <CardHeader>
+          <CardTitle className="font-heading text-xl font-semibold">Update Registered Materials</CardTitle>
+          <CardDescription>Use the Alterar button to update any existing material item.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          {materials.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No materials registered yet.</p>
+          ) : (
+            materials.map((material) => <MaterialEditRow key={material.id} material={material} />)
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -28,10 +28,24 @@ export interface PricingSheet {
 
 export interface Material {
   id: string;
-  pricing_sheet_id: string;
   name: string;
-  unit_cost: number;
-  quantity: number;
+  unit: string;
+  value: number;
+  created_at?: string | null;
+}
+
+export interface LaborCost {
+  id: string;
+  hourly_rate: number;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface TargetProfit {
+  id: string;
+  profit_percent: number;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export type OrderStatus = 'quote_sent' | 'approved' | 'in_progress' | 'delivered';
@@ -44,9 +58,22 @@ export interface Order {
   description: string;
   status: OrderStatus;
   price: number;
+  estimated_hours?: number;
   due_date: string; // ISO date string
   payment_status: PaymentStatus;
   paid_at?: string | null; // ISO timestamp
+  created_at?: string | null;
+}
+
+export interface OrderMaterialItem {
+  id: string;
+  order_id: string;
+  material_cost_id: string;
+  material_name_snapshot: string;
+  unit_snapshot: string;
+  unit_value_snapshot: number;
+  quantity: number;
+  line_total: number;
   created_at?: string | null;
 }
 
