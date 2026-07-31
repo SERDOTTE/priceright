@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/app/(auth)/actions";
 import ThemeToggle from "./Theme";
+import { AuthHeaderActions } from "./AuthHeaderActions";
 
 // Server component: reads the auth session so the header can show a sign-out
 // button for signed-in users, or a sign-in link for visitors.
@@ -20,23 +20,7 @@ export default async function Header() {
         </Link>
         <div className="flex flex-row justify-center items-center gap-2">
           <ThemeToggle />
-          {user ? (
-            <form action={signOut}>
-              <button
-                type="submit"
-                className="rounded-md px-3 py-1.5 text-sm font-semibold text-ink hover:bg-secondary dark:text-white"
-              >
-                Sign out
-              </button>
-            </form>
-          ) : (
-            <Link
-              href="/login"
-              className="rounded-md px-3 py-1.5 text-sm font-semibold text-ink hover:bg-secondary dark:text-white"
-            >
-              Sign in
-            </Link>
-          )}
+          <AuthHeaderActions isSignedIn={!!user} />
         </div>
       </div>
     </header>
