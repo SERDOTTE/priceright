@@ -63,10 +63,10 @@ export default function OrderNavLinks() {
 
     return (
         !isMobile ? (
-            <div className="flex sm:w-52">
+            <div className="flex sm:w-52 lg:w-67">
                 <section
                     style={{ backgroundColor: "#1A1A1A" }}
-                    className="w-52 h-auto m-1 rounded-2xl text-white shadow-sm"
+                    className="w-full h-auto m-1 rounded-2xl text-white shadow-sm"
                 >
                     <nav className="p-2">
                         <ul className="flex flex-col items-center gap-1.5 py-1">
@@ -107,11 +107,11 @@ export default function OrderNavLinks() {
                                                 backgroundColor: isGroupActive ? "#FFC200" : "transparent",
                                                 color: isGroupActive ? "#1A1A1A" : "#FFFFFF"
                                             }}
-                                            className={`flex items-center justify-between gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
+                                            className={`flex items-center justify-between gap-3 px-4 py-3.5 text-left  w-full text-sm sm:text-xs lg:text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
                                                 isGroupActive ? 'shadow-sm' : 'text-white/80'
                                             }`}
                                         >
-                                            <span className="flex items-center gap-3">
+                                            <span className="flex items-center gap-3 truncate">
                                                 <ParentIcon className="size-5" />
                                                 <span>{item.label}</span>
                                             </span>
@@ -119,7 +119,7 @@ export default function OrderNavLinks() {
                                         </button>
 
                                         {isCostsOpen && (
-                                            <ul className="mt-1 flex flex-col gap-1 pl-4">
+                                            <ul className={`mt-1 flex flex-col gap-1 pl-4 ${isCostsOpen ? 'animate-in slide-in-from-top-10' : 'animate-out slide-out-to-top-10'}`}>
                                                 {item.children.map((child) => {
                                                     const isChildActive = pathname === child.href;
                                                     const ChildIcon = child.icon;

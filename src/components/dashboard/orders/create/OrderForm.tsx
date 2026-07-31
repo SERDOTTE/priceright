@@ -401,9 +401,9 @@ export default function OrderForm({ customers, materials, laborCost, targetProfi
                   </SelectContent>
                 </Select>
               </div>
-
+                
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase text-muted-foreground">Quantity</label>
+                <label className="text-xs font-semibold uppercase text-muted-foreground relative bottom-1.5 max-sm:block  max-sm:bottom-0">Quantity</label>
                 <Input
                   type="number"
                   min="0.01"
@@ -414,14 +414,16 @@ export default function OrderForm({ customers, materials, laborCost, targetProfi
                 />
               </div>
 
-              <div className="flex items-end">
+              <div className="flex flex-col text-xs self-center">
+                <span className="text-xs font-semibold uppercase  flex items-center text-white relative bottom-1.5">
+                  Remove</span>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => removeMaterialRow(index)}
-                  className="rounded-xl"
+                  className="rounded-xl bg-action/30 border-action hover:bg-action/40"
                 >
-                  <Trash2 className="size-4" />
+                  <Trash2 className="size-4 text-action" />
                 </Button>
               </div>
             </div>
