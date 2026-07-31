@@ -15,6 +15,13 @@ export async function POST(_request: Request, { params }: RouteContext) {
     return NextResponse.json({ message: "Quote not found." }, { status: 404 });
   }
 
-  const row = Array.isArray(data) ? data[0] : null;
-  return NextResponse.json({ status: row?.quote_status, approvedAt: row?.approved_at }, { status: 200 });
+  const row = Array.isArray(data) ? data[0] : data;
+  if (!row) {
+    return NextResponse.json({ message: "Quote not found." }, { status: 404 });
+  }
+
+  return NextResponse.json(
+    { status: row.quote_status, approvedAt: row.approved_at },
+    { status: 200 },
+  );
 }

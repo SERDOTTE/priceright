@@ -31,9 +31,21 @@ export async function POST(request: Request) {
     );
   }
 
+  const { customer_id, description, price, due_date, status, payment_status } = parsed.data;
+  const paidAt = payment_status === "paid" ? new Date().toISOString() : null;
+
   const { data, error } = await supabase
     .from("orders")
-    .insert({ ...parsed.data, user_id: user.id })
+    .insert({
+      customer_id,
+      description,
+      price,
+      due_date,
+      status,
+      payment_status,
+      paid_at: paidAt,
+      user_id: user.id,
+    })
     .select()
     .single();
 

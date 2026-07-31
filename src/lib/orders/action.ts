@@ -125,16 +125,31 @@ export async function generateQuoteLink(
 
   const token = crypto.randomUUID();
 
-  const { error: insertError } = await supabase
+  const { data: inserted, error: insertError } = await supabase
     .from("quotes")
-    .insert({ order_id: orderId, share_token: token, status: "pending" });
+    .insert({ order_id: orderId, share_token: token, status: "pending" })
+    .select("share_token")
+    .single();
 
   if (insertError) {
+    // Unique conflict: another request created the quote first — return that token.
+    if (insertError.code === "23505") {
+      const { data: racedQuote } = await supabase
+        .from("quotes")
+        .select("share_token")
+        .eq("order_id", orderId)
+        .maybeSingle();
+
+      if (racedQuote?.share_token) {
+        return { token: racedQuote.share_token };
+      }
+    }
+
     console.error("Supabase insert error (quotes):", insertError.message);
     return { error: "Failed to generate quote link." };
   }
 
-  return { token };
+  return { token: inserted.share_token };
 }
 
 export async function selectAllOrders() {

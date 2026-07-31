@@ -143,7 +143,8 @@ function OrdersTable({ ordersPromise, searchQuery, statusFilterValue, paymentFil
                 description: false,
                 dueDate: false,
                 createdAt: false,
-                actions: false,
+                // Keep actions visible so Share / Edit / Delete work on mobile.
+                actions: true,
             }));
         }
     }, [isMobile]);
