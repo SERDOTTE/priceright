@@ -31,17 +31,17 @@ export default function Footer() {
             <h4 className="font-heading text-sm font-semibold text-ink dark:text-white">Product</h4>
             <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <li>
-                <Link href="/pricing" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Pricing Calculator
                 </Link>
               </li>
               <li>
-                <Link href="/orders" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Order Management
                 </Link>
               </li>
               <li>
-                <Link href="/finance" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Cash Flow
                 </Link>
               </li>
@@ -53,17 +53,17 @@ export default function Footer() {
             <h4 className="font-heading text-sm font-semibold text-ink dark:text-white">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <li>
-                <Link href="/docs" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Documentation
                 </Link>
               </li>
               <li>
-                <Link href="/guides" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Pricing Guides
                 </Link>
               </li>
               <li>
-                <Link href="/support" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Support
                 </Link>
               </li>
@@ -75,12 +75,12 @@ export default function Footer() {
             <h4 className="font-heading text-sm font-semibold text-ink dark:text-white">Legal</h4>
             <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <li>
-                <Link href="/privacy" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-ink dark:hover:text-white transition-colors">
+                <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
                   Terms of Service
                 </Link>
               </li>
