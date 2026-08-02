@@ -2,22 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "@/app/(auth)/actions";
+// import { signOut } from "@/app/(auth)/actions";
+import UserMenu from "./UserMenu";
 
-export function AuthHeaderActions({ isSignedIn }: { isSignedIn: boolean }) {
+
+export function AuthHeaderActions({ isSignedIn, user }: { isSignedIn: boolean; user: any }) {
   const pathname = usePathname();
   const onAuthPage = pathname === "/login" || pathname === "/signup";
 
   if (isSignedIn) {
     return (
-      <form action={signOut}>
-        <button
-          type="submit"
-          className="rounded-md px-3 py-1.5 text-sm font-semibold text-ink hover:bg-secondary dark:text-white"
-        >
-          Sign out
-        </button>
-      </form>
+        // <form action={signOut}>
+        //   <button
+        //     type="submit"
+        //     className="rounded-md px-3 py-1.5 text-sm font-semibold text-ink hover:bg-secondary dark:text-white"
+        //   >
+        //     Sign out
+        //   </button>
+        // </form>
+        <UserMenu user={user} />
     );
   }
 

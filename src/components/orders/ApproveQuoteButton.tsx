@@ -19,7 +19,8 @@ export function ApproveQuoteButton({ token }: { token: string }) {
       toast.promise(
         fetch(`/api/quotes/${token}/approve`, { method: "POST" }).then(async (res) => {
           if (!res.ok) throw new Error("Failed to approve");
-          return res.json();
+          const data = await res.json();
+          return data;
         }),
         {
           loading: "Approving quote...",
@@ -29,6 +30,7 @@ export function ApproveQuoteButton({ token }: { token: string }) {
           },
           error: () => {
             const msg = "Could not approve this quote. Please try again.";
+            setIsLoading(false);
             setError(msg);
             return msg;
           },
