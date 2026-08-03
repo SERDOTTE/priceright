@@ -108,7 +108,7 @@ function Stage({
         {step.title}
       </h3>
 
-      <p className="text-body text-ink-dark font-normal leading-relaxed">
+      <p className="text-lg text-ink-dark font-normal leading-relaxed">
         {step.description}
       </p>
 
@@ -197,7 +197,7 @@ export function HowItWorks() {
           <h2 className="text-4xl sm:text-5xl font-heading font-bold tracking-tight max-w-4xl text-balance">
             How PriceRight &amp; QuoteEasy scales your business
           </h2>
-          <p className="max-w-2xl text-body text-muted-foreground font-normal leading-relaxed">
+          <p className="max-w-2xl text-lg text-muted-foreground font-normal leading-relaxed">
             A frictionless pipeline designed to transition independent professionals from chaotic spreadsheets to deterministic profitability.
           </p>
         </div>
