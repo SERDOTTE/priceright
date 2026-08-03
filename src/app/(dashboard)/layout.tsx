@@ -20,7 +20,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden text-base dark:bg-white!">
-      <div className="flex flex-col sm:flex-row w-full min-w-0 border-t border-border">
+      <div className="flex flex-col sm:flex-row w-full min-w-0 border-border">
         <OrderNavLinks />
         <div className="flex-1 max-lg:ml-1 min-w-0 *:scrollbar-thin">{children}</div>
       </div>

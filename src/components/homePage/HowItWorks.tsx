@@ -152,7 +152,7 @@ function Stage({
           } ${inView ? `ring-4 ${step.ring}` : "ring-0"}`}
           style={{ transitionDelay: inView ? `${index * 90}ms` : "0ms" }}
         >
-          <Icon className="h-5 w-5" />
+          <Icon className="h-5 w-5 dark:text-muted-foreground" />
         </div>
       </div>
 
@@ -190,7 +190,7 @@ export function HowItWorks() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-28 gap-5">
-          <div className="inline-flex items-center gap-2 bg-white rounded-full bg-card border border-border px-4 py-1.5 text-xs font-semibold text-ink shadow-2xs uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 bg-white rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-ink shadow-2xs uppercase tracking-wider">
             <span className="h-2 w-2 rounded-full bg-action" />
             3 stages · fully automated
           </div>
