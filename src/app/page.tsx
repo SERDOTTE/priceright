@@ -2,7 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { buttonVariants } from "@/components/ui/button";
 import { Testimonials } from "@/components/homePage/Testimonial";
-
+import { Features } from "@/components/homePage/Features";
+import { HowItWorks } from "@/components/homePage/HowItWorks";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -17,7 +18,7 @@ export default async function Home() {
           <span className="h-2 w-2 rounded-full bg-action" />
           Streamline Your Workflow
         </div>
-        <h1 className="font-heading text-4xl font-bold tracking-tight text-ink dark:text-white">
+        <h1 className="font-heading text-4xl lg:text-5xl font-bold tracking-tight text-ink dark:text-white">
           PriceRight &amp; QuoteEasy
         </h1>
         <p className="max-w-xl text-lg text-muted-foreground">
@@ -27,15 +28,15 @@ export default async function Home() {
 
         <div className="flex flex-col gap-3 sm:flex-row">
           {user ? (
-            <Link href="/dashboard" className={buttonVariants()}>
+            <Link href="/dashboard" className={`${buttonVariants()} px-6 py-5`}>
               Go to your workspace
             </Link>
           ) : (
             <>
-              <Link href="/signup" className={buttonVariants()}>
+              <Link href="/signup" className={`${buttonVariants()}`}>
                 Create an account
               </Link>
-              <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+              <Link href="/login" className={`${buttonVariants({ variant: "outline" })}`}>
                 Sign in
               </Link>
             </>
@@ -43,6 +44,8 @@ export default async function Home() {
         </div>
       </main>
 
+      {/* <Features user={!!user} /> */}
+      <HowItWorks />
       <Testimonials />
     </div>
   );

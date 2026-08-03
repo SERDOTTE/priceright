@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { User, ShieldCheck } from "lucide-react";
+import { User, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import { getTestimonials } from "@/lib/testimonials/action";
 import { Testimonial } from "@/lib/supabase/types";
 
@@ -73,6 +74,23 @@ export function Testimonials() {
         };
     }, []);
 
+    // Helper function for button-triggered scrolling
+    const scroll = (direction: "left" | "right") => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const scrollAmount = 300; 
+        const targetScrollLeft =
+            direction === "left"
+                ? container.scrollLeft - scrollAmount
+                : container.scrollLeft + scrollAmount;
+
+        container.scrollTo({
+            left: targetScrollLeft,
+            behavior: "smooth",
+        });
+    };
+
     if (!testimonials.length) {
         return null;
     }
@@ -98,10 +116,28 @@ export function Testimonials() {
                         </p>
                     </div>
 
-                    {/* Navigation Hint Pill */}
-                    <div className=" lg:flex items-center gap-2 text-xs font-medium text-muted-foreground dark:text-zinc-500 uppercase tracking-widest self-start md:self-end pb-2">
-                        <span>Scroll or Drag</span>
-                        <div className="w-8 h-px bg-zinc-300 dark:bg-zinc-700" />
+                    {/* Navigation Buttons and Hint */}
+                    <div className="flex max-lg:flex-col items-center gap-4 self-start md:self-end pb-2">
+                        <div className="lg:flex items-center gap-2 text-xs font-medium text-muted-foreground dark:text-zinc-500 uppercase tracking-widest">
+                            <span>Scroll or Drag</span>
+                            <div className="w-8 h-px bg-zinc-300 dark:bg-zinc-700" />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                onClick={() => scroll("left")}
+                                aria-label="Scroll left"
+                                className="flex h-10 w-10 items-center justify-center rounded-md border border-ink bg-brand text-ink transition-all cursor-pointer hover:-translate-y-1  duration-300 ease-in-out"
+                            >
+                                <ChevronLeft className="h-5 w-5" />
+                            </Button>
+                            <Button
+                                onClick={() => scroll("right")}
+                                aria-label="Scroll right"
+                                className="flex h-10 w-10 items-center justify-center rounded-md border border-ink bg-brand text-ink transition-all cursor-pointer hover:-translate-y-1  duration-300 ease-in-out"
+                            >
+                                <ChevronRight className="h-5 w-5" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
