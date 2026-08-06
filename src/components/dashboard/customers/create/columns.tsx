@@ -1,0 +1,99 @@
+// columns.tsx
+"use client"
+
+import Link from 'next/link'
+import { createColumnHelper } from "@tanstack/react-table"
+import { ArrowUpDown, Edit2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Customer } from '@/lib/supabase/types'
+import Delete from '../edit/DeleteCustomer'
+import { type DataTableFeatures } from "./data-table-features"
+
+const columnHelper = createColumnHelper<DataTableFeatures, Customer>()
+
+export const columns = columnHelper.columns([
+  columnHelper.accessor("name", {
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="p-3">
+        <div className="text-ink dark:text-white font-semibold">{row.original.name}</div>
+        {row.original.email && (
+          <div className="text-muted-foreground text-[10px]">{row.original.email}</div>
+        )}
+      </div>
+    ),
+  }),
+  columnHelper.accessor("country", {
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Country
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div title={row.original.country} className="text-muted-foreground truncate text-ellipsis">
+        {row.original.country}
+      </div>
+    ),
+  }),
+  columnHelper.accessor("created_at", {
+    id: "dateCreated", // Setting a specific ID so you can easily toggle this column
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date Created
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="text-muted-foreground truncate">
+        {row.original.created_at
+          ? new Date(row.original.created_at).toLocaleDateString('en-US')
+          : 'N/A'}
+      </div>
+    ),
+  }),
+  columnHelper.accessor("phone", {
+    header: "Phone",
+    cell: ({ row }) => (
+      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-300/20 border-2 border-blue-300/50 dark:text-gray-200 text-ink capitalize truncate">
+        {row.original.phone}
+      </span>
+    ),
+  }),
+  columnHelper.display({
+    header: "Actions",
+    id: "actions",
+    cell: ({ row }) => (
+      <div className="text-right space-x-1.5 whitespace-nowrap m-3">
+        <Link
+          href={`/dashboard/customers/edit/${row.original.id}`}
+          className="inline-flex items-center justify-center size-7 rounded-lg border border-ink/20 bg-white hover:bg-ink/10 dark:text-gray-400 text-ink transition-all"
+          title="View / Edit"
+        >
+          <Edit2 className="size-3.5" />
+        </Link>
+        <Delete id={row.original.id} />
+      </div>
+    ),
+  }),
+])
