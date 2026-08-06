@@ -6,7 +6,8 @@ import {
     type ColumnDef,
     type SortingState,
     type ColumnFiltersState,
-    type RowData
+    type RowData,
+    type Row,
 } from "@tanstack/react-table"
 import {
     Table,
@@ -27,9 +28,8 @@ import {
 import { ChevronDown, RefreshCcw, Loader } from "lucide-react"
 import { features, type DataTableFeatures } from "./data-table-features"
 import { useEffect, useState } from "react"
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 interface DataTableProps<TData extends RowData> {
     columns: ColumnDef<DataTableFeatures, TData>[]
@@ -42,29 +42,43 @@ export function DataTable<TData extends RowData>({
 }: DataTableProps<TData>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [globalFilter, setGlobalFilter] = React.useState<string>("")
     const [columnVisibility, setColumnVisibility] = React.useState<Record<string, boolean>>({})
-    const [isRefreshing, setIsRefreshing] = useState(false);
-    const router = useRouter();
+    const [isRefreshing, setIsRefreshing] = useState(false)
+    const router = useRouter()
 
-    const table = useTable({
+    const table = useTable<DataTableFeatures, TData>({
         features,
         data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
+        onGlobalFilterChange: setGlobalFilter,
         onColumnVisibilityChange: setColumnVisibility,
+        globalFilterFn: (row: Row<DataTableFeatures, TData>, _columnId: string, filterValue: unknown) => {
+            const query = String(filterValue ?? "").toLowerCase().trim()
+            if (!query) return true
+
+            const record = row.original as Record<string, unknown>
+            const name = String(record.name ?? "").toLowerCase()
+            const email = String(record.email ?? "").toLowerCase()
+            const country = String(record.country ?? "").toLowerCase()
+
+            return name.includes(query) || email.includes(query) || country.includes(query)
+        },
         state: {
             sorting,
             columnFilters,
+            globalFilter,
             columnVisibility,
         },
     })
 
     const handleRefresh = async () => {
-        setIsRefreshing(true);
-        router.refresh();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
+        setIsRefreshing(true)
+        router.refresh()
+        setTimeout(() => setIsRefreshing(false), 500)
+    }
 
     useEffect(() => {
         if (isRefreshing) {
@@ -79,19 +93,17 @@ export function DataTable<TData extends RowData>({
             {/* Toolbar: Search Input and Columns Dropdown */}
             <div className="flex justify-between items-center m-2">
                 <Input
-                    placeholder="Filter names..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                    placeholder="Filter name, email, country..."
+                    value={globalFilter ?? ""}
+                    onChange={(event) => setGlobalFilter(event.target.value)}
+                    className="max-w-sm dark:bg-ink"
                 />
                 <div className="flex flex-row gap-2 items-center">
                     <Button
-                    variant={"outline"}
+                        variant="outline"
                         onClick={handleRefresh}
                         disabled={isRefreshing}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border  hover:bg-ink/5 dark:bg-muted text-sm font-medium disabled:opacity-50"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border hover:bg-ink/5 dark:bg-muted text-sm font-medium disabled:opacity-50"
                     >
                         <RefreshCcw className={`size-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                     </Button>
@@ -102,43 +114,40 @@ export function DataTable<TData extends RowData>({
                                 <ChevronDown className="size-5" />
                             </Button>
                         }>
+
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className={"w-(--radix-popover-content-width)"}>
                             {table
                                 .getAllColumns()
                                 .filter((column) => column.getCanHide())
-                                .map((column) => {
-                                    return (
-                                        <DropdownMenuCheckboxItem
-                                            key={column.id}
-                                            className="capitalize cursor-pointer"
-                                            checked={column.getIsVisible()}
-                                            onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                        >
-                                            {column.id === "created_at" ? "Date Created" : column.id}
-                                        </DropdownMenuCheckboxItem>
-                                    )
-                                })}
+                                .map((column) => (
+                                    <DropdownMenuCheckboxItem
+                                        key={column.id}
+                                        className="capitalize cursor-pointer"
+                                        checked={column.getIsVisible()}
+                                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                    >
+                                        {column.id === "dateCreated" ? "Date Created" : column.id}
+                                    </DropdownMenuCheckboxItem>
+                                ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
             </div>
 
             {/* Table Container */}
-            <div className="overflow-hidden lg:rounded-md border lg:m-2 scrollbar-thin">
+            <div className="overflow-hidden lg:rounded-md border lg:m-2 px-1">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className="text-left">
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id} className="text-left">
-                                            {header.isPlaceholder ? null : (
-                                                <table.FlexRender header={header} />
-                                            )}
-                                        </TableHead>
-                                    )
-                                })}
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder ? null : (
+                                            <table.FlexRender header={header} />
+                                        )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -148,10 +157,10 @@ export function DataTable<TData extends RowData>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    className=" hover:bg-ink/5 dark:hover:bg-ink/10 transition-colors"
+                                    className="hover:bg-ink/5 dark:hover:bg-ink/10 transition-colors"
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="p-0">
+                                        <TableCell key={cell.id}>
                                             <table.FlexRender cell={cell} />
                                         </TableCell>
                                     ))}

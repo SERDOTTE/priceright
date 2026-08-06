@@ -1,4 +1,3 @@
-// columns.tsx
 "use client"
 
 import Link from 'next/link'
@@ -13,19 +12,19 @@ const columnHelper = createColumnHelper<DataTableFeatures, Customer>()
 
 export const columns = columnHelper.columns([
   columnHelper.accessor("name", {
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8 data-[state=open]:bg-accent"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="p-3">
+      <div className='py-1'>
         <div className="text-ink dark:text-white font-semibold">{row.original.name}</div>
         {row.original.email && (
           <div className="text-muted-foreground text-[10px]">{row.original.email}</div>
@@ -34,17 +33,17 @@ export const columns = columnHelper.columns([
     ),
   }),
   columnHelper.accessor("country", {
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Country
-          <ArrowUpDown className="h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8 data-[state=open]:bg-accent"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Country
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
       <div title={row.original.country} className="text-muted-foreground truncate text-ellipsis">
         {row.original.country}
@@ -52,18 +51,18 @@ export const columns = columnHelper.columns([
     ),
   }),
   columnHelper.accessor("created_at", {
-    id: "dateCreated", // Setting a specific ID so you can easily toggle this column
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Date Created
-          <ArrowUpDown className="h-4 w-4" />
-        </Button>
-      )
-    },
+    id: "dateCreated",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8 data-[state=open]:bg-accent"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Date Created
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
       <div className="text-muted-foreground truncate">
         {row.original.created_at
@@ -81,10 +80,10 @@ export const columns = columnHelper.columns([
     ),
   }),
   columnHelper.display({
-    header: "Actions",
+    header: () => <div className="text-left px-2">Actions</div>,
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-right space-x-1.5 whitespace-nowrap m-3">
+      <div className="text-right space-x-1.5 whitespace-nowrap px-2">
         <Link
           href={`/dashboard/customers/edit/${row.original.id}`}
           className="inline-flex items-center justify-center size-7 rounded-lg border border-ink/20 bg-white hover:bg-ink/10 dark:text-gray-400 text-ink transition-all"

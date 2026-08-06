@@ -14,7 +14,7 @@ export default function ViewCustomers({
     onDelete?: () => void;
 }) {
     return (
-        <main className="w-auto max-w-5xl mx-auto box-border">
+        <main>
             {/* Orders Table — only this section suspends while data loads.
                     `use(promise)` triggers the Suspense fallback until the data resolves. */}
             <Suspense fallback={<Loading />}>
@@ -33,7 +33,7 @@ function CustomersTable({
 
     return (
         <div className="rounded-xl border border-ink/10 shadow-sm box-border max-h-170 flex flex-col overflow-hidden">
-            <div className=" box-border overflow-y-auto overflow-x-auto scroll-fade scroll-smooth">
+            <div className=" box-border">
                 {/* <DataTable
                     columns={columns}
                     data={customers}
