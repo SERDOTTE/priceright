@@ -2,7 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { AuthHeaderActions } from "./AuthHeaderActions";
 import ThemeToggleIcon from "./ThemeIconButton";
-import IsMobileOrderNavLinks from "./dashboard/IsMobileDashboardNavigation"; // Component names should start with an uppercase letter.
+import IsMobileOrderNavLinks from "./dashboard/IsMobileDashboardNavigation";
+import NotificationIcon from "./notifications/NotificationIcon";
 
 // Server component: reads the auth session so the header can show a sign-out
 // button for signed-in users, or a sign-in link for visitors.
@@ -22,8 +23,9 @@ export default async function Header() {
           <span className="rounded-lg bg-brand px-1.5 py-0.5 text-black shadow-sm">Price</span>
           Right
         </Link>
-        <div className="flex flex-row justify-center items-center gap-2">
+        <div className="flex flex-row justify-center items-center gap-3">
           {!user && <ThemeToggleIcon />}
+          {user && <NotificationIcon />}
           <AuthHeaderActions isSignedIn={!!user} user={user}/>
         </div>
       </div>
