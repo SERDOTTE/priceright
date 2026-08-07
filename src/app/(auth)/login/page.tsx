@@ -22,7 +22,7 @@ export default function LoginPage() {
   const [state, formAction] = useActionState(signIn, initialState);
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-12">
+    <main className="mx-auto min-h-screen flex w-full max-w-md flex-1 flex-col justify-center px-4 py-12">
       <Card>
         <CardHeader>
           <CardTitle className="font-heading text-2xl font-bold">Welcome back</CardTitle>

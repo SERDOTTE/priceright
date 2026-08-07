@@ -132,8 +132,10 @@ strong {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #ffc200; /* brand yellow, so shadcn Button (auth) is on-brand */
-  --primary-foreground: #1a1a1a; /* ink on brand: contrast-safe */
+  --primary: #ffc200;
+  /* brand yellow, so shadcn Button (auth) is on-brand */
+  --primary-foreground: #1a1a1a;
+  /* ink on brand: contrast-safe */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -143,7 +145,8 @@ strong {
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: #ffc200; /* brand focus ring */
+  --ring: #ffc200;
+  /* brand focus ring */
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -196,6 +199,37 @@ strong {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+
+  .no-scrollbars {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink) transparent;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.no-scrollbars::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.no-scrollbars::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.no-scrollbars::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.no-scrollbars::-webkit-scrollbar-thumb:hover {
+  background: #d4d4d4;
+}
+
+.no-scrollbars::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
 
 @layer base {
   * {

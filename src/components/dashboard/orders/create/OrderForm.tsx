@@ -262,7 +262,7 @@ export default function OrderForm({ customers, materials, laborCost, targetProfi
                 <Command>
                   <CommandInput placeholder="Search customer by name or email..." className="h-10 text-sm" />
                   <CommandList>
-                    <CommandEmpty>
+                    <CommandEmpty className="px-1 text-xs text-muted-foreground">
                       {customers.length === 0 ? "No customers found. Add one first." : "No matching customer found."}
                     </CommandEmpty>
                     <CommandGroup>

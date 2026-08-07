@@ -39,13 +39,13 @@ export default function RootLayout({
     >
       <body className="flex min-h-screen flex-col bg-background max-w-full text-foreground overflow-x-hidden">
         <Header />
-        {children}
+        <main className="flex-1 pt-20">{children}</main>
         <Toaster
           icons={{
             loading: <Loader className="size-5 animate-spin" />,
           }}
           richColors
-          duration={3000}
+          duration={4000}
           position="top-center"
         />
         <Footer />

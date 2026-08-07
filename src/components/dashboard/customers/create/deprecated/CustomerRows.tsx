@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Customer } from '@/lib/supabase/types';
 import { Edit2 } from 'lucide-react';
-import Delete from '../edit/DeleteCustomer';
+import Delete from '../../edit/DeleteCustomer';
 
 export default function CustomerRows({
     customers,

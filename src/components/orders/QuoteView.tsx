@@ -18,26 +18,26 @@ interface QuoteViewProps {
 export function QuoteView({ quote, children }: QuoteViewProps) {
   return (
     <div className="w-full max-w-2xl mx-auto p-6 sm:p-10">
-      <div className="w-full rounded-xl border border-ink/10 shadow-sm p-6 sm:p-8 space-y-6">
+      <div className="w-full rounded-xl border dark:border-ink-dark border-ink/10 shadow-sm p-6 sm:p-8 space-y-6">
         <div>
-          <p className="text-sm text-ink/60">Quote for</p>
-          <h1 className="font-heading text-2xl font-bold text-ink">{quote.customerName}</h1>
+          <p className="text-sm text-ink/60 dark:text-muted-foreground/60">Quote for</p>
+          <h1 className="font-heading text-2xl font-bold text-ink dark:text-muted-foreground">{quote.customerName}</h1>
         </div>
 
-        <p className="text-ink/80">{quote.description}</p>
+        <p className="text-ink/80  dark:text-muted-foreground">{quote.description}</p>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 pt-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t dark:border-ink-dark border-ink/10 pt-6">
           <div>
-            <p className="text-sm text-ink/60">Total price</p>
-            <p className="text-2xl font-bold tabular-nums text-ink">${quote.price.toFixed(2)}</p>
+            <p className="text-sm text-ink/60  dark:text-muted-foreground/60">Total price</p>
+            <p className="text-2xl font-bold tabular-nums text-ink  dark:text-muted-foreground">${quote.price.toFixed(2)}</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-ink/60">Due date</p>
-            <p className="font-medium text-ink">{quote.dueDate}</p>
+            <p className="text-sm text-ink/60  dark:text-muted-foreground/60">Due date</p>
+            <p className="font-medium text-ink  dark:text-muted-foreground">{quote.dueDate}</p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 pt-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t dark:border-ink-dark border-ink/10 pt-6">
           <StatusBadge status={quote.quoteStatus} />
           {quote.quoteStatus === "approved" ? (
             <p className="text-sm text-ink/60">

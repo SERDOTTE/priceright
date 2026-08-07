@@ -106,3 +106,14 @@ export const paymentStatusColors: Record<PaymentStatus, string> = {
     paid: 'bg-green-500/20 text-green-700 dark:text-green-300',
     overdue: 'bg-red-500/20 text-red-700 dark:text-red-300',
 };
+
+export interface Testimonial {
+  id: string;
+  author: string;
+  role: string;
+  quote: string;
+  avatar_url: string | null;
+  locale: string;
+  is_featured: boolean;
+  display_order: number;
+}

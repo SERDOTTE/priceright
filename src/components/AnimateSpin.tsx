@@ -6,7 +6,7 @@ export default function Loading() {
       aria-label="Loading"
     >
       <svg
-        className="h-10 w-10 animate-spin text-primary"
+        className="h-10 w-10 animate-spin text-ink"
         viewBox="0 0 50 50"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"

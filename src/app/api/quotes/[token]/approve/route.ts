@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 interface RouteContext {
   params: Promise<{ token: string }>;
 }
-
+  
 export async function POST(_request: Request, { params }: RouteContext) {
   const { token } = await params;
   const supabase = await createClient();

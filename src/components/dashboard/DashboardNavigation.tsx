@@ -63,7 +63,7 @@ export default function OrderNavLinks() {
 
     return (
         !isMobile ? (
-            <div className="flex sm:w-52 lg:w-67">
+            <div className="flex sm:w-51 lg:w-67">
                 <section
                     style={{ backgroundColor: "#1A1A1A" }}
                     className="w-full h-auto m-1 rounded-2xl text-white shadow-sm"
@@ -83,9 +83,8 @@ export default function OrderNavLinks() {
                                                     backgroundColor: isActive ? "#FFC200" : "transparent",
                                                     color: isActive ? "#1A1A1A" : "#FFFFFF"
                                                 }}
-                                                className={`flex items-center gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
-                                                    isActive ? 'shadow-sm' : 'text-white/80'
-                                                }`}
+                                                className={`flex items-center gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isActive ? 'shadow-sm' : 'text-white/80'
+                                                    }`}
                                             >
                                                 <IconComponent className="size-5" />
                                                 <span>{item.label}</span>
@@ -107,15 +106,14 @@ export default function OrderNavLinks() {
                                                 backgroundColor: isGroupActive ? "#FFC200" : "transparent",
                                                 color: isGroupActive ? "#1A1A1A" : "#FFFFFF"
                                             }}
-                                            className={`flex items-center justify-between gap-3 px-4 py-3.5 text-left  w-full text-sm sm:text-xs lg:text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
-                                                isGroupActive ? 'shadow-sm' : 'text-white/80'
-                                            }`}
+                                            className={`flex items-center justify-between gap-3 px-4 py-3.5 text-left w-full  text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isGroupActive ? 'shadow-sm' : 'text-white/80'
+                                                }`}
                                         >
-                                            <span className="flex items-center gap-3 truncate">
-                                                <ParentIcon className="size-5" />
-                                                <span>{item.label}</span>
+                                            <span className="flex items-center gap-3 truncate min-w-0">
+                                                <ParentIcon className="size-5 shrink-0" />
+                                                <span className="truncate">{item.label}</span>
                                             </span>
-                                            <ChevronDown className={`size-4 transition-transform ${isCostsOpen ? 'rotate-180' : ''}`} />
+                                            <ChevronDown className={`size-4 shrink-0 transition-transform ${isCostsOpen ? 'rotate-180' : ''}`} />
                                         </button>
 
                                         {isCostsOpen && (
@@ -132,9 +130,8 @@ export default function OrderNavLinks() {
                                                                     backgroundColor: isChildActive ? "#FFC200" : "transparent",
                                                                     color: isChildActive ? "#1A1A1A" : "#FFFFFF"
                                                                 }}
-                                                                className={`flex items-center gap-3 px-4 py-2.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
-                                                                    isChildActive ? 'shadow-sm' : 'text-white/80'
-                                                                }`}
+                                                                className={`flex items-center gap-3 px-4 py-2.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isChildActive ? 'shadow-sm' : 'text-white/80'
+                                                                    }`}
                                                             >
                                                                 <ChildIcon className="size-4" />
                                                                 <span>{child.label}</span>
@@ -171,9 +168,8 @@ export default function OrderNavLinks() {
                                                         backgroundColor: isActive ? "#FFC200" : "transparent",
                                                         color: isActive ? "#1A1A1A" : "#FFFFFF"
                                                     }}
-                                                    className={`flex items-center gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
-                                                        isActive ? 'shadow-sm' : 'text-white/80'
-                                                    }`}
+                                                    className={`flex items-center gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isActive ? 'shadow-sm' : 'text-white/80'
+                                                        }`}
                                                 >
                                                     <IconComponent className="size-5" />
                                                     <span>{item.label}</span>
@@ -195,9 +191,8 @@ export default function OrderNavLinks() {
                                                     backgroundColor: isGroupActive ? "#FFC200" : "transparent",
                                                     color: isGroupActive ? "#1A1A1A" : "#FFFFFF"
                                                 }}
-                                                className={`flex items-center justify-between gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
-                                                    isGroupActive ? 'shadow-sm' : 'text-white/80'
-                                                }`}
+                                                className={`flex items-center justify-between gap-3 px-4 py-3.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isGroupActive ? 'shadow-sm' : 'text-white/80'
+                                                    }`}
                                             >
                                                 <span className="flex items-center gap-3">
                                                     <ParentIcon className="size-5" />
@@ -220,9 +215,8 @@ export default function OrderNavLinks() {
                                                                         backgroundColor: isChildActive ? "#FFC200" : "transparent",
                                                                         color: isChildActive ? "#1A1A1A" : "#FFFFFF"
                                                                     }}
-                                                                    className={`flex items-center gap-3 px-4 py-2.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${
-                                                                        isChildActive ? 'shadow-sm' : 'text-white/80'
-                                                                    }`}
+                                                                    className={`flex items-center gap-3 px-4 py-2.5 w-full text-sm rounded-xl transition-all duration-200 hover:bg-brand/20 hover:text-white ${isChildActive ? 'shadow-sm' : 'text-white/80'
+                                                                        }`}
                                                                 >
                                                                     <ChildIcon className="size-4" />
                                                                     <span>{child.label}</span>
