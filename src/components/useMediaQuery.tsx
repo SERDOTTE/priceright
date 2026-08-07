@@ -21,3 +21,7 @@ export default function useMediaQuery(query: string) {
 
   return matches;
 }
+
+export function isMobile() {
+  return useMediaQuery("(max-width: 768px)");
+}

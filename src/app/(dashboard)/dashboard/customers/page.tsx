@@ -2,6 +2,7 @@
 import CustomersPage from "@/components/dashboard/customers/create/ViewPage";
 import AddButton from "@/components/dashboard/customers/create/AddButton";
 import Link from "next/link"
+import Information from "@/components/Information";
 
 export default async function CustomerFormPage() {
 
@@ -16,7 +17,7 @@ export default async function CustomerFormPage() {
               <span className="text-foreground font-medium">Customers</span>
             </div>
             <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">
-              View/Create Customers
+              View/Create Customers <Information detail={"Edit or delete user information by using the actions tab. The actions tab should be set to visible."}/>
             </h1>
             <p className="text-muted-foreground">
               Manage Clients/Customers
