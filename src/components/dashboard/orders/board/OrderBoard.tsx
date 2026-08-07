@@ -26,7 +26,9 @@ function formatDueDate(dueDate: string | null) {
     if (!dueDate) return null;
     const parsed = new Date(dueDate);
     if (Number.isNaN(parsed.getTime())) return null;
-    return parsed.toLocaleDateString();
+    // due_date is a date-only column, so it parses as UTC midnight. Formatting it in the
+    // local zone would show the previous day for anyone west of UTC.
+    return parsed.toLocaleDateString(undefined, { timeZone: "UTC" });
 }
 
 export default function OrderBoard({ initialCards }: { initialCards: BoardCard[] }) {
