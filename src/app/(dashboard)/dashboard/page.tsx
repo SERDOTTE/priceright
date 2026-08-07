@@ -1,35 +1,13 @@
-﻿import Filter from '@/components/Filter';
 import Name from '@/components/Names';
 import Link from 'next/link'
 import { createClient } from "@/lib/supabase/server";
 import CashFlowSummary from "@/components/dashboard/CashFlowSummary";
 
-export const FilterList = [
-  {
-    title: "Support Status", label: "Ticket Status", htmlFor: "ticketStatus", name: "status", id: "ticketStatus",
-    options: [
-      { value: "all", label: "All Tickets" },
-      { value: "open", label: "Open / Unassigned" },
-      { value: "pending", label: "Pending Client Action" },
-      { value: "resolved", label: "Resolved" }
-    ]
-  },
-  {
-    title: "Priority Level", label: "Urgency", htmlFor: "urgencyLevel", name: "priority", id: "urgencyLevel",
-    options: [
-      { value: "high", label: "High Priority (24hr)" },
-      { value: "medium", label: "Medium" },
-      { value: "low", label: "Low" }
-    ]
-  },
-  {
-    title: "Record Type", label: "Document Category", htmlFor: "docCategory", name: "document_type", id: "docCategory",
-    options: [
-      { value: "invoice", label: "Invoices" },
-      { value: "contract", label: "Service Contracts" },
-      { value: "intake", label: "Client Intake Forms" }
-    ]
-  }
+const QUICK_LINKS = [
+  { href: "/dashboard/orders", label: "All orders", hint: "Review and adjust existing orders." },
+  { href: "/dashboard/orders/create", label: "Create order", hint: "Price a new job for a client." },
+  { href: "/dashboard/customers", label: "Customers", hint: "Manage your client list." },
+  { href: "/dashboard/costs/materials", label: "Costs", hint: "Keep materials, labor and profit up to date." },
 ];
 
 export default async function OrdersDashboard() {
@@ -37,7 +15,6 @@ export default async function OrdersDashboard() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log(user)
 
   return (
     <div
@@ -55,36 +32,24 @@ export default async function OrdersDashboard() {
           </p>
         </div>
         <span className='border-t border-gray-200 my-4  block'></span>
+
         <CashFlowSummary />
-        <div className="flex max-sm:flex-col max-sm:gap-3 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-4">
-          <div id="searchBoxContainer" className="w-full sm:w-[50%] max-w-md mr-4">
-            <div className="searchContainer flex items-center justify-between gap-2 h-9">
-              <input
-                type="search"
-                id="search"
-                name="q"
-                placeholder="Search Orders"
-                style={{ borderColor: "#1A1A1A20", color: "#1A1A1A" }}
-                className="w-full h-full text-xs rounded-lg border bg-transparent outline-none px-3 placeholder:opacity-40 focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all shadow-sm"
-              />
-            </div>
-          </div>
-          <Link
-            href={'/dashboard/orders'}
-            style={{ backgroundColor: "#FFC200", color: "#1A1A1A" }}
-            className="px-4 py-2 rounded-lg text-sm hover:opacity-90 hover:cursor-pointer transition-all shadow-sm h-9 flex items-center justify-center shrink-0 max-sm:mx-auto"
-          >
-            + Create Order
-          </Link>
-        </div>
 
-        <div className='bg-muted p-2 shadow-md/20 rounded-lg sm:max-w-250 my-0 mx-auto mb-6'>
-          <Filter filters={FilterList} />
-        </div>
-
-        <div className="bg-white rounded-lg shadow overflow-hidden sm:max-w-250 mx-auto">
-          {/* ... table content ... */}
-        </div>
+        <nav
+          aria-label="Dashboard shortcuts"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:max-w-250 mx-auto"
+        >
+          {QUICK_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-lg border border-border p-4 shadow-sm transition-colors hover:border-brand hover:bg-muted/50"
+            >
+              <span className="block text-sm font-semibold text-foreground">{link.label}</span>
+              <span className="block text-xs text-muted-foreground">{link.hint}</span>
+            </Link>
+          ))}
+        </nav>
       </main>
     </div>
   );

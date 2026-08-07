@@ -23,6 +23,12 @@ export default function OrderPage() {
               Review active client orders, monitor <span>PriceRight</span> automated pricing
               rules, and manage adjustments.
             </p>
+            <Link
+              href="/dashboard/orders/board"
+              className="mt-3 inline-block text-sm underline underline-offset-2"
+            >
+              Open the drag-and-drop board
+            </Link>
           </div>
         </div>
 
