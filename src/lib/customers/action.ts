@@ -168,9 +168,10 @@ export async function deleteCustomer(id: string | number) {
             .from('customers')
             .delete()
             .eq('id', id)
+            .eq('user_id', user.id)
         if (error) {
-            console.error("Supabase insert error:", error);
-            return { message: 'Database error: Failed to update customer.' };
+            console.error("Supabase delete customer error:", error);
+            return { message: 'Database error: Failed to delete customer.' };
         }
         revalidatePath('/dashboard/customers');
         return { success: true, message: 'Customer deleted successfully!' };

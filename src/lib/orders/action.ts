@@ -472,6 +472,7 @@ export async function updateOrder(id: string | number, prevState: OrderState, fo
             .from('orders')
             .select('paid_at')
             .eq('id', id)
+            .eq('user_id', user.id)
             .single();
 
         if (fetchError || !existingOrder) {
@@ -494,7 +495,8 @@ export async function updateOrder(id: string | number, prevState: OrderState, fo
                 payment_status,
                 paid_at: paidAt,
             })
-            .eq('id', id);
+            .eq('id', id)
+            .eq('user_id', user.id);
 
         if (error) {
             console.error("Supabase update error:", error);
