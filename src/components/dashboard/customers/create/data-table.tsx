@@ -43,7 +43,9 @@ export function DataTable<TData extends RowData>({
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = React.useState<string>("")
-    const [columnVisibility, setColumnVisibility] = React.useState<Record<string, boolean>>({})
+    const [columnVisibility, setColumnVisibility] = React.useState<Record<string, boolean>>({
+        actions: false,
+    })
     const [isRefreshing, setIsRefreshing] = useState(false)
     const router = useRouter()
 

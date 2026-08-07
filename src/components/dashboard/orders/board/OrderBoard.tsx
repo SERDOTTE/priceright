@@ -133,7 +133,7 @@ export default function OrderBoard({ initialCards }: { initialCards: BoardCard[]
                                             draggingId === card.id ? "opacity-50" : ""
                                         }`}
                                     >
-                                        <p className="text-sm font-medium text-foreground">
+                                        <p className="text-sm font-medium text-foreground wrap-break-word">
                                             {card.description}
                                         </p>
                                         <p className="text-xs text-muted-foreground">

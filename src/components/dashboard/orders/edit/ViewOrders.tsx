@@ -156,7 +156,7 @@ function OrdersTable({ ordersPromise, searchQuery, statusFilterValue, paymentFil
     return (
         <div className="rounded-xl border border-ink/10 shadow-sm box-border flex flex-col">
             {/* Columns Toggle Bar - separated from overflow-hidden container */}
-            <div className="p-3 border-b border-ink/10 dark:border dark:rounded-t-xl dark:border-muted-foreground relative z-20">
+            <div className="p-3 border-b border-ink/10 dark:border dark:rounded-t-xl dark:border-muted-foreground relative">
                 <details className="relative inline-block text-left">
                     <summary className="cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white dark:bg-muted shadow-sm px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
                         <Columns className='size-4' /> Columns
