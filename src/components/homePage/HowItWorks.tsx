@@ -243,7 +243,7 @@ export function HowItWorks() {
             <div className="flex flex-col gap-4 w-auto lg:w-auto">
               <Link
                 href="/signup"
-                className={`${buttonVariants()} bg-action text-white hover:bg-action/90 font-semibold px-8 py-6 text-button transition-transform duration-300 hover:scale-105 shadow-lg justify-center`}
+                className={`${buttonVariants()} font-semibold px-8 py-6 text-button transition-transform duration-300 hover:scale-105 shadow-lg justify-center`}
               >
                 Get started for free
               </Link>

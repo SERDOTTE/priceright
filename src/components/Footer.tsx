@@ -28,7 +28,7 @@ export default function Footer() {
 
           {/* Product Links */}
           <div className="space-y-3">
-            <h4 className="font-heading text-sm font-semibold text-ink dark:text-white">Product</h4>
+            <h2 className="font-heading text-sm font-semibold text-ink dark:text-white">Product</h2>
             <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <li>
                 <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
@@ -50,7 +50,7 @@ export default function Footer() {
 
           {/* Resources Links */}
           <div className="space-y-3">
-            <h4 className="font-heading text-sm font-semibold text-ink dark:text-white">Resources</h4>
+            <h2 className="font-heading text-sm font-semibold text-ink dark:text-white">Resources</h2>
             <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <li>
                 <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
@@ -72,7 +72,7 @@ export default function Footer() {
 
           {/* Legal Links */}
           <div className="space-y-3">
-            <h4 className="font-heading text-sm font-semibold text-ink dark:text-white">Legal</h4>
+            <h2 className="font-heading text-sm font-semibold text-ink dark:text-white">Legal</h2>
             <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <li>
                 <Link href="/" className="hover:text-ink dark:hover:text-white transition-colors">
