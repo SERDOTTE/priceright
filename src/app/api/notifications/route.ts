@@ -16,20 +16,17 @@ export async function GET() {
   }
 
   const notifications: Notification[] = [];
-  const now = new Date().toISOString();
 
   // Parallel database execution using lightweight HEAD requests
   const [
-    { count: overdueCount, error: overdueError },
+    { data: orders, error: overdueError },
     { count: customerCount, error: customerError },
     { count: orderCount, error: orderError }
   ] = await Promise.all([
     supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .neq('status', 'paid')
-      .lt('due_date', now),
+      .from("orders")
+      .select("price, payment_status, due_date, paid_at")
+      .eq("user_id", user.id),
 
     supabase
       .from('customers')
@@ -42,13 +39,27 @@ export async function GET() {
       .eq('user_id', user.id)
   ]);
 
-  // Log failures for monitoring (e.g., Sentry / Datadog)
+  // Log failures for monitoring
   if (overdueError) console.error('Error checking overdue orders:', overdueError);
   if (customerError) console.error('Error checking customer count:', customerError);
   if (orderError) console.error('Error checking order count:', orderError);
 
-  // Safely check counts ONLY when query succeeds (!error)
-  if (!overdueError && overdueCount !== null && overdueCount > 0) {
+  // Calculate overdue count without early returning
+  let overdueCount = 0;
+  if (orders && orders.length > 0) {
+    const current = new Date();
+
+    for (const order of orders) {
+      const dueDate = order.due_date ? new Date(order.due_date) : null;
+      const isPastDue = dueDate !== null && dueDate.getTime() < current.getTime();
+
+      if (order.payment_status === "overdue" || isPastDue) {
+        overdueCount += 1;
+      }
+    }
+  }
+
+  if (overdueCount > 0) {
     notifications.push({
       id: 'overdue-payments',
       message: `You have ${overdueCount} overdue payment(s).`,
@@ -71,8 +82,8 @@ export async function GET() {
       link: '/dashboard/orders/create'
     });
   }
-  console.log(notifications)
+
   return NextResponse.json(notifications, {
-    headers: { 'Cache-Control': 'private, max-age=15, stale-while-revalidate=30' }
+    headers: { 'Cache-Control': 'no-store' }
   });
 }
