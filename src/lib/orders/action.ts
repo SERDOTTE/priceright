@@ -511,3 +511,42 @@ export async function updateOrder(id: string | number, prevState: OrderState, fo
         };
     }
 }
+
+const OrderStatusSchema = z.enum(["quote_sent", "approved", "in_progress", "delivered"]);
+
+// Used by the drag-and-drop order board, which only ever changes an order's workflow
+// stage. Kept separate from updateOrder so a drop doesn't have to round-trip the whole
+// order form just to move a card between columns.
+export async function updateOrderStatus(id: string, status: string) {
+    const supabase = await createClient();
+    const parsedStatus = OrderStatusSchema.safeParse(status);
+
+    if (!parsedStatus.success) {
+        return { success: false, message: 'Invalid order status.' };
+    }
+
+    try {
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+            return { success: false, message: 'Unauthorized: You must be logged in.' };
+        }
+
+        const { error } = await supabase
+            .from('orders')
+            .update({ status: parsedStatus.data })
+            .eq('id', id)
+            .eq('user_id', user.id);
+
+        if (error) {
+            console.error("Supabase update order status error:", error);
+            return { success: false, message: 'Database error: Failed to move order.' };
+        }
+
+        revalidatePath('/dashboard/orders/board');
+        revalidatePath('/dashboard/orders');
+        return { success: true, message: 'Order moved.' };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return { success: false, message: 'Database error: Failed to move order.' };
+    }
+}
