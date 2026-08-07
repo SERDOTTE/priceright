@@ -465,6 +465,25 @@ export async function updateOrder(id: string | number, prevState: OrderState, fo
             return { message: 'Unauthorized: You must be logged in.' };
         }
 
+        // `paid_at` was only ever written on insert, so an order edited into 'paid' kept a
+        // null timestamp and dropped out of the dashboard revenue totals. Keep it in sync
+        // here, reusing the original timestamp so unrelated edits don't move the paid date.
+        const { data: existingOrder, error: fetchError } = await supabase
+            .from('orders')
+            .select('paid_at')
+            .eq('id', id)
+            .single();
+
+        if (fetchError || !existingOrder) {
+            console.error("Supabase select order error:", fetchError);
+            return { message: 'Database error: Failed to update order.' };
+        }
+
+        const paidAt =
+            payment_status === 'paid'
+                ? existingOrder.paid_at ?? new Date().toISOString()
+                : null;
+
         const { error } = await supabase
             .from('orders')
             .update({
@@ -473,6 +492,7 @@ export async function updateOrder(id: string | number, prevState: OrderState, fo
                 price,
                 status,
                 payment_status,
+                paid_at: paidAt,
             })
             .eq('id', id);
 
@@ -482,6 +502,7 @@ export async function updateOrder(id: string | number, prevState: OrderState, fo
         }
 
         revalidatePath('/dashboard/orders');
+        revalidatePath('/dashboard');
         return { success: true, message: 'Order updated successfully!' };
     } catch (error) {
         console.error("Unexpected error:", error);

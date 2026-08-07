@@ -2,6 +2,7 @@
 import Name from '@/components/Names';
 import Link from 'next/link'
 import { createClient } from "@/lib/supabase/server";
+import CashFlowSummary from "@/components/dashboard/CashFlowSummary";
 
 export const FilterList = [
   {
@@ -54,6 +55,7 @@ export default async function OrdersDashboard() {
           </p>
         </div>
         <span className='border-t border-gray-200 my-4  block'></span>
+        <CashFlowSummary />
         <div className="flex max-sm:flex-col max-sm:gap-3 max-sm:items-start sm:max-w-250 my-0 mx-auto justify-between items-center rounded-lg mb-6 shadow-md/20 p-4">
           <div id="searchBoxContainer" className="w-full sm:w-[50%] max-w-md mr-4">
             <div className="searchContainer flex items-center justify-between gap-2 h-9">
