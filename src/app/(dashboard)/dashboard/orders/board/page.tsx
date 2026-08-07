@@ -2,6 +2,7 @@ import Link from "next/link";
 import OrderBoard, { BoardCard } from "@/components/dashboard/orders/board/OrderBoard";
 import { selectAllOrders } from "@/lib/orders/action";
 import { OrderStatus, PaymentStatus } from "@/lib/supabase/types";
+import Information from "@/components/Information";
 
 export default async function OrderBoardPage() {
   const orders = await selectAllOrders();
@@ -36,11 +37,10 @@ export default async function OrderBoardPage() {
             <span className="text-foreground font-medium">Board</span>
           </div>
           <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">
-            Order board
+            Order board <Information className="inline" detail={"Changes are saved right away and stay in place after a refresh."}/>
           </h1>
           <p className="text-muted-foreground">
-            Drag an order card to another stage to update its status. Changes are saved
-            right away and stay in place after a refresh.
+            Drag an order card to another stage to update its status. 
           </p>
         </div>
 

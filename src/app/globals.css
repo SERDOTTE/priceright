@@ -253,3 +253,7 @@ strong {
     @apply font-heading;
   }
 }
+
+html {
+  scrollbar-gutter: stable;
+}

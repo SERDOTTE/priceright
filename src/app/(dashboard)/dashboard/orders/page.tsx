@@ -1,5 +1,6 @@
 import OrdersPage from "@/components/dashboard/orders/edit/ViewPage";
 import Link from "next/link";
+import { GripVertical } from "lucide-react";
 
 export default function OrderPage() {
   return (
@@ -23,13 +24,16 @@ export default function OrderPage() {
               Review active client orders, monitor <span>PriceRight</span> automated pricing
               rules, and manage adjustments.
             </p>
-            <Link
-              href="/dashboard/orders/board"
-              className="mt-3 inline-block text-sm underline underline-offset-2"
-            >
-              Open the drag-and-drop board
-            </Link>
           </div>
+        </div>
+
+        <div className="inline-flex">
+          <Link
+            href="/dashboard/orders/board"
+            className="mb-3 text-sm flex items-center underline underline-offset-3"
+          >
+            <GripVertical className="inline size-5 mr-1" /> Adjust Order Status
+          </Link>
         </div>
 
         <div className="pt-2">

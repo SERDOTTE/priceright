@@ -29,6 +29,8 @@ export default function Delete({ id }: DeleteProps) {
                 if (!res.success) {
                     throw new Error(res.message || "Failed to delete order");
                 }
+                setIsDeleting(false);
+                setIsOpen(false);
                 return res;
             };
 

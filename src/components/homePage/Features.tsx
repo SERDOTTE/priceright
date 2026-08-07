@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calculator, Kanban, ArrowRightLeft, PieChart, Send, ShieldCheck, ArrowRight } from "lucide-react";
+import { Calculator, ArrowRightLeft, PieChart, Send, ShieldCheck, ArrowRight } from "lucide-react";
 
 export function Features({ user }: { user: boolean }) {
     return (

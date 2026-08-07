@@ -74,7 +74,7 @@ export default function OrderRows({
     //         );
     //     })
     //     : orders;
-    let filtered = orders.filter((item) => {
+    const filtered = orders.filter((item) => {
         const order = item.allOrders;
         const dateString = order.created_at
             ? new Date(order.created_at).toLocaleDateString('en-US')
@@ -162,7 +162,7 @@ export default function OrderRows({
                 //         errorMessage = `${errorMessage}\n${errorList}`;
                 //     }
                 // }
-                let errorContent = (
+                const errorContent = (
                     <div>
                         <p className="font-semibold">{result?.message || "Failed to update order."}</p>
                         {result?.errors && (
